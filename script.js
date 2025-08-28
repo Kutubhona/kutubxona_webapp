@@ -1,11 +1,11 @@
-// Kitoblar ma'lumotlari
+// Kitoblar ma'lumotlari (har bir kitob bitta)
 const books = [
     { title: "Sahih Hadislar", category: "Hadis", link: "pdf/hadis1.pdf" },
-    { title: "Hadis to'plami 2", category: "Hadis", link: "pdf/hadis2.pdf" },
-    { title: "Islom tarixi 1", category: "Tarix", link: "pdf/tarix1.pdf" },
-    { title: "Islom tarixi 2", category: "Tarix", link: "pdf/tarix2.pdf" },
-    { title: "Fiqh asoslari 1", category: "Fiqh", link: "pdf/fiqh1.pdf" },
-    { title: "Fiqh asoslari 2", category: "Fiqh", link: "pdf/fiqh2.pdf" },
+    { title: "Hadis Asoslari", category: "Hadis", link: "pdf/hadis2.pdf" },
+    { title: "Islom Tarixi 1", category: "Tarix", link: "pdf/tarix1.pdf" },
+    { title: "Islom Tarixi 2", category: "Tarix", link: "pdf/tarix2.pdf" },
+    { title: "Fiqh Asoslari 1", category: "Fiqh", link: "pdf/fiqh1.pdf" },
+    { title: "Fiqh Asoslari 2", category: "Fiqh", link: "pdf/fiqh2.pdf" },
 ];
 
 // Elementlarni olish
@@ -17,13 +17,24 @@ const body = document.body;
 
 // Kitoblarni render qilish
 function renderBooks(filteredBooks) {
+    // Duplikatlarni oldini olish (title bo'yicha)
+    const uniqueBooks = [];
+    const titles = new Set();
+
+    filteredBooks.forEach(book => {
+        if(!titles.has(book.title)){
+            titles.add(book.title);
+            uniqueBooks.push(book);
+        }
+    });
+
     booksContainer.innerHTML = '';
-    if(filteredBooks.length === 0){
+    if(uniqueBooks.length === 0){
         booksContainer.innerHTML = '<p>Hozircha bu yerda kitob yo‘q...</p>';
         return;
     }
 
-    filteredBooks.forEach(book => {
+    uniqueBooks.forEach(book => {
         const card = document.createElement('div');
         card.className = 'book-card';
         card.innerHTML = `
