@@ -1,8 +1,8 @@
 // Kitoblar ma'lumotlari
 const books = [
-    { title: "Islom tarixi 1", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom1.pdf" },
-    { title: "Islom tarixi 2", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom2.pdf" },
-    { title: "Islom tarixi 3", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom3.pdf" },
+    { title: "Islom tarixi 1", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/pdf/islom1.pdf" },
+    { title: "Islom tarixi 2", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/pdf/islom2.pdf" },
+    { title: "Islom tarixi 3", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/pdf/islom3.pdf" },
     // Boshqa kategoriyalar uchun kitoblar (ixtiyoriy)
     { title: "Fiqh asoslari", category: "Fiqh", link: "pdf/fiqh_asoslari.pdf" },
     { title: "Hadis to'plami", category: "Hadis", link: "pdf/hadis_toplami.pdf" },
