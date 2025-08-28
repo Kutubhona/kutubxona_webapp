@@ -5,7 +5,7 @@ const books = [
     { title: "Fiqh Asoslari", category: "Fiqh", link: "pdf/fiqh/fiqh1.pdf", description: "Fiqh asoslari va qoidalari." },
 
     // ✅ Yangi kitob qo‘shildi
-    { title: "Fiqh Savol-Javob", category: "Fiqh", link: "pdf/fiqh/https://github.com/Kutubhona/kutubxona_webapp/blob/main/pdf/01-%D0%9D%D0%B8%D0%B7%D0%BE%D0%BC%D0%B8-%D0%98%D1%81%D0%BB%D0%BE%D0%BC.pdf", description: "Fiqh bo‘yicha savol-javoblar to‘plami." }
+    { title: "Fiqh Savol-Javob", category: "Fiqh", link: "‎pdf/01-Низоми-Ислом.pdf", description: "Fiqh bo‘yicha savol-javoblar to‘plami." }
 ];
 
 // Elementlarni olish
