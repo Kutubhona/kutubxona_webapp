@@ -3,23 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 Kutubxona Web App</title>
+    <title>Kutubxona</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>📚 Kutubxona Web App</h1>
-        <p>Mavzularni tanlang va kitobni oching:</p>
+        <h1>Kutubxona 📚</h1>
+        <p>Turli mavzulardagi kitoblarni ko‘rib chiqing</p>
     </header>
 
+    <nav>
+        <button class="filter-btn" data-category="all">Barchasi</button>
+        <button class="filter-btn" data-category="Islom">Islom</button>
+        <button class="filter-btn" data-category="Fiqh">Fiqh</button>
+        <button class="filter-btn" data-category="Hadis">Hadis</button>
+        <button class="filter-btn" data-category="Tafsir">Tafsir</button>
+    </nav>
+
     <main>
-        <div id="menu" class="menu"></div>
-        <div id="books" class="books"></div>
+        <div class="books-container">
+            <!-- Kitoblar shu yerda chiqadi -->
+            <div class="book" data-category="Islom">
+                <h3>Islomiy Kitob 1</h3>
+                <p>Muallif: Ali</p>
+                <a href="pdf/islomiy1.pdf" target="_blank">PDFni ochish</a>
+            </div>
+            <div class="book" data-category="Fiqh">
+                <h3>Fiqh Kitob 1</h3>
+                <p>Muallif: Hasan</p>
+                <a href="pdf/fiqh1.pdf" target="_blank">PDFni ochish</a>
+            </div>
+            <div class="book" data-category="Hadis">
+                <h3>Hadis Kitob 1</h3>
+                <p>Muallif: Muhammad</p>
+                <a href="pdf/hadis1.pdf" target="_blank">PDFni ochish</a>
+            </div>
+            <div class="book" data-category="Tafsir">
+                <h3>Tafsir Kitob 1</h3>
+                <p>Muallif: Yusuf</p>
+                <a href="pdf/tafsir1.pdf" target="_blank">PDFni ochish</a>
+            </div>
+            <!-- Shu yerga yana kitoblar qo‘shish mumkin -->
+        </div>
     </main>
 
     <footer>
-        <p>© 2025 Kutubxona Web App</p>
+        <p>© 2025 Kutubxona. Barcha huquqlar himoyalangan.</p>
     </footer>
 
     <script src="script.js"></script>
