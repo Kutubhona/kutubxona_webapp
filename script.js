@@ -1,6 +1,6 @@
 // Kitoblar ma'lumotlari
 const books = [
-    { title: "Sahih Hadislar", category: "Hadis", link: "pdf/hadis1.pdf", description: "Muhim hadislarni o'z ichiga oladi." },
+    { title: "Hadislar", category: "Hadis", link: "pdf/hadis1.pdf", description: "Muhim hadislarni o'z ichiga oladi." },
     { title: "Islom Tarixi", category: "Tarix", link: "pdf/tarix1.pdf", description: "Islom tarixining asosiy voqealari." },
     { title: "Fiqh Asoslari", category: "Fiqh", link: "pdf/fiqh1.pdf", description: "Fiqh asoslari va qoidalari." },
 ];
