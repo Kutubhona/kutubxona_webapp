@@ -1,38 +1,45 @@
-/* Asosiy stil */
-body {
+/* Reset va asosiy stil */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f0f2f5;
     color: #333;
 }
 
+/* Header */
 header {
     background: linear-gradient(90deg, #4e54c8, #8f94fb);
     color: white;
     text-align: center;
-    padding: 20px 10px;
+    padding: 30px 10px;
 }
 
 header h1 {
-    margin: 0;
-    font-size: 2em;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
 }
 
 header input {
-    margin-top: 15px;
-    padding: 10px;
-    width: 80%;
+    width: 90%;
     max-width: 400px;
+    padding: 12px 15px;
     border-radius: 25px;
     border: none;
     outline: none;
-    font-size: 1em;
+    font-size: 1rem;
 }
 
+/* Nav / Categories */
 nav {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    gap: 10px;
     margin: 20px 0;
 }
 
@@ -40,11 +47,10 @@ nav {
     background-color: #8f94fb;
     color: white;
     border: none;
-    margin: 5px;
     padding: 12px 25px;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1rem;
     transition: 0.3s;
 }
 
@@ -52,30 +58,32 @@ nav {
     background-color: #4e54c8;
 }
 
+/* Main / Book Cards */
 main {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    padding: 20px;
+    flex-wrap: wrap;
     gap: 20px;
+    padding: 20px;
 }
 
 .book-card {
     background: white;
+    width: 220px;
     padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     text-align: center;
-    transition: 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .book-card:hover {
     transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
 .book-card h3 {
-    font-size: 1.1em;
+    font-size: 1.1rem;
     margin: 10px 0;
 }
 
@@ -87,16 +95,28 @@ main {
     background-color: #4e54c8;
     color: white;
     text-decoration: none;
-    transition: 0.3s;
+    transition: background-color 0.3s;
 }
 
 .book-card a:hover {
     background-color: #8f94fb;
 }
 
+/* Footer */
 footer {
     text-align: center;
     padding: 15px;
     background: #4e54c8;
     color: white;
+    margin-top: 30px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    .book-card {
+        width: 90%;
+    }
 }
