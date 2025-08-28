@@ -6,23 +6,22 @@
     <title>Kutubxona</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light">
     <header>
         <h1>Kutubxonaga Xush kelibsiz</h1>
-        <input type="text" id="searchInput" placeholder="Kitobni qidirish...">
+        <input type="text" id="searchInput" placeholder="Qaysi mavzudagi kitoblarni qidiryapsiz?">
+        <button id="toggleTheme">🌙 Qorong'u rejim</button>
     </header>
 
     <nav id="categories">
-        <button class="category-btn" data-category="Islom">Islom</button>
-        <button class="category-btn" data-category="Fiqh">Fiqh</button>
         <button class="category-btn" data-category="Hadis">Hadis</button>
-        <button class="category-btn" data-category="Tafsir">Tafsir</button>
-        <button class="category-btn" data-category="Barcha">Barcha</button>
+        <button class="category-btn" data-category="Tarix">Tarix</button>
+        <button class="category-btn" data-category="Fiqh">Fiqh</button>
     </nav>
 
     <main>
         <div id="booksContainer">
-            <!-- Kitoblar bu yerga JS orqali qo'shiladi -->
+            <!-- Kitoblar JS orqali qo'shiladi -->
         </div>
     </main>
 
