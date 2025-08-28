@@ -39,4 +39,15 @@ renderBooks(books);
 // Kategoriya bo'yicha filtrlash
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        const category = btn.getAtt
+        const category = btn.getAttribute('data-category');
+        const filtered = books.filter(book => book.category === category);
+        renderBooks(filtered);
+    });
+});
+
+// Qidiruv funksiyasi
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = books.filter(book => book.title.toLowerCase().includes(query));
+    renderBooks(filtered);
+});
