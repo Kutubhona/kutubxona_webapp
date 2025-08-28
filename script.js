@@ -1,11 +1,8 @@
 // Kitoblar ma'lumotlari (har bir kitob bitta)
 const books = [
     { title: "Sahih Hadislar", category: "Hadis", link: "pdf/hadis1.pdf" },
-    { title: "Hadis Asoslari", category: "Hadis", link: "pdf/hadis2.pdf" },
-    { title: "Islom Tarixi 1", category: "Tarix", link: "pdf/tarix1.pdf" },
-    { title: "Islom Tarixi 2", category: "Tarix", link: "pdf/tarix2.pdf" },
-    { title: "Fiqh Asoslari 1", category: "Fiqh", link: "pdf/fiqh1.pdf" },
-    { title: "Fiqh Asoslari 2", category: "Fiqh", link: "pdf/fiqh2.pdf" },
+    { title: "Islom Tarixi ", category: "Tarix", link: "pdf/tarix1.pdf" },
+    { title: "Fiqh Asoslari ", category: "Fiqh", link: "pdf/fiqh1.pdf" },
 ];
 
 // Elementlarni olish
