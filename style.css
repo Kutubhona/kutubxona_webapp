@@ -8,7 +8,7 @@
 /* Body rang va smooth transition */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background 2s ease, color 2s ease;
+    transition: background 1,5s ease, color 1,s ease;
 }
 
 /* Yorug' va qorong'u ranglar */
@@ -42,7 +42,7 @@ header input {
     outline: none;
     font-size: 1rem;
     margin-bottom: 10px;
-    transition: background 2s ease, color 2s ease;
+    transition: background 1,5s ease, color 1,5s ease;
 }
 
 body.light header input {
