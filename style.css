@@ -1,163 +1,68 @@
 /* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* Body rang va smooth transition */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background 1,5s ease, color 1,s ease;
+    transition: background 1.5s ease, color 1.5s ease;
 }
 
 /* Yorug' va qorong'u ranglar */
-body.light {
-    background: #f5f5f5;
-    color: #333;
-}
-
-body.dark {
-    background: #1e1e2f;
-    color: #f0f0f0;
-}
+body.light { background: #f5f5f5; color: #333; }
+body.dark { background: #1e1e2f; color: #f0f0f0; }
 
 /* Header */
-header {
-    text-align: center;
-    padding: 30px 10px;
-}
-
-header h1 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-}
-
+header { text-align: center; padding: 30px 10px; }
+header h1 { font-size: 2rem; margin-bottom: 15px; }
 header input {
-    width: 90%;
-    max-width: 400px;
+    width: 90%; max-width: 400px;
     padding: 12px 15px;
-    border-radius: 25px;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    margin-bottom: 10px;
-    transition: background 1,5s ease, color 1,5s ease;
+    border-radius: 25px; border: none; outline: none;
+    font-size: 1rem; margin-bottom: 10px;
+    transition: background 1.5s ease, color 1.5s ease;
 }
-
-body.light header input {
-    background-color: #ffffff;
-    color: #333;
-}
-
-body.dark header input {
-    background-color: #2b2b3e;
-    color: #f0f0f0;
-}
+body.light header input { background-color: #fff; color: #333; }
+body.dark header input { background-color: #2b2b3e; color: #f0f0f0; }
 
 header button#toggleTheme {
-    padding: 8px 15px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    background: #4e54c8;
-    color: white;
-    font-size: 1rem;
+    padding: 8px 15px; border-radius: 20px; border: none; cursor: pointer;
+    background: #4e54c8; color: white; font-size: 1rem;
     transition: background 0.3s;
 }
-
-header button#toggleTheme:hover {
-    background: #8f94fb;
-}
+header button#toggleTheme:hover { background: #8f94fb; }
 
 /* Categories */
-nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
-}
-
+nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
 .category-btn {
-    background-color: #8f94fb;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.3s;
+    background-color: #8f94fb; color: white; border: none; padding: 12px 25px;
+    border-radius: 25px; cursor: pointer; font-size: 1rem; transition: background 0.3s;
 }
-
-.category-btn:hover {
-    background-color: #4e54c8;
-}
+.category-btn:hover { background-color: #4e54c8; }
+.category-btn.active { background-color: #ff6b6b; }
 
 /* Main / Book Cards */
-main {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
-}
-
+main { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 20px; }
 .book-card {
-    background: white;
-    width: 220px;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s, background 2s ease, color 2s ease;
+    background: white; width: 220px; padding: 15px; border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1); text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s, background 1.5s ease, color 1.5s ease;
 }
-
-body.dark .book-card {
-    background: #2b2b3e;
-    color: #f0f0f0;
-}
-
-.book-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
-
-.book-card h3 {
-    font-size: 1.1rem;
-    margin: 10px 0;
-}
-
+body.dark .book-card { background: #2b2b3e; color: #f0f0f0; }
+.book-card:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.book-card h3 { font-size: 1.1rem; margin: 10px 0; }
+.book-card p { font-size: 0.9rem; margin: 5px 0; }
 .book-card a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 15px;
-    border-radius: 20px;
-    background-color: #4e54c8;
-    color: white;
-    text-decoration: none;
-    transition: background-color 0.3s;
+    display: inline-block; margin-top: 10px; padding: 8px 15px;
+    border-radius: 20px; background-color: #4e54c8; color: white;
+    text-decoration: none; transition: background-color 0.3s;
 }
-
-.book-card a:hover {
-    background-color: #8f94fb;
-}
+.book-card a:hover { background-color: #8f94fb; }
 
 /* Footer */
-footer {
-    text-align: center;
-    padding: 15px;
-    background: #4e54c8;
-    color: white;
-    margin-top: 30px;
-}
+footer { text-align: center; padding: 15px; background: #4e54c8; color: white; margin-top: 30px; }
 
 /* Responsive */
 @media (max-width: 600px) {
-    header h1 {
-        font-size: 1.5rem;
-    }
-    .book-card {
-        width: 90%;
-    }
+    header h1 { font-size: 1.5rem; }
+    .book-card { width: 90%; }
 }
