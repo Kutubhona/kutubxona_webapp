@@ -1,8 +1,11 @@
 // Kitoblar ma'lumotlari
 const books = [
-    { title: "Hadislar", category: "Hadis", link: "pdf/hadis1.pdf", description: "Muhim hadislarni o'z ichiga oladi." },
-    { title: "Islom Tarixi", category: "Tarix", link: "pdf/tarix1.pdf", description: "Islom tarixining asosiy voqealari." },
-    { title: "Fiqh Asoslari", category: "Fiqh", link: "pdf/fiqh1.pdf", description: "Fiqh asoslari va qoidalari." },
+    { title: "Hadislar", category: "Hadis", link: "pdf/hadis/hadis1.pdf", description: "Muhim hadislarni o'z ichiga oladi." },
+    { title: "Islom Tarixi", category: "Tarix", link: "pdf/tarix/tarix1.pdf", description: "Islom tarixining asosiy voqealari." },
+    { title: "Fiqh Asoslari", category: "Fiqh", link: "pdf/fiqh/fiqh1.pdf", description: "Fiqh asoslari va qoidalari." },
+
+    // ✅ Yangi kitob qo‘shildi
+    { title: "Fiqh Savol-Javob", category: "Fiqh", link: "pdf/fiqh/https://github.com/Kutubhona/kutubxona_webapp/blob/main/pdf/01-%D0%9D%D0%B8%D0%B7%D0%BE%D0%BC%D0%B8-%D0%98%D1%81%D0%BB%D0%BE%D0%BC.pdf", description: "Fiqh bo‘yicha savol-javoblar to‘plami." }
 ];
 
 // Elementlarni olish
@@ -20,14 +23,14 @@ function renderBooks(filteredBooks) {
     const titles = new Set();
 
     filteredBooks.forEach(book => {
-        if(!titles.has(book.title)){
+        if (!titles.has(book.title)) {
             titles.add(book.title);
             uniqueBooks.push(book);
         }
     });
 
     booksContainer.innerHTML = '';
-    if(uniqueBooks.length === 0){
+    if (uniqueBooks.length === 0) {
         booksContainer.innerHTML = '<p>Hozircha bu yerda kitob yo‘q...</p>';
         return;
     }
@@ -49,11 +52,11 @@ function filterBooks() {
     const query = searchInput.value.toLowerCase();
     let filtered = books;
 
-    if(activeCategory) {
+    if (activeCategory) {
         filtered = filtered.filter(book => book.category === activeCategory);
     }
 
-    if(query) {
+    if (query) {
         filtered = filtered.filter(book => book.title.toLowerCase().includes(query));
     }
 
@@ -67,7 +70,7 @@ renderBooks(books);
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         categoryButtons.forEach(b => b.classList.remove('active'));
-        if(activeCategory === btn.dataset.category){
+        if (activeCategory === btn.dataset.category) {
             activeCategory = ""; // toggle off
         } else {
             activeCategory = btn.dataset.category;
@@ -83,7 +86,7 @@ searchInput.addEventListener('input', filterBooks);
 // Yorug' va qorong'u rejim + localStorage saqlash
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
-    if(savedTheme) body.className = savedTheme;
+    if (savedTheme) body.className = savedTheme;
     toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
 }
 loadTheme();
