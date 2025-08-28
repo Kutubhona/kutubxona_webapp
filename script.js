@@ -1,26 +1,25 @@
 // Kitoblar ma'lumotlari
 const books = [
-    // Islom tarixi kategoriyasi (faqat 3 PDF)
-    { title: "Islom tarixi 1", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom1.pdf" },
-    { title: "Islom tarixi 2", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom2.pdf" },
-    { title: "Islom tarixi 3", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom3.pdf" },
-
-    // Boshqa kategoriyalar
-    { title: "Fiqh asoslari", category: "Fiqh", link: "pdf/fiqh_asoslari.pdf" },
-    { title: "Hadis to'plami", category: "Hadis", link: "pdf/hadis_toplami.pdf" },
-    { title: "Tafsir al-Qur'on", category: "Tafsir", link: "pdf/tafsir_alquron.pdf" },
+    { title: "Sahih Hadislar", category: "Hadis", link: "pdf/hadis1.pdf" },
+    { title: "Hadis to'plami 2", category: "Hadis", link: "pdf/hadis2.pdf" },
+    { title: "Islom tarixi 1", category: "Tarix", link: "pdf/tarix1.pdf" },
+    { title: "Islom tarixi 2", category: "Tarix", link: "pdf/tarix2.pdf" },
+    { title: "Fiqh asoslari 1", category: "Fiqh", link: "pdf/fiqh1.pdf" },
+    { title: "Fiqh asoslari 2", category: "Fiqh", link: "pdf/fiqh2.pdf" },
 ];
 
 // Elementlarni olish
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
+const toggleThemeBtn = document.getElementById('toggleTheme');
+const body = document.body;
 
 // Kitoblarni render qilish
 function renderBooks(filteredBooks) {
     booksContainer.innerHTML = '';
     if(filteredBooks.length === 0){
-        booksContainer.innerHTML = '<p>Kitob topilmadi...</p>';
+        booksContainer.innerHTML = '<p>Hozircha bu yerda kitob yo‘q...</p>';
         return;
     }
 
@@ -42,13 +41,6 @@ renderBooks(books);
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         const category = btn.getAttribute('data-category');
-
-        // "Barcha" tugmasi uchun
-        if(category === "Barcha") {
-            renderBooks(books);
-            return;
-        }
-
         const filtered = books.filter(book => book.category === category);
         renderBooks(filtered);
     });
@@ -59,4 +51,17 @@ searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
     const filtered = books.filter(book => book.title.toLowerCase().includes(query));
     renderBooks(filtered);
+});
+
+// Yorug' va qorong'u rejim
+toggleThemeBtn.addEventListener('click', () => {
+    if(body.classList.contains('light')){
+        body.classList.remove('light');
+        body.classList.add('dark');
+        toggleThemeBtn.textContent = "🌞 Yorug' rejim";
+    } else {
+        body.classList.remove('dark');
+        body.classList.add('light');
+        toggleThemeBtn.textContent = "🌙 Qorong'u rejim";
+    }
 });
