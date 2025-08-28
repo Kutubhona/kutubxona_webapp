@@ -1,14 +1,15 @@
 // Kitoblar ma'lumotlari
 const books = [
-    { title: "Islom tarixi 1", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/pdf/islom1.pdf" },
-    { title: "Islom tarixi 2", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/pdf/islom2.pdf" },
-    { title: "Islom tarixi 3", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/pdf/islom3.pdf" },
-    // Boshqa kategoriyalar uchun kitoblar (ixtiyoriy)
+    // Islom tarixi kategoriyasi (faqat 3 PDF)
+    { title: "Islom tarixi 1", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom1.pdf" },
+    { title: "Islom tarixi 2", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom2.pdf" },
+    { title: "Islom tarixi 3", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom3.pdf" },
+
+    // Boshqa kategoriyalar
     { title: "Fiqh asoslari", category: "Fiqh", link: "pdf/fiqh_asoslari.pdf" },
     { title: "Hadis to'plami", category: "Hadis", link: "pdf/hadis_toplami.pdf" },
     { title: "Tafsir al-Qur'on", category: "Tafsir", link: "pdf/tafsir_alquron.pdf" },
 ];
-
 
 // Elementlarni olish
 const booksContainer = document.getElementById('booksContainer');
@@ -22,6 +23,7 @@ function renderBooks(filteredBooks) {
         booksContainer.innerHTML = '<p>Kitob topilmadi...</p>';
         return;
     }
+
     filteredBooks.forEach(book => {
         const card = document.createElement('div');
         card.className = 'book-card';
@@ -40,6 +42,13 @@ renderBooks(books);
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         const category = btn.getAttribute('data-category');
+
+        // "Barcha" tugmasi uchun
+        if(category === "Barcha") {
+            renderBooks(books);
+            return;
+        }
+
         const filtered = books.filter(book => book.category === category);
         renderBooks(filtered);
     });
