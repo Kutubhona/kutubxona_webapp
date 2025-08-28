@@ -1,0 +1,91 @@
+/* Umumiy */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f9;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.2em;
+}
+
+p {
+    margin: 10px 0 0;
+}
+
+/* Menu tugmalari */
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+.menu button {
+    padding: 12px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: #2575fc;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu button:hover {
+    background: #6a11cb;
+    transform: translateY(-3px);
+}
+
+/* Kitoblar ro'yxati */
+.books {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.books h2 {
+    margin-top: 0;
+    color: #2575fc;
+}
+
+.books a {
+    display: block;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f0f4ff;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.books a:hover {
+    background: #2575fc;
+    color: white;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+    background: #6a11cb;
+    color: white;
+}
