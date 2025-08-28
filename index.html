@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kutubxona</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kutubxona</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Kutubxonaga Xush kelibsiz!</h1>
-  </header>
+    <header>
+        <h1>Kutubxonaga Xush kelibsiz</h1>
+        <input type="text" id="searchInput" placeholder="Kitobni qidirish...">
+    </header>
 
-  <section class="search-bar">
-    <input type="text" id="search-input" placeholder="Kitob nomi bo‘yicha qidiruv...">
-    <button id="search-btn">Qidirish</button>
-  </section>
+    <nav id="categories">
+        <button class="category-btn" data-category="Islom">Islom</button>
+        <button class="category-btn" data-category="Fiqh">Fiqh</button>
+        <button class="category-btn" data-category="Hadis">Hadis</button>
+        <button class="category-btn" data-category="Tafsir">Tafsir</button>
+    </nav>
 
-  <section class="topics">
-    <button class="topic-btn" data-topic="Islam">Islom</button>
-    <button class="topic-btn" data-topic="Fiqh">Fiqh</button>
-    <button class="topic-btn" data-topic="Hadis">Hadis</button>
-    <button class="topic-btn" data-topic="Tafsir">Tafsir</button>
-    <button class="topic-btn" data-topic="Tarix">Tarix</button>
-    <button class="topic-btn" data-topic="Ilm">Ilm</button>
-  </section>
+    <main>
+        <div id="booksContainer">
+            <!-- Kitoblar bu yerga JS orqali qo'shiladi -->
+        </div>
+    </main>
 
-  <section class="books">
-    <div id="books-container">
-      <p>Kitob tanlang...</p>
-    </div>
-  </section>
+    <footer>
+        <p>&copy; 2025 Kutubxona</p>
+    </footer>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
