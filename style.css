@@ -1,18 +1,25 @@
-/* Reset va asosiy stil */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body rang va smooth transition */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background 0.6s ease, color 0.6s ease;
+}
+
+/* Yorug' va qorong'u ranglar */
 body.light {
-    background: #f0f2f5;
+    background: #f5f5f5;
     color: #333;
 }
 
 body.dark {
     background: #1e1e2f;
-    color: #f0f2f5;
+    color: #f0f0f0;
 }
 
 /* Header */
@@ -35,6 +42,17 @@ header input {
     outline: none;
     font-size: 1rem;
     margin-bottom: 10px;
+    transition: background 0.6s ease, color 0.6s ease;
+}
+
+body.light header input {
+    background-color: #ffffff;
+    color: #333;
+}
+
+body.dark header input {
+    background-color: #2b2b3e;
+    color: #f0f0f0;
 }
 
 header button#toggleTheme {
@@ -52,7 +70,7 @@ header button#toggleTheme:hover {
     background: #8f94fb;
 }
 
-/* Nav / Categories */
+/* Categories */
 nav {
     display: flex;
     justify-content: center;
@@ -92,7 +110,7 @@ main {
     border-radius: 12px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.6s ease, color 0.6s ease;
 }
 
 body.dark .book-card {
