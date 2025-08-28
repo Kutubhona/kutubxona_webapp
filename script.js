@@ -14,12 +14,21 @@ const booksData = {
   Tafsir: [
     { title: "Tafsir Kitob 1", file: "pdf/Tafsir1.pdf" },
     { title: "Tafsir Kitob 2", file: "pdf/Tafsir2.pdf" }
+  ],
+  Tarix: [
+    { title: "Tarix Kitob 1", file: "pdf/Tarix1.pdf" },
+    { title: "Tarix Kitob 2", file: "pdf/Tarix2.pdf" }
+  ],
+  Ilm: [
+    { title: "Ilm Kitob 1", file: "pdf/Ilm1.pdf" },
+    { title: "Ilm Kitob 2", file: "pdf/Ilm2.pdf" }
   ]
 };
 
 const buttons = document.querySelectorAll(".topic-btn");
 const booksContainer = document.getElementById("books-container");
 
+// Mavzu tugmasi bosilganda
 buttons.forEach(btn => {
   btn.addEventListener("click", () => {
     const topic = btn.getAttribute("data-topic");
@@ -27,6 +36,7 @@ buttons.forEach(btn => {
   });
 });
 
+// Kitoblarni ko‘rsatish
 function displayBooks(topic) {
   booksContainer.innerHTML = "";
   booksData[topic].forEach(book => {
@@ -36,3 +46,30 @@ function displayBooks(topic) {
     booksContainer.appendChild(div);
   });
 }
+
+// Qidiruv funksiyasi
+const searchInput = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+
+searchBtn.addEventListener("click", () => {
+  const query = searchInput.value.toLowerCase();
+  booksContainer.innerHTML = "";
+
+  let found = false;
+
+  Object.keys(booksData).forEach(topic => {
+    booksData[topic].forEach(book => {
+      if(book.title.toLowerCase().includes(query)) {
+        found = true;
+        const div = document.createElement("div");
+        div.className = "book";
+        div.innerHTML = `<a href="${book.file}" target="_blank">${book.title}</a>`;
+        booksContainer.appendChild(div);
+      }
+    });
+  });
+
+  if(!found) {
+    booksContainer.innerHTML = "<p>Hech qanday natija topilmadi.</p>";
+  }
+});
