@@ -1,97 +1,75 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 body {
-    background-color: #f4f4f9;
-    color: #333;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  color: #343a40;
+  margin: 0;
+  padding: 0;
 }
 
 header {
-    background: #4e73df;
-    color: white;
-    text-align: center;
-    padding: 2rem 1rem;
+  background-color: #495057;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
 }
 
-header h1 {
-    font-size: 2.5rem;
+h1 {
+  margin: 0;
+  font-size: 2rem;
 }
 
-header p {
-    margin-top: 0.5rem;
-    font-size: 1.1rem;
+.topics {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 30px 0;
 }
 
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 1rem;
-    flex-wrap: wrap;
-    background: #ffffff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.topic-btn {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-nav button {
-    background: #4e73df;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
+.topic-btn:hover {
+  background-color: #495057;
 }
 
-nav button:hover {
-    background: #2e59d9;
+.books {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  padding: 20px;
 }
 
-.books-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    padding: 2rem;
+#books-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .book {
-    background: white;
-    padding: 1.2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-
-.book:hover {
-    transform: translateY(-5px);
-}
-
-.book h3 {
-    color: #4e73df;
-    margin-bottom: 0.5rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 15px;
+  width: 200px;
+  text-align: center;
+  transition: 0.3s;
 }
 
 .book a {
-    display: inline-block;
-    margin-top: 0.8rem;
-    padding: 0.5rem 1rem;
-    background: #1cc88a;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: 0.3s;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
 }
 
-.book a:hover {
-    background: #17a673;
-}
-
-footer {
-    background: #2e59d9;
-    color: white;
-    text-align: center;
-    padding: 1rem;
+.book:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
