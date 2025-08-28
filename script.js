@@ -9,6 +9,7 @@ const books = [
     { title: "Tafsir al-Qur'on", category: "Tafsir", link: "pdf/tafsir_alquron.pdf" },
 ];
 
+
 // Elementlarni olish
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
