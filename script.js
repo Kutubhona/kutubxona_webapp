@@ -1,75 +1,42 @@
-const booksData = {
-  Islam: [
-    { title: "Islom Kitob 1", file: "pdf/Islam1.pdf" },
-    { title: "Islom Kitob 2", file: "pdf/Islam2.pdf" }
-  ],
-  Fiqh: [
-    { title: "Fiqh Kitob 1", file: "pdf/Fiqh1.pdf" },
-    { title: "Fiqh Kitob 2", file: "pdf/Fiqh2.pdf" }
-  ],
-  Hadis: [
-    { title: "Hadis Kitob 1", file: "pdf/Hadis1.pdf" },
-    { title: "Hadis Kitob 2", file: "pdf/Hadis2.pdf" }
-  ],
-  Tafsir: [
-    { title: "Tafsir Kitob 1", file: "pdf/Tafsir1.pdf" },
-    { title: "Tafsir Kitob 2", file: "pdf/Tafsir2.pdf" }
-  ],
-  Tarix: [
-    { title: "Tarix Kitob 1", file: "pdf/Tarix1.pdf" },
-    { title: "Tarix Kitob 2", file: "pdf/Tarix2.pdf" }
-  ],
-  Ilm: [
-    { title: "Ilm Kitob 1", file: "pdf/Ilm1.pdf" },
-    { title: "Ilm Kitob 2", file: "pdf/Ilm2.pdf" }
-  ]
-};
+// Kitoblar ma'lumotlari
+const books = [
+    { title: "Islom tarixi", category: "Islom", link: "pdf/islom_tarixi.pdf" },
+    { title: "Fiqh asoslari", category: "Fiqh", link: "pdf/fiqh_asoslari.pdf" },
+    { title: "Hadis to'plami", category: "Hadis", link: "pdf/hadis_toplami.pdf" },
+    { title: "Tafsir al-Qur'on", category: "Tafsir", link: "pdf/tafsir_alquron.pdf" },
+    { title: "Namoz kitobi", category: "Islom", link: "pdf/namoz.pdf" },
+    { title: "Zakat va Fiqh", category: "Fiqh", link: "pdf/zakat.pdf" },
+    { title: "Sahih Hadislar", category: "Hadis", link: "pdf/sahih_hadis.pdf" },
+    { title: "Tafsir ibn Kathir", category: "Tafsir", link: "pdf/tafsir_ibn_kathir.pdf" },
+];
 
-const buttons = document.querySelectorAll(".topic-btn");
-const booksContainer = document.getElementById("books-container");
+// Elementlarni olish
+const booksContainer = document.getElementById('booksContainer');
+const searchInput = document.getElementById('searchInput');
+const categoryButtons = document.querySelectorAll('.category-btn');
 
-// Mavzu tugmasi bosilganda
-buttons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const topic = btn.getAttribute("data-topic");
-    displayBooks(topic);
-  });
-});
-
-// Kitoblarni ko‘rsatish
-function displayBooks(topic) {
-  booksContainer.innerHTML = "";
-  booksData[topic].forEach(book => {
-    const div = document.createElement("div");
-    div.className = "book";
-    div.innerHTML = `<a href="${book.file}" target="_blank">${book.title}</a>`;
-    booksContainer.appendChild(div);
-  });
+// Kitoblarni render qilish
+function renderBooks(filteredBooks) {
+    booksContainer.innerHTML = '';
+    if(filteredBooks.length === 0){
+        booksContainer.innerHTML = '<p>Kitob topilmadi...</p>';
+        return;
+    }
+    filteredBooks.forEach(book => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.innerHTML = `
+            <h3>${book.title}</h3>
+            <a href="${book.link}" target="_blank">PDF ni ochish</a>
+        `;
+        booksContainer.appendChild(card);
+    });
 }
 
-// Qidiruv funksiyasi
-const searchInput = document.getElementById("search-input");
-const searchBtn = document.getElementById("search-btn");
+// Dastlab barcha kitoblar
+renderBooks(books);
 
-searchBtn.addEventListener("click", () => {
-  const query = searchInput.value.toLowerCase();
-  booksContainer.innerHTML = "";
-
-  let found = false;
-
-  Object.keys(booksData).forEach(topic => {
-    booksData[topic].forEach(book => {
-      if(book.title.toLowerCase().includes(query)) {
-        found = true;
-        const div = document.createElement("div");
-        div.className = "book";
-        div.innerHTML = `<a href="${book.file}" target="_blank">${book.title}</a>`;
-        booksContainer.appendChild(div);
-      }
-    });
-  });
-
-  if(!found) {
-    booksContainer.innerHTML = "<p>Hech qanday natija topilmadi.</p>";
-  }
-});
+// Kategoriya bo'yicha filtrlash
+categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const category = btn.getAtt
