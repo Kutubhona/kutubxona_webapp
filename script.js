@@ -1,15 +1,12 @@
 // Kitoblar ma'lumotlari
 const books = [
-    { title: "Islom tarixi 1", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/commit/fd983b6b348559908862f5f9192840e15dc4d743#r164770704" },
-    { title: "Islom tarixi 2", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/commit/fd983b6b348559908862f5f9192840e15dc4d743#r164772218" },
-    { title: "Islom tarixi 3", category: "Islom", link: "https://github.com/Kutubhona/kutubxona_webapp/commit/fd983b6b348559908862f5f9192840e15dc4d743#r164772238" },
+    { title: "Islom tarixi 1", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom1.pdf" },
+    { title: "Islom tarixi 2", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom2.pdf" },
+    { title: "Islom tarixi 3", category: "Islom", link: "https://username.github.io/kutubxona_webapp/pdf/islom3.pdf" },
+    // Boshqa kategoriyalar uchun kitoblar (ixtiyoriy)
     { title: "Fiqh asoslari", category: "Fiqh", link: "pdf/fiqh_asoslari.pdf" },
     { title: "Hadis to'plami", category: "Hadis", link: "pdf/hadis_toplami.pdf" },
     { title: "Tafsir al-Qur'on", category: "Tafsir", link: "pdf/tafsir_alquron.pdf" },
-    { title: "Namoz kitobi", category: "Islom", link: "pdf/namoz.pdf" },
-    { title: "Zakat va Fiqh", category: "Fiqh", link: "pdf/zakat.pdf" },
-    { title: "Sahih Hadislar", category: "Hadis", link: "pdf/sahih_hadis.pdf" },
-    { title: "Tafsir ibn Kathir", category: "Tafsir", link: "pdf/tafsir_ibn_kathir.pdf" },
 ];
 
 // Elementlarni olish
