@@ -1,14 +1,15 @@
+// 📚 Kitoblar ma'lumotlari
 const books = [
     {
         title: "Tarixi Tabariy",
-        category: "Hadis",
-        link: "pdf/hadis/",
+        category: "Tarix",
+        link: "pdf/tarix/TARIXI_TABARIY_PDF.pdf",
         description: "Tarixiy hadislar to‘plami."
     },
     {
         title: "Islom Tarixi",
         category: "Tarix",
-        link: "pdf/tarix/TARIXI_TABARIY_PDF.pdf",
+        link: "pdf/tarix/tarix1.pdf",
         description: "Islom tarixining asosiy voqealari."
     },
     {
@@ -19,6 +20,7 @@ const books = [
     }
 ];
 
+// 🧩 Elementlarni olish
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
@@ -27,10 +29,11 @@ const body = document.body;
 
 let activeCategory = "";
 
+// 📦 Kitoblarni render qilish
 function renderBooks(filteredBooks) {
     booksContainer.innerHTML = '';
     if (filteredBooks.length === 0) {
-        booksContainer.innerHTML = '<p></p>';
+        booksContainer.innerHTML = '';
         return;
     }
 
@@ -46,6 +49,7 @@ function renderBooks(filteredBooks) {
     });
 }
 
+// 🔍 Filter funksiyasi: kategoriya + qidiruv
 function filterBooks() {
     const query = searchInput.value.toLowerCase();
     let filtered = books;
@@ -61,6 +65,7 @@ function filterBooks() {
     renderBooks(filtered);
 }
 
+// 📊 Kategoriya tugmalariga kitob sonini qo‘shish
 function updateCategoryCounts() {
     categoryButtons.forEach(btn => {
         const category = btn.dataset.category;
@@ -69,9 +74,11 @@ function updateCategoryCounts() {
     });
 }
 
+// 🚀 Sahifa yuklanganda
 renderBooks([]);
 updateCategoryCounts();
 
+// 🎯 Kategoriya tugmasi bosilganda
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         categoryButtons.forEach(b => b.classList.remove('active'));
@@ -85,8 +92,10 @@ categoryButtons.forEach(btn => {
     });
 });
 
+// 🔎 Qidiruv oynasi
 searchInput.addEventListener('input', filterBooks);
 
+// 🌗 Yorug‘/qorong‘u rejimni yuklash
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) body.className = savedTheme;
@@ -94,6 +103,7 @@ function loadTheme() {
 }
 loadTheme();
 
+// 🌗 Rejim tugmasi bosilganda
 toggleThemeBtn.addEventListener('click', () => {
     body.classList.toggle('light');
     body.classList.toggle('dark');
