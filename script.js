@@ -1,10 +1,9 @@
-// 📚 Kitoblar ma'lumotlari
 const books = [
     {
-        title: "Hadislar",
+        title: "Tarixi Tabariy",
         category: "Hadis",
         link: "pdf/hadis/TARIXI_TABARIY_PDF.pdf",
-        description: "Muhim hadislarni o'z ichiga oladi."
+        description: "Tarixiy hadislar to‘plami."
     },
     {
         title: "Islom Tarixi",
@@ -17,50 +16,25 @@ const books = [
         category: "Fiqh",
         link: "pdf/fiqh/fiqh1.pdf",
         description: "Fiqh asoslari va qoidalari."
-    },
-    {
-        title: "Fiqh Savol-Javoblar",
-        category: "Fiqh",
-        link: "pdf/01-Низоми-Ислом.pdf",
-        description: "Fiqh bo‘yicha savol-javoblar to‘plami."
-    },
-    {
-        title: "Tarixi Tabariy",
-        category: "Hadis",
-        link: "pdf/hadis/TARIXI_TABARIY_PDF.pdf",
-        description: "Tarixiy hadislar to‘plami."
     }
 ];
 
-// 🧩 Elementlarni olish
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
 const toggleThemeBtn = document.getElementById('toggleTheme');
 const body = document.body;
 
-let activeCategory = ""; // Hozirgi tanlangan kategoriya
+let activeCategory = "";
 
-// 📦 Kitoblarni render qilish
 function renderBooks(filteredBooks) {
-    const uniqueBooks = [];
-    const titles = new Set();
-
-    filteredBooks.forEach(book => {
-        const uniqueKey = book.title + book.link;
-        if (!titles.has(uniqueKey)) {
-            titles.add(uniqueKey);
-            uniqueBooks.push(book);
-        }
-    });
-
     booksContainer.innerHTML = '';
-    if (uniqueBooks.length === 0) {
+    if (filteredBooks.length === 0) {
         booksContainer.innerHTML = '<p>Hozircha bu yerda kitob yo‘q...</p>';
         return;
     }
 
-    uniqueBooks.forEach(book => {
+    filteredBooks.forEach(book => {
         const card = document.createElement('div');
         card.className = 'book-card';
         card.innerHTML = `
@@ -72,7 +46,6 @@ function renderBooks(filteredBooks) {
     });
 }
 
-// 🔍 Filter funksiyasi: kategoriya + qidiruv
 function filterBooks() {
     const query = searchInput.value.toLowerCase();
     let filtered = books;
@@ -88,15 +61,13 @@ function filterBooks() {
     renderBooks(filtered);
 }
 
-// 🚀 Dastlab barcha kitoblar
-renderBooks(books);
+renderBooks([]);
 
-// 🎯 Kategoriya bo'yicha filtrlash + active class
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         categoryButtons.forEach(b => b.classList.remove('active'));
         if (activeCategory === btn.dataset.category) {
-            activeCategory = ""; // toggle off
+            activeCategory = "";
         } else {
             activeCategory = btn.dataset.category;
             btn.classList.add('active');
@@ -105,10 +76,8 @@ categoryButtons.forEach(btn => {
     });
 });
 
-// 🔎 Qidiruv funksiyasi
 searchInput.addEventListener('input', filterBooks);
 
-// 🌗 Yorug' va qorong'u rejim + localStorage saqlash
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) body.className = savedTheme;
@@ -119,6 +88,4 @@ loadTheme();
 toggleThemeBtn.addEventListener('click', () => {
     body.classList.toggle('light');
     body.classList.toggle('dark');
-    localStorage.setItem('theme', body.className);
-    toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
-});
+    localStorage.setItem('theme',
