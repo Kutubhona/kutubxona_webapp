@@ -30,7 +30,7 @@ let activeCategory = "";
 function renderBooks(filteredBooks) {
     booksContainer.innerHTML = '';
     if (filteredBooks.length === 0) {
-        booksContainer.innerHTML = '<p>Hozircha bu yerda kitob yo‘q...</p>';
+        booksContainer.innerHTML = '<p></p>';
         return;
     }
 
