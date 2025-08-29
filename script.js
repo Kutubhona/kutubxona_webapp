@@ -1,3 +1,4 @@
+// 📚 Kitoblar ma'lumotlari
 const books = [
     {
         title: "Tarixi Tabariy",
@@ -19,14 +20,16 @@ const books = [
     }
 ];
 
+// 🧩 Elementlarni olish
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
 const toggleThemeBtn = document.getElementById('toggleTheme');
 const body = document.body;
 
-let activeCategory = "";
+let activeCategory = ""; // Hozirgi tanlangan kategoriya
 
+// 📦 Kitoblarni render qilish
 function renderBooks(filteredBooks) {
     booksContainer.innerHTML = '';
     if (filteredBooks.length === 0) {
@@ -46,6 +49,7 @@ function renderBooks(filteredBooks) {
     });
 }
 
+// 🔍 Filter funksiyasi: kategoriya + qidiruv
 function filterBooks() {
     const query = searchInput.value.toLowerCase();
     let filtered = books;
@@ -61,13 +65,15 @@ function filterBooks() {
     renderBooks(filtered);
 }
 
+// 🚀 Sahifa yuklanganda kitoblar ko‘rinmasin
 renderBooks([]);
 
+// 🎯 Kategoriya bo'yicha filtrlash + active class
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         categoryButtons.forEach(b => b.classList.remove('active'));
         if (activeCategory === btn.dataset.category) {
-            activeCategory = "";
+            activeCategory = ""; // toggle off
         } else {
             activeCategory = btn.dataset.category;
             btn.classList.add('active');
@@ -76,8 +82,10 @@ categoryButtons.forEach(btn => {
     });
 });
 
+// 🔎 Qidiruv funksiyasi
 searchInput.addEventListener('input', filterBooks);
 
+// 🌗 Yorug' va qorong'u rejim + localStorage saqlash
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) body.className = savedTheme;
@@ -88,4 +96,6 @@ loadTheme();
 toggleThemeBtn.addEventListener('click', () => {
     body.classList.toggle('light');
     body.classList.toggle('dark');
-    localStorage.setItem('theme',
+    localStorage.setItem('theme', body.className);
+    toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
+});
