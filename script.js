@@ -3,7 +3,7 @@ const books = [
     {
         title: "Hadislar",
         category: "Hadis",
-        link: "pdf/hadis/hadis1.pdf",
+        link: "pdf/hadis/TARIXI_TABARIY_PDF.pdf",
         description: "Muhim hadislarni o'z ichiga oladi."
     },
     {
