@@ -2,13 +2,13 @@ const books = [
     {
         title: "Tarixi Tabariy",
         category: "Hadis",
-        link: "pdf/hadis/TARIXI_TABARIY_PDF.pdf",
+        link: "pdf/hadis/",
         description: "Tarixiy hadislar to‘plami."
     },
     {
         title: "Islom Tarixi",
         category: "Tarix",
-        link: "pdf/tarix/tarix1.pdf",
+        link: "pdf/tarix/TARIXI_TABARIY_PDF.pdf",
         description: "Islom tarixining asosiy voqealari."
     },
     {
