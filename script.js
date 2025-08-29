@@ -7,12 +7,6 @@ const books = [
         description: "Tarixiy hadislar to‘plami."
     },
     {
-        title: "Islom Tarixi",
-        category: "Tarix",
-        link: "pdf/tarix/tarix1.pdf",
-        description: "Islom tarixining asosiy voqealari."
-    },
-    {
         title: "Fiqh Asoslari",
         category: "Fiqh",
         link: "pdf/fiqh/fiqh1.pdf",
