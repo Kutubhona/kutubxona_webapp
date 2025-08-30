@@ -15,27 +15,24 @@ const books = [
 ];
 
 // 🧩 Elementlarni olish
-const booksContainer = document.getElementById('booksContainer');
-const searchInput = document.getElementById('searchInput');
-const categoryButtons = document.querySelectorAll('.category-btn');
-const toggleThemeBtn = document.getElementById('toggleTheme');
-const body = document.body;
+const booksContainer   = document.getElementById('booksContainer');
+const searchInput      = document.getElementById('searchInput');
+const categoryButtons  = document.querySelectorAll('.category-btn');
+const toggleThemeBtn   = document.getElementById('toggleTheme');
+const uploadForm       = document.getElementById('uploadForm');
+const body             = document.body;
 
 let activeCategory = "";
 
 // 📦 Kitoblarni render qilish
 function renderBooks(filteredBooks) {
     booksContainer.innerHTML = '';
-    if (filteredBooks.length === 0) {
-        booksContainer.innerHTML = '';
-        return;
-    }
+    if (filteredBooks.length === 0) return;
 
     filteredBooks.forEach(book => {
         const card = document.createElement('div');
         card.className = 'book-card';
 
-        // PDF tugmasi: universal qurilmalar uchun
         const pdfButton = `
             <a href="${book.link}" target="_blank" rel="noopener noreferrer">📖 PDF ni ochish</a>
             <a href="${book.link}" download style="display:block; margin-top:6px;">⬇️ Yuklab olish</a>
@@ -58,7 +55,6 @@ function filterBooks() {
     if (activeCategory) {
         filtered = filtered.filter(book => book.category === activeCategory);
     }
-
     if (query) {
         filtered = filtered.filter(book => book.title.toLowerCase().includes(query));
     }
@@ -100,7 +96,9 @@ searchInput.addEventListener('input', filterBooks);
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) body.className = savedTheme;
-    toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
+    toggleThemeBtn.textContent = body.classList.contains('dark')
+        ? "🌞 Yorug' rejim"
+        : "🌙 Qorong'u rejim";
 }
 loadTheme();
 
@@ -109,5 +107,29 @@ toggleThemeBtn.addEventListener('click', () => {
     body.classList.toggle('light');
     body.classList.toggle('dark');
     localStorage.setItem('theme', body.className);
-    toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
+    toggleThemeBtn.textContent = body.classList.contains('dark')
+        ? "🌞 Yorug' rejim"
+        : "🌙 Qorong'u rejim";
 });
+
+// 📥 Kitob qo‘shish formasi ishlashi
+if (uploadForm) {
+    uploadForm.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const title       = document.getElementById('bookTitle').value.trim();
+        const description = document.getElementById('bookDescription').value.trim();
+        const category    = document.getElementById('bookCategory').value;
+        const link        = document.getElementById('bookLink').value.trim();
+
+        if (!title || !description || !category || !link) {
+            alert("Iltimos, barcha maydonlarni to‘ldiring.");
+            return;
+        }
+
+        books.push({ title, description, category, link });
+        updateCategoryCounts();
+        filterBooks();
+        uploadForm.reset();
+    });
+}
