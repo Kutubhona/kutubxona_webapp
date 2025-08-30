@@ -25,6 +25,23 @@
         </div>
     </main>
 
+    <!-- 📥 Yangi kitob qo‘shish formasi -->
+    <section id="uploadSection">
+        <h2>📥 Yangi kitob qo‘shish</h2>
+        <form id="uploadForm">
+            <input type="text" id="bookTitle" placeholder="Kitob nomi" required>
+            <input type="text" id="bookDescription" placeholder="Tavsif" required>
+            <select id="bookCategory" required>
+                <option value="">Kategoriya tanlang</option>
+                <option value="Hadis">Hadis</option>
+                <option value="Tarix">Tarix</option>
+                <option value="Fiqh">Fiqh</option>
+            </select>
+            <input type="text" id="bookLink" placeholder="PDF linki (masalan: pdf/tarix/kitob.pdf)" required>
+            <button type="submit">Qo‘shish</button>
+        </form>
+    </section>
+
     <footer>
         <p>&copy; 2025 Kutubxona</p>
     </footer>
