@@ -52,6 +52,31 @@
         <p>&copy; 2025 Kutubxona</p>
     </footer>
 
+    <!-- ✅ Qo'shildi: Firebase SDK (compat) va init -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script>
+      // Bu yerga Firebase Console -> Web app sahifasidagi configni qo'ying
+      // Misol: const firebaseConfig = { apiKey: "...", authDomain: "...", ... };
+      const firebaseConfig = {
+        apiKey: "API_KEYINGIZ",
+        authDomain: "LOYIHA_ID.firebaseapp.com",
+        projectId: "LOYIHA_ID",
+        storageBucket: "LOYIHA_ID.appspot.com",
+        messagingSenderId: "XXXXXXX",
+        appId: "APP_ID",
+        measurementId: "G-XXXXXXX"
+      };
+
+      // Firebase ishga tushiriladi
+      firebase.initializeApp(firebaseConfig);
+
+      // Global o'zgaruvchilar (script.js uchun)
+      window.db = firebase.firestore();
+      window.storage = firebase.storage();
+    </script>
+
     <script src="script.js"></script>
 </body>
 </html>
