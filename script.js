@@ -1,3 +1,4 @@
+// 🧩 Elementlar
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
@@ -85,10 +86,12 @@ uploadForm.addEventListener('submit', async (e) => {
     if (!file) return alert("PDF tanlang!");
 
     try {
+        // Faylni Storage'ga yuklash
         const storageRef = storage.ref(`books/${Date.now()}_${file.name}`);
         await storageRef.put(file);
         const fileURL = await storageRef.getDownloadURL();
 
+        // Firestore'ga yozish
         await db.collection("books").add({
             title,
             description,
