@@ -20,18 +20,14 @@
     </nav>
 
     <main>
-        <div id="booksContainer">
-            <!-- Kitoblar JS orqali qo'shiladi -->
-        </div>
+        <div id="booksContainer"></div>
     </main>
 
-    <!-- 📥 Kitob qo‘shish tugmasi -->
-    <div style="text-align:center; margin:20px;">
+    <div class="center">
         <button id="showUploadBtn">📥 Kitob qo‘shish</button>
     </div>
 
-    <!-- 📥 Yangi kitob qo‘shish formasi (dastlab yashirin) -->
-    <section id="uploadSection" style="display:none;">
+    <section id="uploadSection" class="hidden">
         <h2>📥 Yangi kitob qo‘shish</h2>
         <form id="uploadForm">
             <input type="text" id="bookTitle" placeholder="Kitob nomi" required>
@@ -42,7 +38,6 @@
                 <option value="Tarix">Tarix</option>
                 <option value="Fiqh">Fiqh</option>
             </select>
-            <!-- 📂 Qurilmadan PDF tanlash -->
             <input type="file" id="bookFile" accept="application/pdf" required>
             <button type="submit">Qo‘shish</button>
         </form>
@@ -52,12 +47,10 @@
         <p>&copy; 2025 Kutubxona</p>
     </footer>
 
-    <!-- ✅ Firebase SDK (compat) va init -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script>
-      // Sening haqiqiy Firebase config qiymatlaring
       const firebaseConfig = {
         apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
         authDomain: "kutubxona-79dd3.firebaseapp.com",
@@ -67,15 +60,10 @@
         appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
         measurementId: "G-Z0Z4FWPWP8"
       };
-
-      // Firebase ishga tushiriladi
       firebase.initializeApp(firebaseConfig);
-
-      // Global o'zgaruvchilar (script.js uchun)
       window.db = firebase.firestore();
       window.storage = firebase.storage();
     </script>
-
     <script src="script.js"></script>
 </body>
 </html>
