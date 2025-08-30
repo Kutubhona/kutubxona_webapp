@@ -1,4 +1,3 @@
-// 🧩 Elementlar
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
@@ -64,9 +63,14 @@ toggleThemeBtn.addEventListener('click', () => {
     updateThemeButton();
 });
 
-// 📥 Kitob qo‘shish formasi ko‘rsatish
+// 📥 Kitob qo‘shish tugmasi (parol bilan)
 showUploadBtn.addEventListener('click', () => {
-    uploadSection.style.display = uploadSection.style.display === 'none' ? 'block' : 'none';
+    const password = prompt("Kitob qo‘shish uchun parolni kiriting:");
+    if (password === "ibr2010071717.se") {
+        uploadSection.style.display = 'block';
+    } else {
+        alert("❌ Noto‘g‘ri parol!");
+    }
 });
 
 // 📤 Yangi kitob qo‘shish
@@ -81,12 +85,10 @@ uploadForm.addEventListener('submit', async (e) => {
     if (!file) return alert("PDF tanlang!");
 
     try {
-        // Faylni Storage'ga yuklash
         const storageRef = storage.ref(`books/${Date.now()}_${file.name}`);
         await storageRef.put(file);
         const fileURL = await storageRef.getDownloadURL();
 
-        // Firestore'ga yozish
         await db.collection("books").add({
             title,
             description,
