@@ -34,10 +34,17 @@ function renderBooks(filteredBooks) {
     filteredBooks.forEach(book => {
         const card = document.createElement('div');
         card.className = 'book-card';
+
+        // PDF tugmasi: universal qurilmalar uchun
+        const pdfButton = `
+            <a href="${book.link}" target="_blank" rel="noopener noreferrer">📖 PDF ni ochish</a>
+            <a href="${book.link}" download style="display:block; margin-top:6px;">⬇️ Yuklab olish</a>
+        `;
+
         card.innerHTML = `
             <h3>${book.title}</h3>
             <p>${book.description}</p>
-            <a href="${book.link}" target="_blank">PDF ni ochish</a>
+            ${pdfButton}
         `;
         booksContainer.appendChild(card);
     });
