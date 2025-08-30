@@ -67,7 +67,7 @@ toggleThemeBtn.addEventListener('click', () => {
 // 📥 Kitob qo‘shish tugmasi (parol bilan)
 showUploadBtn.addEventListener('click', () => {
     const password = prompt("Kitob qo‘shish uchun parolni kiriting:");
-    if (password === "ibr2010071717.se") {
+    if (password === "ibr2018071717.se") {
         uploadSection.style.display = 'block';
     } else {
         alert("❌ Noto‘g‘ri parol!");
@@ -78,8 +78,8 @@ showUploadBtn.addEventListener('click', () => {
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const title = document.getElementById('bookTitle').value;
-    const description = document.getElementById('bookDescription').value;
+    const title = document.getElementById('bookTitle').value.trim();
+    const description = document.getElementById('bookDescription').value.trim();
     const category = document.getElementById('bookCategory').value;
     const file = document.getElementById('bookFile').files[0];
 
@@ -91,12 +91,13 @@ uploadForm.addEventListener('submit', async (e) => {
         await storageRef.put(file);
         const fileURL = await storageRef.getDownloadURL();
 
-        // Firestore'ga yozish
+        // Firestore'ga yozish (secret bilan)
         await db.collection("books").add({
             title,
             description,
             category,
-            link: fileURL
+            link: fileURL,
+            secret: "ibr2018071717.se"
         });
 
         alert("✅ Kitob qo‘shildi!");
