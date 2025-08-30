@@ -20,6 +20,8 @@ const searchInput      = document.getElementById('searchInput');
 const categoryButtons  = document.querySelectorAll('.category-btn');
 const toggleThemeBtn   = document.getElementById('toggleTheme');
 const uploadForm       = document.getElementById('uploadForm');
+const showUploadBtn    = document.getElementById('showUploadBtn');
+const uploadSection    = document.getElementById('uploadSection');
 const body             = document.body;
 
 let activeCategory = "";
@@ -112,24 +114,38 @@ toggleThemeBtn.addEventListener('click', () => {
         : "🌙 Qorong'u rejim";
 });
 
-// 📥 Kitob qo‘shish formasi ishlashi
-if (uploadForm) {
-    uploadForm.addEventListener('submit', e => {
-        e.preventDefault();
+// 📥 Kitob qo‘shish tugmasi — parol tekshirish
+showUploadBtn.addEventListener('click', () => {
+    const password = prompt("Kitob qo‘shish uchun parolni kiriting:");
+    if (password === "ibr2010071717.se") {
+        uploadSection.style.display = "block";
+        showUploadBtn.style.display = "none";
+    } else {
+        alert("❌ Noto‘g‘ri parol!");
+    }
+});
 
-        const title       = document.getElementById('bookTitle').value.trim();
-        const description = document.getElementById('bookDescription').value.trim();
-        const category    = document.getElementById('bookCategory').value;
-        const link        = document.getElementById('bookLink').value.trim();
+// 📥 Forma ishlashi — qurilmadan PDF tanlash
+uploadForm.addEventListener('submit', e => {
+    e.preventDefault();
 
-        if (!title || !description || !category || !link) {
-            alert("Iltimos, barcha maydonlarni to‘ldiring.");
-            return;
-        }
+    const title       = document.getElementById('bookTitle').value.trim();
+    const description = document.getElementById('bookDescription').value.trim();
+    const category    = document.getElementById('bookCategory').value;
+    const fileInput   = document.getElementById('bookFile');
 
-        books.push({ title, description, category, link });
-        updateCategoryCounts();
-        filterBooks();
-        uploadForm.reset();
-    });
-}
+    if (!title || !description || !category || fileInput.files.length === 0) {
+        alert("Iltimos, barcha maydonlarni to‘ldiring.");
+        return;
+    }
+
+    // Tanlangan PDF faylga vaqtinchalik URL yaratamiz
+    const file = fileInput.files[0];
+    const fileURL = URL.createObjectURL(file);
+
+    books.push({ title, description, category, link: fileURL });
+    updateCategoryCounts();
+    filterBooks();
+    uploadForm.reset();
+    alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
+});
