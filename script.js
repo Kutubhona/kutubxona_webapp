@@ -1,42 +1,55 @@
-// 📚 Kitoblar ro‘yxati Firestore’dan olinadi
-let books = [];
+// 📚 Kitoblar ma'lumotlari
+const books = [
+    {
+        title: "Tarixi Tabariy",
+        category: "Hadis",
+        link: "pdf/hadis/TARIXI_TABARIY_PDF.pdf",
+        description: "Tarixiy hadislar to‘plami."
+    },
+    {
+        title: "Islom Tarixi",
+        category: "Tarix",
+        link: "pdf/tarix/tarix1.pdf",
+        description: "Islom tarixining asosiy voqealari."
+    },
+    {
+        title: "Fiqh Asoslari",
+        category: "Fiqh",
+        link: "pdf/fiqh/fiqh1.pdf",
+        description: "Fiqh asoslari va qoidalari."
+    }
+];
 
 // 🧩 Elementlarni olish
-const booksContainer   = document.getElementById('booksContainer');
-const searchInput      = document.getElementById('searchInput');
-const categoryButtons  = document.querySelectorAll('.category-btn');
-const toggleThemeBtn   = document.getElementById('toggleTheme');
-const uploadForm       = document.getElementById('uploadForm');
-const showUploadBtn    = document.getElementById('showUploadBtn');
-const uploadSection    = document.getElementById('uploadSection');
-const body             = document.body;
+const booksContainer = document.getElementById('booksContainer');
+const searchInput = document.getElementById('searchInput');
+const categoryButtons = document.querySelectorAll('.category-btn');
+const toggleThemeBtn = document.getElementById('toggleTheme');
+const body = document.body;
 
-let activeCategory = "";
+let activeCategory = ""; // Hozirgi tanlangan kategoriya
 
 // 📦 Kitoblarni render qilish
 function renderBooks(filteredBooks) {
     booksContainer.innerHTML = '';
-    if (filteredBooks.length === 0) return;
+    if (filteredBooks.length === 0) {
+        booksContainer.innerHTML = '<p>Hozircha bu yerda kitob yo‘q...</p>';
+        return;
+    }
 
     filteredBooks.forEach(book => {
         const card = document.createElement('div');
         card.className = 'book-card';
-
-        const pdfButton = `
-            <a href="${book.link}" target="_blank" rel="noopener noreferrer">📖 PDF ni ochish</a>
-            <a href="${book.link}" download style="display:block; margin-top:6px;">⬇️ Yuklab olish</a>
-        `;
-
         card.innerHTML = `
             <h3>${book.title}</h3>
             <p>${book.description}</p>
-            ${pdfButton}
+            <a href="${book.link}" target="_blank">PDF ni ochish</a>
         `;
         booksContainer.appendChild(card);
     });
 }
 
-// 🔍 Filtrlash
+// 🔍 Filter funksiyasi: kategoriya + qidiruv
 function filterBooks() {
     const query = searchInput.value.toLowerCase();
     let filtered = books;
@@ -44,6 +57,7 @@ function filterBooks() {
     if (activeCategory) {
         filtered = filtered.filter(book => book.category === activeCategory);
     }
+
     if (query) {
         filtered = filtered.filter(book => book.title.toLowerCase().includes(query));
     }
@@ -51,30 +65,15 @@ function filterBooks() {
     renderBooks(filtered);
 }
 
-// 📊 Kategoriya sonlarini yangilash
-function updateCategoryCounts() {
-    categoryButtons.forEach(btn => {
-        const category = btn.dataset.category;
-        const count = books.filter(book => book.category === category).length;
-        btn.textContent = `${category} (${count})`;
-    });
-}
+// 🚀 Sahifa yuklanganda kitoblar ko‘rinmasin
+renderBooks([]);
 
-// 🚀 Firestore’dan kitoblarni olish
-function loadBooksFromFirestore() {
-    db.collection("books").orderBy("title").onSnapshot(snapshot => {
-        books = snapshot.docs.map(doc => doc.data());
-        updateCategoryCounts();
-        filterBooks();
-    });
-}
-
-// 🎯 Kategoriya tugmalari
+// 🎯 Kategoriya bo'yicha filtrlash + active class
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         categoryButtons.forEach(b => b.classList.remove('active'));
         if (activeCategory === btn.dataset.category) {
-            activeCategory = "";
+            activeCategory = ""; // toggle off
         } else {
             activeCategory = btn.dataset.category;
             btn.classList.add('active');
@@ -83,77 +82,20 @@ categoryButtons.forEach(btn => {
     });
 });
 
-// 🔎 Qidiruv
+// 🔎 Qidiruv funksiyasi
 searchInput.addEventListener('input', filterBooks);
 
-// 🌗 Tema yuklash
+// 🌗 Yorug' va qorong'u rejim + localStorage saqlash
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) body.className = savedTheme;
-    toggleThemeBtn.textContent = body.classList.contains('dark')
-        ? "🌞 Yorug' rejim"
-        : "🌙 Qorong'u rejim";
+    toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
 }
 loadTheme();
 
-// 🌗 Tema o‘zgartirish
 toggleThemeBtn.addEventListener('click', () => {
     body.classList.toggle('light');
     body.classList.toggle('dark');
     localStorage.setItem('theme', body.className);
-    toggleThemeBtn.textContent = body.classList.contains('dark')
-        ? "🌞 Yorug' rejim"
-        : "🌙 Qorong'u rejim";
+    toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
 });
-
-// 📥 Kitob qo‘shish tugmasi — parol tekshirish
-showUploadBtn.addEventListener('click', () => {
-    const password = prompt("Kitob qo‘shish uchun parolni kiriting:");
-    if (password === "ibr2010071717.se") {
-        uploadSection.style.display = "block";
-        showUploadBtn.style.display = "none";
-    } else {
-        alert("❌ Noto‘g‘ri parol!");
-    }
-});
-
-// 📤 Forma yuborilganda — PDF’ni Firebase Storage’ga yuklash
-uploadForm.addEventListener('submit', async e => {
-    e.preventDefault();
-
-    const title       = document.getElementById('bookTitle').value.trim();
-    const description = document.getElementById('bookDescription').value.trim();
-    const category    = document.getElementById('bookCategory').value;
-    const fileInput   = document.getElementById('bookFile');
-
-    if (!title || !description || !category || fileInput.files.length === 0) {
-        alert("Iltimos, barcha maydonlarni to‘ldiring.");
-        return;
-    }
-
-    const file = fileInput.files[0];
-    const storageRef = storage.ref(`pdf/${Date.now()}_${file.name}`);
-
-    try {
-        // Faylni yuklash
-        await storageRef.put(file);
-        const fileURL = await storageRef.getDownloadURL();
-
-        // Firestore’ga yozish
-        await db.collection("books").add({
-            title,
-            description,
-            category,
-            link: fileURL
-        });
-
-        alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
-        uploadForm.reset();
-    } catch (error) {
-        console.error("Xatolik:", error);
-        alert("❌ Yuklashda xatolik yuz berdi");
-    }
-});
-
-// 📥 Boshlash
-loadBooksFromFirestore();
