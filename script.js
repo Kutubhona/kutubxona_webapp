@@ -67,7 +67,7 @@ toggleThemeBtn.addEventListener('click', () => {
 // 📥 Kitob qo‘shish tugmasi (parol bilan)
 showUploadBtn.addEventListener('click', () => {
     const password = prompt("Kitob qo‘shish uchun parolni kiriting:");
-    if (password === "ibr2018071717.se") {
+    if (password === "ibr2010071717.se") {
         uploadSection.style.display = 'block';
     } else {
         alert("❌ Noto‘g‘ri parol!");
@@ -86,18 +86,16 @@ uploadForm.addEventListener('submit', async (e) => {
     if (!file) return alert("PDF tanlang!");
 
     try {
-        // Faylni Storage'ga yuklash
         const storageRef = storage.ref(`books/${Date.now()}_${file.name}`);
         await storageRef.put(file);
         const fileURL = await storageRef.getDownloadURL();
 
-        // Firestore'ga yozish (secret bilan)
         await db.collection("books").add({
             title,
             description,
             category,
             link: fileURL,
-            secret: "ibr2018071717.se"
+            secret: "abrakadabra123" // Firestore qoidasi bilan mos
         });
 
         alert("✅ Kitob qo‘shildi!");
