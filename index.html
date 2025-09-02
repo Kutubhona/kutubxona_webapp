@@ -50,6 +50,18 @@
         </form>
     </section>
 
+    <!-- 📄 PDF tanlov oynasi -->
+    <section id="pdfOptions" style="text-align:center; margin:40px 0; display:none;">
+        <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
+        <button id="openPDFBtn">📖 Brauzerda ochish</button>
+        <button id="downloadPDFBtn">⬇️ Yuklab olish</button>
+
+        <div id="downloadMessage" style="margin-top:20px; display:none;">
+            <p style="color:green; font-weight:bold;">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
+            <a id="openDownloaded" href="" target="_blank" class="open-pdf-link">📂 Yuklangan PDF ni ochish</a>
+        </div>
+    </section>
+
     <footer>
         <p>&copy; 2025 Kutubxona</p>
     </footer>
@@ -63,7 +75,7 @@
         apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
         authDomain: "kutubxona-79dd3.firebaseapp.com",
         projectId: "kutubxona-79dd3",
-        storageBucket: "kutubxona-79dd3.firebasestorage.app", <!-- ✅ To‘g‘ri bucket nomi -->
+        storageBucket: "kutubxona-79dd3.firebasestorage.app",
         messagingSenderId: "593289819612",
         appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
         measurementId: "G-Z0Z4FWPWP8"
