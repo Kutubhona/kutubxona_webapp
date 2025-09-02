@@ -6,6 +6,7 @@ const toggleThemeBtn = document.getElementById('toggleTheme');
 const uploadSection = document.getElementById('uploadSection');
 const showUploadBtn = document.getElementById('showUploadBtn');
 const uploadForm = document.getElementById('uploadForm');
+const uploadProgress = document.getElementById('uploadProgress');
 const body = document.body;
 
 let activeCategory = "";
@@ -16,8 +17,8 @@ function renderBooks(list) {
     booksContainer.innerHTML = list.length
         ? list.map(book => `
             <div class="book-card">
-                <h3>${book.title}</h3>
-                <p>${book.description}</p>
+                <h3>${book.title || "Nomsiz kitob"}</h3>
+                <p>${book.description || ""}</p>
                 <a href="${book.link}" target="_blank">PDF ni ochish</a>
             </div>
         `).join('')
@@ -29,7 +30,7 @@ function filterBooks() {
     const query = searchInput.value.toLowerCase();
     const filtered = allBooks.filter(book =>
         (!activeCategory || book.category === activeCategory) &&
-        (!query || book.title.toLowerCase().includes(query))
+        (!query || (book.title && book.title.toLowerCase().includes(query)))
     );
     renderBooks(filtered);
 }
@@ -74,7 +75,7 @@ showUploadBtn.addEventListener('click', () => {
     }
 });
 
-// 📤 Yangi kitob qo‘shish
+// 📤 Yangi kitob qo‘shish (progress va xatolik bilan)
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -89,29 +90,42 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        // Faylni Firebase Storage'ga yuklash (metadata bilan)
         const storageRef = firebase.storage().ref(`books/${Date.now()}_${file.name}`);
-        await storageRef.put(file, {
+        const uploadTask = storageRef.put(file, {
             customMetadata: {
                 secret_code: "ibr2010071717.se"
             }
         });
 
-        // Fayl linkini olish
-        const fileURL = await storageRef.getDownloadURL();
+        // 📊 Yuklash jarayonini kuzatish
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                uploadProgress.textContent = `Yuklanmoqda: ${progress.toFixed(0)}%`;
+            },
+            (error) => {
+                console.error("❌ Yuklash xatolik:", error);
+                uploadProgress.textContent = "";
+                alert("❌ Yuklashda xatolik: " + error.message);
+            },
+            async () => {
+                // ✅ Yuklash tugadi
+                const fileURL = await storageRef.getDownloadURL();
+                await firebase.firestore().collection("books").add({
+                    title,
+                    description,
+                    category,
+                    link: fileURL,
+                    secret_code: "ibr2010071717.se"
+                });
 
-        // Firestore'ga kitob ma'lumotlarini yozish (secret_code bilan)
-        await firebase.firestore().collection("books").add({
-            title,
-            description,
-            category,
-            link: fileURL,
-            secret_code: "ibr2010071717.se"
-        });
+                alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
+                uploadProgress.textContent = "";
+                uploadForm.reset();
+                uploadSection.style.display = 'none';
+            }
+        );
 
-        alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
-        uploadForm.reset();
-        uploadSection.style.display = 'none';
     } catch (err) {
         console.error("❌ Xatolik:", err);
         alert("❌ Xatolik: " + err.message);
