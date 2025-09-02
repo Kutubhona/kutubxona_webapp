@@ -25,7 +25,7 @@
 
     <div class="center">
         <button id="showUploadBtn">📥 Kitob qo‘shish</button>
-    </div>
+    </div> 
 
     <section id="uploadSection" style="display:none;">
         <h2>📥 Yangi kitob qo‘shish</h2>
@@ -40,10 +40,14 @@
             </select>
             <input type="file" id="bookFile" accept="application/pdf" required>
             <button type="submit">Qo‘shish</button>
-        </form>
 
-        <!-- 📊 Yuklash jarayoni foizini ko‘rsatish -->
-        <p id="uploadProgress" style="font-weight:bold; color:green; margin-top:10px;"></p>
+            <!-- 📊 Progress bar -->
+            <div id="progressContainer" style="width:100%; background:#ddd; height:20px; border-radius:10px; margin-top:10px; display:none;">
+                <div id="progressBar" style="height:100%; width:0%; background:green; border-radius:10px; text-align:center; color:white; font-size:12px;">
+                    0%
+                </div>
+            </div>
+        </form>
     </section>
 
     <footer>
@@ -59,7 +63,7 @@
         apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
         authDomain: "kutubxona-79dd3.firebaseapp.com",
         projectId: "kutubxona-79dd3",
-        storageBucket: "kutubxona-79dd3.appspot.com",
+        storageBucket: "kutubxona-79dd3.firebasestorage.app", <!-- ✅ To‘g‘ri bucket nomi -->
         messagingSenderId: "593289819612",
         appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
         measurementId: "G-Z0Z4FWPWP8"
