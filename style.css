@@ -57,11 +57,12 @@ header input {
     font-size: 1rem;
     margin-bottom: 10px;
     box-shadow: var(--shadow);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 header input:focus {
     transform: scale(1.05);
+    box-shadow: 0 0 10px var(--primary-light);
 }
 
 body.light header input {
@@ -140,7 +141,7 @@ main {
 }
 
 .book-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.02);
     box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
 
@@ -173,11 +174,12 @@ body.dark .book-card {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .book-card button:hover {
     background: #ff8787;
+    transform: scale(1.05);
 }
 
 /* UPLOAD SECTION */
@@ -205,12 +207,13 @@ body.dark #uploadSection {
     max-width: 400px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #uploadForm input:focus,
 #uploadForm select:focus {
     transform: scale(1.03);
+    box-shadow: 0 0 8px var(--primary-light);
 }
 
 #uploadForm button {
