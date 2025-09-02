@@ -1,603 +1,130 @@
-/* Modern, polished, and animated UI with smooth 1s theme transitions.
-   Sections:
-   1) Variables  2) Reset  3) Base  4) Utilities  5) Header
-   6) Navigation 7) Main Grid 8) Book Cards 9) Card Actions 10) Admin Toggle
-   11) Upload 12) Progress 13) PDF Options 14) Footer 15) Responsive 16) Animations 17) Reduced Motion
-*/
-
-/* 1. Variables */
+/* ====== VARIABLES ====== */
 :root {
-    /* Brand */
-    --primary: #4e54c8;
-    --primary-light: #8f94fb;
-    --danger: #ff6b6b;
-    --success: #22c55e;
+  /* Brand Colors */
+  --primary: #4e54c8;
+  --primary-light: #8f94fb;
+  --danger: #ff6b6b;
+  --success: #22c55e;
 
-    /* Light theme */
-    --light-bg: #f5f7fb;
-    --light-surface: #ffffff;
-    --light-text: #2a2a2a;
+  /* Light Theme */
+  --light-bg: #f5f7fb;
+  --light-surface: #fff;
+  --light-text: #2a2a2a;
 
-    /* Dark theme */
-    --dark-bg-start: #2a2c39;
-    --dark-bg-end: #1f2029;
-    --dark-card: #2f3142;
-    --dark-surface: #1a1c2b;
-    --dark-hover: #3a3d4f;
-    --dark-text: #f5f5f5;
+  /* Dark Theme */
+  --dark-bg-start: #2a2c39;
+  --dark-bg-end: #1f2029;
+  --dark-card: #2f3142;
+  --dark-surface: #1a1c2b;
+  --dark-hover: #3a3d4f;
+  --dark-text: #f5f5f5;
 
-    /* Effects */
-    --shadow: 0 10px 30px rgba(0,0,0,0.15);
-    --shadow-soft: 0 6px 18px rgba(0,0,0,0.12);
-    --shadow-strong: 0 18px 50px rgba(0,0,0,0.25);
-    --ring: 0 0 0 4px rgba(143,148,251,0.22);
-    --blur: 10px;
-    --radius-s: 10px;
-    --radius-m: 14px;
-    --radius-l: 22px;
+  /* Effects */
+  --shadow-soft: 0 6px 18px rgba(0,0,0,0.12);
+  --shadow-strong: 0 18px 50px rgba(0,0,0,0.25);
+  --ring: 0 0 0 4px rgba(143,148,251,0.22);
+  --blur: 10px;
+  --radius: 12px;
 
-    /* Motion */
-    --theme-duration: 1s;
-    --hover-duration: 0.25s;
-    --elev-duration: 0.3s;
+  /* Motion */
+  --theme-duration: 1s;
+  --hover-duration: 0.25s;
+  --elev-duration: 0.3s;
 
-    /* Accent gradients */
-    --grad-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
-    --grad-danger: linear-gradient(135deg, #ff7a7a, var(--danger));
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+  --grad-danger: linear-gradient(135deg, #ff7a7a, var(--danger));
 }
 
-/* 2. Reset */
+/* ====== RESET ====== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 img { max-width: 100%; display: block; }
-button, input, select, textarea { font: inherit; color: inherit; background: none; }
-a { color: inherit; }
-
+button, input, select, textarea { font: inherit; color: inherit; background: none; border: none; }
+a { color: inherit; text-decoration: none; }
 :root { color-scheme: light dark; }
 
-/* Focus visibility */
-:focus { outline: none; }
-:focus-visible {
-    outline: none;
-    box-shadow: var(--ring);
-    border-radius: 12px;
-}
-
-/* Text selection */
-::selection { background: rgba(143,148,251,0.35); color: #111; }
-body.dark ::selection { background: rgba(143,148,251,0.5); color: #fff; }
-
-/* Scrollbar (WebKit) */
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track { background: transparent; }
-*::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--primary), var(--primary-light));
-    border-radius: 8px;
-}
-body.dark *::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #6b70ff, #9498ff);
-}
-
-/* 3. Base Styles */
+/* ====== BASE ====== */
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--light-bg);
-    color: var(--light-text);
-    line-height: 1.55;
-    transition: background var(--theme-duration) ease, color var(--theme-duration) ease;
-    -webkit-tap-highlight-color: transparent;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--light-bg);
+  color: var(--light-text);
+  line-height: 1.55;
+  transition: background var(--theme-duration) ease, color var(--theme-duration) ease;
 }
 body.dark {
-    background: linear-gradient(135deg, var(--dark-bg-start), var(--dark-bg-end));
-    background-size: 200% 200%;
-    animation: darkGradient var(--theme-duration) ease forwards;
-    color: var(--dark-text);
+  background: linear-gradient(135deg, var(--dark-bg-start), var(--dark-bg-end));
+  color: var(--dark-text);
 }
 
-/* Container rhythm */
-main, header, footer, nav { outline: none; }
-
-/* 4. Utilities */
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 14px 0 0;
+/* ====== UTILITIES ====== */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--hover-duration) ease, box-shadow var(--elev-duration) ease, filter var(--elev-duration) ease, background var(--theme-duration) ease, color var(--theme-duration) ease;
 }
+.btn:hover { transform: translateY(-2px) scale(1.02); }
+.btn:active { transform: translateY(0) scale(0.98); }
 
-/* Utility: subtle glass surface */
-.glass {
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(var(--blur));
-    -webkit-backdrop-filter: blur(var(--blur));
-    border: 1px solid rgba(255,255,255,0.35);
-}
-body.dark .glass {
-    background: rgba(28, 31, 48, 0.55);
-    border-color: rgba(255,255,255,0.14);
-}
-
-/* 5. Header */
+/* ====== HEADER ====== */
 header {
-    text-align: center;
-    padding: 36px 12px 28px;
-    background: var(--grad-primary);
-    color: white;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-    animation: fadeInDown 0.7s ease both;
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
+  text-align: center;
+  padding: 36px 12px 28px;
+  background: var(--grad-primary);
+  color: white;
+  box-shadow: var(--shadow-soft);
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  animation: fadeInDown 0.7s ease both;
 }
-header::before {
-    content: "";
-    position: absolute;
-    inset: -50% -50% auto -50%;
-    height: 200%;
-    background: radial-gradient(closest-side, rgba(255,255,255,0.22), transparent 70%);
-    transform: rotate(18deg);
-    filter: blur(44px);
-    pointer-events: none;
-}
-header::after {
-    content: "";
-    position: absolute;
-    top: -20%;
-    left: -10%;
-    width: 140%;
-    height: 140%;
-    background: conic-gradient(from 0deg, rgba(255,255,255,0.12), transparent 30%, rgba(255,255,255,0.12), transparent 60%);
-    animation: headerSheen 5s linear infinite;
-    pointer-events: none;
-}
-header h1 {
-    font-size: 2rem;
-    letter-spacing: 0.2px;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    margin-bottom: 16px;
-}
-header input {
-    width: min(92%, 460px);
-    padding: 12px 16px;
-    border-radius: 28px;
-    border: 0;
-    outline: none;
-    font-size: 1rem;
-    color: inherit;
-    background: rgba(255,255,255,0.95);
-    box-shadow: var(--shadow-soft);
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                background var(--theme-duration) ease,
-                color var(--theme-duration) ease;
-}
-body.dark header input {
-    background: var(--dark-card);
-    color: var(--dark-text);
-}
-header input:focus {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 28px rgba(0,0,0,0.22), var(--ring);
-}
-header input::placeholder {
-    color: rgba(0,0,0,0.6);
-    transition: color var(--theme-duration) ease;
-}
-body.dark header input::placeholder { color: rgba(255,255,255,0.75); }
 
-/* Theme toggle button */
-#toggleTheme {
-    margin-top: 12px;
-    padding: 9px 16px;
-    border-radius: 22px;
-    border: none;
-    background: rgba(255,255,255,0.12);
-    color: #fff;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    transition: transform var(--hover-duration) ease,
-                background var(--elev-duration) ease,
-                box-shadow var(--elev-duration) ease;
-    position: relative;
-    overflow: hidden;
-}
-#toggleTheme:hover {
-    transform: translateY(-1px) scale(1.03);
-    background: rgba(255,255,255,0.2);
-    box-shadow: 0 8px 22px rgba(0,0,0,0.2);
-}
-#toggleTheme:active { transform: translateY(0) scale(0.98); }
-
-/* 6. Navigation / Categories */
+/* ====== NAVIGATION ====== */
 nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 18px 0 6px;
-    padding: 0 10px;
-    animation: fadeInUp 0.6s ease both 0.05s;
-}
-.category-btn {
-    background: var(--grad-primary);
-    color: white;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 26px;
-    cursor: pointer;
-    box-shadow: var(--shadow-soft);
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                filter var(--elev-duration) ease,
-                background var(--theme-duration) ease;
-    position: relative;
-    overflow: hidden;
-}
-.category-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(78,84,200,0.35);
-    filter: brightness(1.05);
-}
-.category-btn:active { transform: translateY(0) scale(0.98); }
-.category-btn.active {
-    background: linear-gradient(135deg, #ff8b8b, var(--danger));
-    box-shadow: 0 10px 24px rgba(255,107,107,0.35);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 6px;
 }
 
-/* 7. Main Grid */
-main {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 18px;
-    padding: 22px;
-    max-width: 1100px;
-    margin: 0 auto;
-    align-items: start;
-}
-
-/* 8. Book Cards */
+/* ====== CARDS ====== */
 .book-card {
-    background: var(--light-surface);
-    padding: 16px 14px;
-    border-radius: var(--radius-m);
-    box-shadow: var(--shadow-soft);
-    text-align: center;
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                background var(--theme-duration) ease,
-                color var(--theme-duration) ease,
-                border-color var(--theme-duration) ease;
-    animation: riseIn 0.5s ease both;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(0,0,0,0.04);
+  background: var(--light-surface);
+  padding: 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  transition: transform var(--hover-duration) ease, box-shadow var(--elev-duration) ease, background var(--theme-duration) ease, color var(--theme-duration) ease;
 }
 body.dark .book-card {
-    background: linear-gradient(180deg, var(--dark-card), #1a1c2b);
-    color: var(--dark-text);
-    border-color: rgba(255,255,255,0.06);
-}
-.book-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(120% 120% at 50% -20%, rgba(255,255,255,0.25), transparent 60%);
-    opacity: 0;
-    transition: opacity var(--elev-duration) ease;
-    pointer-events: none;
+  background: linear-gradient(180deg, var(--dark-card), var(--dark-surface));
 }
 .book-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-strong);
-}
-.book-card:hover::after { opacity: 1; }
-
-/* 9. Card Actions (Open PDF & Delete) */
-.book-card a,
-.book-card button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 9px 16px;
-    border-radius: 10px;
-    border: none;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                filter var(--elev-duration) ease,
-                background var(--theme-duration) ease,
-                color var(--theme-duration) ease;
-    box-shadow: var(--shadow-soft);
-    position: relative;
-    overflow: hidden;
-}
-.book-card a {
-    background: var(--grad-primary);
-    color: white;
-}
-.book-card a:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 28px rgba(78,84,200,0.35);
-}
-.book-card button {
-    background: var(--grad-danger);
-    color: white;
-}
-.book-card button:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 26px rgba(255,107,107,0.35);
-}
-.book-card a:active,
-.book-card button:active { transform: translateY(0) scale(0.98); }
-
-/* Ripple effect on press */
-.book-card a::after,
-.book-card button::after,
-.category-btn::after,
-#toggleTheme::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(120px 120px at var(--x,50%) var(--y,50%), rgba(255,255,255,0.35), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    pointer-events: none;
-}
-.book-card a:active::after,
-.book-card button:active::after,
-.category-btn:active::after,
-#toggleTheme:active::after { opacity: 1; }
-
-/* 10. Admin Mode Toggle */
-#showUploadBtn {
-    padding: 11px 22px;
-    background: var(--grad-primary);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                filter var(--elev-duration) ease,
-                background var(--theme-duration) ease;
-}
-#showUploadBtn:hover {
-    transform: translateY(-2px) scale(1.03);
-    filter: brightness(1.06);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-strong);
 }
 
-/* 11. Upload Section */
-#uploadSection {
-    text-align: center;
-    padding: 20px 16px 24px;
-    background: #eef0ff;
-    border-radius: 16px;
-    margin: 20px;
-    box-shadow: var(--shadow);
-    animation: fadeInUp 0.6s ease both;
-    max-width: 760px;
-    margin-left: auto;
-    margin-right: auto;
-    transition: background var(--theme-duration) ease, color var(--theme-duration) ease;
-}
-body.dark #uploadSection {
-    background: linear-gradient(180deg, var(--dark-card), #181a28);
-    color: var(--dark-text);
-}
-
-/* Upload form elements */
-#uploadForm input,
-#uploadForm select,
-#uploadForm button {
-    margin: 10px auto 0;
-    padding: 12px 14px;
-    width: min(92%, 460px);
-    border-radius: 10px;
-    border: 1px solid rgba(0,0,0,0.08);
-    background: #fff;
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                background var(--theme-duration) ease,
-                color var(--theme-duration) ease,
-                border-color var(--theme-duration) ease;
-}
-body.dark #uploadForm input,
-body.dark #uploadForm select {
-    background: #1b1d2c;
-    border-color: rgba(255,255,255,0.08);
-    color: var(--dark-text);
-}
-#uploadForm input:focus,
-#uploadForm select:focus {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 26px rgba(78,84,200,0.25), var(--ring);
-}
-
-/* Submit button */
-#uploadForm button[type="submit"] {
-    background: var(--grad-primary);
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-#uploadForm button[type="submit"]:hover {
-    transform: translateY(-1px) scale(1.02);
-}
-
-/* 12. Progress Bar */
-#progressContainer {
-    width: min(92%, 460px);
-    margin: 12px auto 0;
-    background: linear-gradient(180deg, #e7e8f3, #d7d8ea);
-    height: 18px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
-}
-body.dark #progressContainer {
-    background: #131424;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.35);
-}
-#progressBar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--primary), var(--primary-light));
-    color: #fff;
-    font-size: 12px;
-    line-height: 18px;
-    text-align: center;
-    border-radius: 12px;
-    transition: width 0.4s ease;
-    position: relative;
-    overflow: hidden;
-}
-#progressBar::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
-    transform: translateX(-100%);
-    animation: sheen 1.8s linear infinite;
-}
-
-/* 13. PDF Options Chooser */
-#pdfOptions {
-    display: none;
-    background: rgba(255,255,255,0.9);
-    padding: 22px 16px;
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    max-width: 560px;
-    margin: 28px auto;
-    animation: fadeInUp 0.5s ease both;
-    backdrop-filter: blur(4px);
-}
-body.dark #pdfOptions {
-    background: rgba(22, 24, 37, 0.9);
-    color: var(--dark-text);
-}
-#pdfOptions h3 {
-    margin-bottom: 14px;
-    font-size: 1.15rem;
-}
-#pdfOptions button {
-    margin: 6px 6px 0;
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: transform var(--hover-duration) ease,
-                box-shadow var(--elev-duration) ease,
-                filter var(--elev-duration) ease,
-                background var(--theme-duration) ease;
-    box-shadow: var(--shadow-soft);
-}
-#openPDFBtn {
-    background: var(--grad-primary);
-    color: #fff;
-}
-#openPDFBtn:hover {
-    transform: translateY(-2px) scale(1.02);
-    filter: brightness(1.06);
-}
-#downloadPDFBtn {
-    background: linear-gradient(135deg, #ff8b8b, var(--danger));
-    color: #fff;
-}
-#downloadPDFBtn:hover {
-    transform: translateY(-2px) scale(1.02);
-    filter: brightness(1.06);
-}
-
-/* Downloaded success message */
-#downloadMessage {
-    margin-top: 14px;
-    padding-top: 6px;
-    animation: fadeIn 0.45s ease both;
-}
-#downloadMessage p {
-    margin-bottom: 10px;
-    color: var(--success);
-    font-weight: 600;
-}
-.open-pdf-link {
-    display: inline-block;
-    padding: 9px 16px;
-    border-radius: 10px;
-    background: var(--grad-primary);
-    color: #fff;
-    text-decoration: none;
-    transition: transform var(--hover-duration) ease, filter var(--elev-duration) ease, box-shadow var(--elev-duration) ease;
-    box-shadow: var(--shadow-soft);
-}
-.open-pdf-link:hover {
-    transform: translateY(-2px) scale(1.02);
-    filter: brightness(1.06);
-}
-
-/* 14. Footer */
+/* ====== FOOTER ====== */
 footer {
-    text-align: center;
-    padding: 16px 10px;
-    background: var(--grad-primary);
-    color: white;
-    margin-top: 30px;
-    box-shadow: var(--shadow);
-    animation: fadeInUp 0.6s ease both 0.05s;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
+  text-align: center;
+  padding: 16px;
+  background: var(--grad-primary);
+  color: white;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
 }
 
-/* 15. Responsive Breakpoints */
-@media (max-width: 920px) {
-    main { max-width: 900px; }
-}
-@media (max-width: 740px) {
-    main { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-}
+/* ====== RESPONSIVE ====== */
 @media (max-width: 640px) {
-    header h1 { font-size: 1.6rem; }
-    main { padding: 16px; gap: 14px; }
-    .book-card { padding: 14px 12px; }
-    #pdfOptions { margin: 20px 12px; }
+  header h1 { font-size: 1.6rem; }
+  main { padding: 16px; gap: 14px; }
 }
 
-/* 16. Animations */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+/* ====== ANIMATIONS ====== */
 @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-18px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-18px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-@keyframes riseIn {
-    from { opacity: 0; transform: translateY(14px) scale(0.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes sheen {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes darkGradient {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-}
-@keyframes headerSheen {
-    0% { transform: translateX(-10%) rotate(18deg); }
-    100% { transform: translateX(10%) rotate(18deg); }
-}
-
-/* 17. Reduced Motion Preference */
-@media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
-}
-
-/* Optional: JS can set --x/--y for ripple center on mousedown */
