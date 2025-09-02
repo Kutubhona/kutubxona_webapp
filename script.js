@@ -6,7 +6,8 @@ const toggleThemeBtn = document.getElementById('toggleTheme');
 const uploadSection = document.getElementById('uploadSection');
 const showUploadBtn = document.getElementById('showUploadBtn');
 const uploadForm = document.getElementById('uploadForm');
-const uploadProgress = document.getElementById('uploadProgress');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
 const body = document.body;
 
 let activeCategory = "";
@@ -75,7 +76,7 @@ showUploadBtn.addEventListener('click', () => {
     }
 });
 
-// 📤 Yangi kitob qo‘shish (progress va xatolik bilan)
+// 📤 Yangi kitob qo‘shish (progress bar bilan)
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -90,26 +91,37 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        const storageRef = firebase.storage().ref(`books/${Date.now()}_${file.name}`);
+        // Fayl nomini tozalash
+        const cleanFileName = file.name
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/[^a-z0-9_\-.]/g, '');
+        const uniqueName = `${Date.now()}_${cleanFileName}`;
+
+        const storageRef = firebase.storage().ref(`books/${uniqueName}`);
         const uploadTask = storageRef.put(file, {
             customMetadata: {
                 secret_code: "ibr2010071717.se"
             }
         });
 
-        // 📊 Yuklash jarayonini kuzatish
+        // 📊 Progress barni ko‘rsatish
+        progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+        progressBar.textContent = '0%';
+
         uploadTask.on('state_changed',
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                uploadProgress.textContent = `Yuklanmoqda: ${progress.toFixed(0)}%`;
+                progressBar.style.width = `${progress.toFixed(0)}%`;
+                progressBar.textContent = `${progress.toFixed(0)}%`;
             },
             (error) => {
                 console.error("❌ Yuklash xatolik:", error);
-                uploadProgress.textContent = "";
+                progressContainer.style.display = 'none';
                 alert("❌ Yuklashda xatolik: " + error.message);
             },
             async () => {
-                // ✅ Yuklash tugadi
                 const fileURL = await storageRef.getDownloadURL();
                 await firebase.firestore().collection("books").add({
                     title,
@@ -120,7 +132,7 @@ uploadForm.addEventListener('submit', async (e) => {
                 });
 
                 alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
-                uploadProgress.textContent = "";
+                progressContainer.style.display = 'none';
                 uploadForm.reset();
                 uploadSection.style.display = 'none';
             }
@@ -129,6 +141,7 @@ uploadForm.addEventListener('submit', async (e) => {
     } catch (err) {
         console.error("❌ Xatolik:", err);
         alert("❌ Xatolik: " + err.message);
+        progressContainer.style.display = 'none';
     }
 });
 
