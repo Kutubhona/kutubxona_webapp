@@ -82,8 +82,7 @@ uploadForm.addEventListener('submit', async (e) => {
     const title = document.getElementById('bookTitle').value.trim();
     const description = document.getElementById('bookDescription').value.trim();
     const category = document.getElementById('bookCategory').value;
-    const fileInput = document.getElementById('bookFile');
-    const file = fileInput.files[0];
+    const file = document.getElementById('bookFile').files[0];
 
     if (!file) {
         alert("❌ PDF fayl tanlanmagan!");
@@ -91,16 +90,19 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 
     try {
+        // Faylni Firebase Storage'ga yuklash
         const storageRef = firebase.storage().ref(`books/${Date.now()}_${file.name}`);
-        const uploadTask = await storageRef.put(file);
+        await storageRef.put(file);
+
+        // Fayl linkini olish
         const fileURL = await storageRef.getDownloadURL();
 
+        // Firestore'ga kitob ma'lumotlarini yozish
         await firebase.firestore().collection("books").add({
             title,
             description,
             category,
-            link: fileURL,
-            secret: "abrakadabra123"
+            link: fileURL
         });
 
         alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
