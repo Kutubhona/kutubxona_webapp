@@ -8,82 +8,271 @@
     --dark-card: #2b2b3e;
     --dark-hover: #3a3a50;
     --dark-text: #f0f0f0;
+    --shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    transition: background 1.5s ease, color 1.5s ease;
+    transition: background 0.8s ease, color 0.8s ease;
 }
 
-body.light { background: var(--light-bg); color: var(--light-text); }
-body.dark { background: var(--dark-bg); color: var(--dark-text); }
+body.light {
+    background: var(--light-bg);
+    color: var(--light-text);
+}
 
-header { text-align: center; padding: 30px 10px; }
-header h1 { font-size: 2rem; margin-bottom: 15px; }
+body.dark {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    padding: 30px 10px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    box-shadow: var(--shadow);
+    animation: fadeInDown 0.8s ease;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
 header input {
-    width: 90%; max-width: 400px; padding: 12px 15px;
-    border-radius: 25px; border: none; outline: none;
-    font-size: 1rem; margin-bottom: 10px;
+    width: 90%;
+    max-width: 400px;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
 }
-body.light header input { background: #fff; color: var(--light-text); }
-body.dark header input { background: var(--dark-card); color: var(--dark-text); }
+
+header input:focus {
+    transform: scale(1.05);
+}
+
+body.light header input {
+    background: #fff;
+    color: var(--light-text);
+}
+
+body.dark header input {
+    background: var(--dark-card);
+    color: var(--dark-text);
+}
 
 #toggleTheme {
-    padding: 8px 15px; border-radius: 20px; border: none;
-    background: var(--primary); color: white; cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    background: var(--danger);
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
-#toggleTheme:hover { background: var(--primary-light); }
 
+#toggleTheme:hover {
+    background: #ff8787;
+    transform: scale(1.05);
+}
+
+/* CATEGORY BUTTONS */
 nav {
-    display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 10px; margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
 }
+
 .category-btn {
-    background: var(--primary-light); color: white; border: none;
-    padding: 12px 25px; border-radius: 25px; cursor: pointer;
+    background: var(--primary-light);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
 }
-.category-btn:hover { background: var(--primary); }
-.category-btn.active { background: var(--danger); }
 
+.category-btn:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+}
+
+.category-btn.active {
+    background: var(--danger);
+}
+
+/* BOOK CARDS */
 main {
-    display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 20px; padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
 }
+
 .book-card {
-    background: white; width: 220px; padding: 15px;
-    border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    background: white;
+    width: 220px;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.6s ease;
 }
-body.dark .book-card { background: var(--dark-card); color: var(--dark-text); }
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+body.dark .book-card {
+    background: var(--dark-card);
+    color: var(--dark-text);
+}
+
 .book-card a {
-    display: inline-block; margin-top: 10px; padding: 8px 15px;
-    border-radius: 20px; background: var(--primary); color: white;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: var(--primary);
+    color: white;
     text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
-.book-card a:hover { background: var(--primary-light); }
 
+.book-card a:hover {
+    background: var(--primary-light);
+    transform: scale(1.05);
+}
+
+.book-card button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.book-card button:hover {
+    background: #ff8787;
+}
+
+/* UPLOAD SECTION */
 #uploadSection {
-    text-align: center; padding: 20px; background: #f0f0ff;
-    border-radius: 12px; margin: 20px;
+    text-align: center;
+    padding: 20px;
+    background: #f0f0ff;
+    border-radius: 12px;
+    margin: 20px;
+    box-shadow: var(--shadow);
+    animation: fadeInUp 0.6s ease;
 }
-#uploadForm input, #uploadForm select, #uploadForm button {
-    margin: 10px; padding: 10px; width: 90%; max-width: 400px;
-    border-radius: 8px; border: 1px solid #ccc;
-}
+
+#uploadForm input,
+#uploadForm select,
 #uploadForm button {
-    background: var(--primary); color: white; border: none; cursor: pointer;
+    margin: 10px;
+    padding: 10px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease;
 }
-#uploadForm button:hover { background: var(--primary-light); }
 
+#uploadForm input:focus,
+#uploadForm select:focus {
+    transform: scale(1.03);
+}
+
+#uploadForm button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#uploadForm button:hover {
+    background: var(--primary-light);
+}
+
+/* SHOW UPLOAD BUTTON */
 #showUploadBtn {
-    padding: 10px 20px; background: var(--primary); color: white;
-    border: none; border-radius: 8px; cursor: pointer;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: background 0.3s ease, transform 0.2s ease;
 }
-#showUploadBtn:hover { background: var(--primary-light); }
 
+#showUploadBtn:hover {
+    background: var(--primary-light);
+    transform: scale(1.05);
+}
+
+/* PROGRESS BAR */
+#progressContainer {
+    width: 100%;
+    background: #ddd;
+    height: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    line-height: 20px;
+    transition: width 0.4s ease;
+}
+
+/* FOOTER */
 footer {
-    text-align: center; padding: 15px;
-    background: var(--primary); color: white; margin-top: 30px;
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    margin-top: 30px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
