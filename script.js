@@ -77,41 +77,48 @@ showUploadBtn.addEventListener('click', () => {
 // 📤 Yangi kitob qo‘shish
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log("✅ Form yuborildi");
 
     const title = document.getElementById('bookTitle').value.trim();
     const description = document.getElementById('bookDescription').value.trim();
     const category = document.getElementById('bookCategory').value;
-    const file = document.getElementById('bookFile').files[0];
+    const fileInput = document.getElementById('bookFile');
+    const file = fileInput.files[0];
 
-    if (!file) return alert("PDF tanlang!");
+    if (!file) {
+        alert("❌ PDF fayl tanlanmagan!");
+        return;
+    }
 
     try {
-        const storageRef = storage.ref(`books/${Date.now()}_${file.name}`);
-        await storageRef.put(file);
+        const storageRef = firebase.storage().ref(`books/${Date.now()}_${file.name}`);
+        const uploadTask = await storageRef.put(file);
         const fileURL = await storageRef.getDownloadURL();
 
-        await db.collection("books").add({
+        await firebase.firestore().collection("books").add({
             title,
             description,
             category,
             link: fileURL,
-            secret: "abrakadabra123" // Firestore qoidasi bilan mos
+            secret: "abrakadabra123"
         });
 
-        alert("✅ Kitob qo‘shildi!");
+        alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
         uploadForm.reset();
         uploadSection.style.display = 'none';
     } catch (err) {
-        console.error(err);
-        alert("❌ Xatolik yuz berdi!");
+        console.error("❌ Xatolik:", err);
+        alert("❌ Xatolik: " + err.message);
     }
 });
 
 // 🔄 Firestore'dan real vaqtda kitoblarni olish
 function loadBooksFromFirestore() {
-    db.collection("books").onSnapshot(snapshot => {
+    firebase.firestore().collection("books").onSnapshot(snapshot => {
         allBooks = snapshot.docs.map(doc => doc.data());
         filterBooks();
+    }, err => {
+        console.error("❌ Firestore xatolik:", err);
     });
 }
 
