@@ -12,6 +12,7 @@ const body = document.body;
 
 let activeCategory = "";
 let allBooks = [];
+let isAdmin = false; // 🔑 Admin rejimi
 
 // 📦 Kitoblarni chiqarish
 function renderBooks(list) {
@@ -21,6 +22,7 @@ function renderBooks(list) {
                 <h3>${book.title || "Nomsiz kitob"}</h3>
                 <p>${book.description || ""}</p>
                 <a href="${book.link}" target="_blank">PDF ni ochish</a>
+                ${isAdmin ? `<button onclick="deleteBook('${book.id}', '${book.link}')">❌ O‘chirish</button>` : ""}
             </div>
         `).join('')
         : '<p>Hozircha bu yerda kitob yo‘q...</p>';
@@ -68,9 +70,11 @@ toggleThemeBtn.addEventListener('click', () => {
 
 // 📥 Kitob qo‘shish tugmasi (parol bilan)
 showUploadBtn.addEventListener('click', () => {
-    const password = prompt("Kitob qo‘shish uchun parolni kiriting:");
+    const password = prompt("Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
     if (password === "ibr2010071717.se") {
         uploadSection.style.display = 'block';
+        isAdmin = true; // ✅ Admin rejimi yoqildi
+        filterBooks(); // O‘chirish tugmalari ko‘rinadi
     } else {
         alert("❌ Noto‘g‘ri parol!");
     }
@@ -91,7 +95,6 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        // Fayl nomini tozalash
         const cleanFileName = file.name
             .toLowerCase()
             .replace(/\s+/g, '_')
@@ -145,10 +148,37 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 });
 
+// 🗑 Kitobni o‘chirish (faqat admin)
+async function deleteBook(bookId, fileURL) {
+    if (!isAdmin) {
+        alert("❌ Sizda o‘chirish huquqi yo‘q!");
+        return;
+    }
+
+    if (!confirm("Haqiqatan ham bu kitobni o‘chirmoqchimisiz?")) return;
+
+    try {
+        // Firestore’dan hujjatni o‘chirish
+        await firebase.firestore().collection("books").doc(bookId).delete();
+
+        // Storage’dan faylni o‘chirish
+        const storageRef = firebase.storage().refFromURL(fileURL);
+        await storageRef.delete();
+
+        alert("✅ Kitob muvaffaqiyatli o‘chirildi!");
+    } catch (err) {
+        console.error("❌ O‘chirish xatolik:", err);
+        alert("❌ O‘chirishda xatolik: " + err.message);
+    }
+}
+
 // 🔄 Firestore'dan real vaqtda kitoblarni olish
 function loadBooksFromFirestore() {
     firebase.firestore().collection("books").onSnapshot(snapshot => {
-        allBooks = snapshot.docs.map(doc => doc.data());
+        allBooks = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
         filterBooks();
     }, err => {
         console.error("❌ Firestore xatolik:", err);
