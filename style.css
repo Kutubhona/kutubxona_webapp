@@ -7,8 +7,9 @@
     --light-bg: #f5f7fb;
     --light-text: #2a2a2a;
 
-    --dark-bg: #1f2029; /* ✅ Qop-qora emas, yumshoq kulrang-ko‘kimtir */
-    --dark-card: #2a2c39;
+    --dark-bg-start: #2a2c39;
+    --dark-bg-end: #1f2029;
+    --dark-card: #2f3142;
     --dark-hover: #3a3d4f;
     --dark-text: #f5f5f5;
 
@@ -25,12 +26,20 @@ body {
     background: var(--light-bg);
     color: var(--light-text);
     line-height: 1.5;
-    transition: background-color 0.6s ease, color 0.6s ease; /* ✅ Silliq o‘tish */
+    transition: background 1s ease, color 0.6s ease;
 }
 
 body.dark {
-    background: var(--dark-bg);
+    background: linear-gradient(135deg, var(--dark-bg-start), var(--dark-bg-end));
+    background-size: 200% 200%;
+    animation: darkGradient 1.2s ease forwards;
     color: var(--dark-text);
+}
+
+/* Gradient animatsiya */
+@keyframes darkGradient {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
 }
 
 /* HEADER */
@@ -61,13 +70,13 @@ header input {
     transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* ✅ Placeholder ranglarini sozlash */
+/* Placeholder ranglari */
 header input::placeholder {
     color: rgba(0,0,0,0.6);
     transition: color 0.4s ease;
 }
 body.dark header input::placeholder {
-    color: rgba(255,255,255,0.75); /* Qorong‘u rejimda aniq ko‘rinadi */
+    color: rgba(255,255,255,0.75);
 }
 
 body.light header input {
