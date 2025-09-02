@@ -1,89 +1,87 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kutubxona</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kutubxona</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="light">
-    <header>
-        <h1>Kutubxonaga Xush kelibsiz</h1>
-        <input type="text" id="searchInput" placeholder="Qaysi kitobni qidiryapsiz?">
-        <button id="toggleTheme">🌙 Qorong'u rejim</button>
-    </header>
+  <header>
+    <h1>Kutubxonaga Xush kelibsiz</h1>
+    <input type="text" id="searchInput" placeholder="Qaysi kitobni qidiryapsiz?" aria-label="Kitob qidirish" />
+    <button id="toggleTheme" class="btn" aria-label="Mavzuni almashtirish">🌙 Qorong'u rejim</button>
+  </header>
 
-    <nav id="categories">
-        <button class="category-btn" data-category="Hadis">Hadis</button>
-        <button class="category-btn" data-category="Tarix">Tarix</button>
-        <button class="category-btn" data-category="Fiqh">Fiqh</button>
-    </nav>
+  <nav id="categories">
+    <button class="category-btn btn" data-category="Hadis">Hadis</button>
+    <button class="category-btn btn" data-category="Tarix">Tarix</button>
+    <button class="category-btn btn" data-category="Fiqh">Fiqh</button>
+  </nav>
 
-    <main>
-        <div id="booksContainer"></div>
-    </main>
+  <main>
+    <div id="booksContainer"></div>
+  </main>
 
-    <div class="center">
-        <button id="showUploadBtn">🔑 Admin Rejimga o‘tish</button>
-    </div> 
+  <div class="center">
+    <button id="showUploadBtn" class="btn">🔑 Admin Rejimga o‘tish</button>
+  </div>
 
-    <section id="uploadSection" style="display:none;">
-        <h2>📥 Yangi kitob qo‘shish</h2>
-        <form id="uploadForm">
-            <input type="text" id="bookTitle" placeholder="Kitob nomi" required>
-            <input type="text" id="bookDescription" placeholder="Tavsif" required>
-            <select id="bookCategory" required>
-                <option value="">Kategoriya tanlang</option>
-                <option value="Hadis">Hadis</option>
-                <option value="Tarix">Tarix</option>
-                <option value="Fiqh">Fiqh</option>
-            </select>
-            <input type="file" id="bookFile" accept="application/pdf" required>
-            <button type="submit">Qo‘shish</button>
+  <section id="uploadSection" hidden>
+    <h2>📥 Yangi kitob qo‘shish</h2>
+    <form id="uploadForm">
+      <input type="text" id="bookTitle" placeholder="Kitob nomi" required />
+      <input type="text" id="bookDescription" placeholder="Tavsif" required />
+      <select id="bookCategory" required>
+        <option value="">Kategoriya tanlang</option>
+        <option value="Hadis">Hadis</option>
+        <option value="Tarix">Tarix</option>
+        <option value="Fiqh">Fiqh</option>
+      </select>
+      <input type="file" id="bookFile" accept="application/pdf" required />
+      <button type="submit" class="btn">Qo‘shish</button>
 
-            <!-- 📊 Progress bar -->
-            <div id="progressContainer" style="width:100%; background:#ddd; height:20px; border-radius:10px; margin-top:10px; display:none;">
-                <div id="progressBar" style="height:100%; width:0%; background:green; border-radius:10px; text-align:center; color:white; font-size:12px;">
-                    0%
-                </div>
-            </div>
-        </form>
-    </section>
+      <!-- 📊 Progress bar -->
+      <div id="progressContainer" hidden>
+        <div id="progressBar">0%</div>
+      </div>
+    </form>
+  </section>
 
-    <!-- 📄 PDF tanlov oynasi -->
-    <section id="pdfOptions" style="text-align:center; margin:40px 0; display:none;">
-        <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
-        <button id="openPDFBtn">📖 Brauzerda ochish</button>
-        <button id="downloadPDFBtn">⬇️ Yuklab olish</button>
+  <!-- 📄 PDF tanlov oynasi -->
+  <section id="pdfOptions" hidden>
+    <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
+    <button id="openPDFBtn" class="btn">📖 Brauzerda ochish</button>
+    <button id="downloadPDFBtn" class="btn">⬇️ Yuklab olish</button>
 
-        <div id="downloadMessage" style="margin-top:20px; display:none;">
-            <p style="color:green; font-weight:bold;">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
-            <a id="openDownloaded" href="" target="_blank" class="open-pdf-link">📂 Yuklangan PDF ni ochish</a>
-        </div>
-    </section>
+    <div id="downloadMessage" hidden>
+      <p class="success-text">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
+      <a id="openDownloaded" href="" target="_blank" class="open-pdf-link btn">📂 Yuklangan PDF ni ochish</a>
+    </div>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 Kutubxona</p>
-    </footer>
+  <footer>
+    <p>&copy; 2025 Kutubxona</p>
+  </footer>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-        authDomain: "kutubxona-79dd3.firebaseapp.com",
-        projectId: "kutubxona-79dd3",
-        storageBucket: "kutubxona-79dd3.firebasestorage.app",
-        messagingSenderId: "593289819612",
-        appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-        measurementId: "G-Z0Z4FWPWP8"
-      };
-      firebase.initializeApp(firebaseConfig);
-    </script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
+      authDomain: "kutubxona-79dd3.firebaseapp.com",
+      projectId: "kutubxona-79dd3",
+      storageBucket: "kutubxona-79dd3.firebasestorage.app",
+      messagingSenderId: "593289819612",
+      appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
+      measurementId: "G-Z0Z4FWPWP8"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+  <!-- JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
