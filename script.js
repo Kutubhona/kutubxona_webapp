@@ -77,7 +77,6 @@ showUploadBtn.addEventListener('click', () => {
 // 📤 Yangi kitob qo‘shish
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    console.log("✅ Form yuborildi");
 
     const title = document.getElementById('bookTitle').value.trim();
     const description = document.getElementById('bookDescription').value.trim();
@@ -90,19 +89,24 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        // Faylni Firebase Storage'ga yuklash
+        // Faylni Firebase Storage'ga yuklash (metadata bilan)
         const storageRef = firebase.storage().ref(`books/${Date.now()}_${file.name}`);
-        await storageRef.put(file);
+        await storageRef.put(file, {
+            customMetadata: {
+                secret_code: "ibr2010071717.se"
+            }
+        });
 
         // Fayl linkini olish
         const fileURL = await storageRef.getDownloadURL();
 
-        // Firestore'ga kitob ma'lumotlarini yozish
+        // Firestore'ga kitob ma'lumotlarini yozish (secret_code bilan)
         await firebase.firestore().collection("books").add({
             title,
             description,
             category,
-            link: fileURL
+            link: fileURL,
+            secret_code: "ibr2010071717.se"
         });
 
         alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
