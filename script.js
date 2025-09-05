@@ -1,3 +1,7 @@
+// =============================
+// script.js — Kutubxona funksiyalari
+// =============================
+
 // Elements
 const body = document.body;
 const booksContainer = document.getElementById('booksContainer');
@@ -23,7 +27,22 @@ let activeCategory = '';
 let isAdmin = false;
 let currentPDF = "";
 
-// ---------- Ripple (all .ripple) ----------
+// =============================
+// Splash Screen
+// =============================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const intro = document.getElementById('introScreen');
+    if (intro) {
+      intro.style.animation = 'fadeOut 1s ease forwards';
+      setTimeout(() => intro.remove(), 1000);
+    }
+  }, 2000);
+});
+
+// =============================
+// Ripple effect
+// =============================
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.ripple');
   if (!btn) return;
@@ -32,12 +51,14 @@ document.addEventListener('click', (e) => {
   const y = e.clientY - r.top;
   btn.style.setProperty('--x', x + 'px');
   btn.style.setProperty('--y', y + 'px');
-  btn.classList.remove('active'); // restart
+  btn.classList.remove('active');
   void btn.offsetWidth;
   btn.classList.add('active');
 });
 
-// ---------- Reveal on scroll ----------
+// =============================
+// Reveal on scroll
+// =============================
 const io = new IntersectionObserver(entries => {
   entries.forEach(en => {
     if (en.isIntersecting) {
@@ -48,10 +69,11 @@ const io = new IntersectionObserver(entries => {
 },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// ---------- Category click ----------
+// =============================
+// Category click
+// =============================
 document.querySelectorAll('.cat-btn').forEach(btn => {
   btn.addEventListener('mousemove', (e) => {
-    // sheen follow
     btn.style.setProperty('--x', `${e.offsetX}px`);
     btn.style.setProperty('--y', `${e.offsetY}px`);
   });
@@ -63,7 +85,9 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
   });
 });
 
-// ---------- Theme toggle ----------
+// =============================
+// Theme toggle
+// =============================
 function updateThemeButton() {
   const isDark = body.classList.contains('dark');
   toggleThemeBtn.textContent = isDark ? "☀️ Yorug‘" : "🌙 Qorong‘u";
@@ -74,7 +98,9 @@ toggleThemeBtn.addEventListener('click', () => {
 });
 updateThemeButton();
 
-// ---------- Render ----------
+// =============================
+// Render books
+// =============================
 function renderBooks(list) {
   if (!list.length) {
     booksContainer.innerHTML = '';
@@ -96,11 +122,12 @@ function renderBooks(list) {
     </article>
   `).join('');
 
-  // trigger reveal for new nodes
   booksContainer.querySelectorAll('.reveal').forEach(el => io.observe(el));
 }
 
-// ---------- Filter ----------
+// =============================
+// Filter books
+// =============================
 function filterBooks() {
   const q = (searchInput.value || '').toLowerCase();
   const filtered = allBooks.filter(b => {
@@ -114,7 +141,9 @@ function filterBooks() {
 }
 searchInput.addEventListener('input', filterBooks);
 
-// ---------- Admin mode ----------
+// =============================
+// Admin mode
+// =============================
 showUploadBtn.addEventListener('click', () => {
   const password = prompt("Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
   if (password === "ibr2010071717.se") {
@@ -126,7 +155,9 @@ showUploadBtn.addEventListener('click', () => {
   }
 });
 
-// ---------- Upload ----------
+// =============================
+// Upload book
+// =============================
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const title = document.getElementById('bookTitle').value.trim();
@@ -143,7 +174,8 @@ uploadForm.addEventListener('submit', async (e) => {
     const task = storageRef.put(file);
 
     progressContainer.hidden = false;
-    progressBar.style.width = '0%'; progressBar.textContent = '0%';
+    progressBar.style.width = '0%'; 
+    progressBar.textContent = '0%';
 
     task.on('state_changed', (snap) => {
       const p = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
@@ -164,7 +196,9 @@ uploadForm.addEventListener('submit', async (e) => {
   }
 });
 
-// ---------- Delete ----------
+// =============================
+// Delete book
+// =============================
 async function deleteBook(bookId, fileURL) {
   if (!isAdmin) return alert("❌ Sizda o‘chirish huquqi yo‘q!");
   if (!confirm("Haqiqatan ham bu kitobni o‘chirmoqchimisiz?")) return;
@@ -177,9 +211,11 @@ async function deleteBook(bookId, fileURL) {
     alert("❌ O‘chirishda xatolik!");
   }
 }
-window.deleteBook = deleteBook; // expose for inline onclick
+window.deleteBook = deleteBook;
 
-// ---------- PDF options ----------
+// =============================
+// PDF options
+// =============================
 function showPDFOptions(url){
   currentPDF = url;
   pdfOptions.hidden = false;
@@ -191,13 +227,18 @@ openPDFBtn.addEventListener('click', () => currentPDF && window.open(currentPDF,
 downloadPDFBtn.addEventListener('click', () => {
   if (!currentPDF) return;
   const a = document.createElement('a');
-  a.href = currentPDF; a.download = 'kitob.pdf';
-  document.body.appendChild(a); a.click(); a.remove();
+  a.href = currentPDF; 
+  a.download = 'kitob.pdf';
+  document.body.appendChild(a); 
+  a.click(); 
+  a.remove();
   openDownloaded.href = currentPDF;
   downloadMessage.hidden = false;
 });
 
-// ---------- Live load from Firestore (pro) ----------
+// =============================
+// Live load from Firestore
+// =============================
 function subscribeBooks(){
   firebase.firestore().collection('books').orderBy('title')
     .onSnapshot((snap) => {
