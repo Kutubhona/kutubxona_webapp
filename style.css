@@ -578,3 +578,19 @@ body.dark .btn--ghost{
   outline-offset:2px;
   border-radius:10px;
 }
+
+/* -----------------------------
+   Selected category animation (qizil fon)
+   ----------------------------- */
+.cat-btn.selected {
+  animation: bgRedAnim 0.4s forwards;
+}
+
+@keyframes bgRedAnim {
+  from { 
+    background: currentColor;
+  }
+  to { 
+    background: linear-gradient(135deg, #ef4444, #f87171);
+  }
+}
