@@ -1,118 +1,87 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kutubxona</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body>
-
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-inner">
-      <div class="header-left">
-        <h1 class="h-title">Kutubxonaga Xush kelibsiz</h1>
-        <p class="h-sub">Sizga kitobni tavsiya qilamiz! Qaysi kitobni qidirmoqchisiz?</p>
-
-        <div class="header-actions">
-          <div class="search">
-            <input type="search" placeholder="Kitob qidirish..." aria-label="Kitob qidirish">
-          </div>
-          <button class="pill" id="toggleTheme">🌙 Qorong‘u rejim</button>
-        </div>
-      </div>
+<body class="light">
+  <header>
+    <h1>Kutubxonaga Xush kelibsiz</h1>
+    <p class="subtitle">Sizga kitobni tavsiya qilamiz!</p>
+    <div class="header-actions">
+      <input type="text" id="searchInput" placeholder="Qaysi kitobni qidiryapsiz?" aria-label="Kitob qidirish"/>
+      <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">🌙 Qorong'u</button>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="container">
+  <nav id="categories">
+    <button class="category-btn btn" data-category="Hadis">📜 Hadis</button>
+    <button class="category-btn btn" data-category="Tarix">🏛️ Tarix</button>
+    <button class="category-btn btn" data-category="Fiqh">⚖️ Fiqh</button>
+  </nav>
 
-    <!-- NAVIGATION -->
-    <nav id="categories" aria-label="Kitob turlari">
-      <button class="cat active">📖 Qur’on Karim</button>
-      <button class="cat">📘 Tafsir kitoblar</button>
-      <button class="cat">📜 Hadis kitoblar</button>
-      <button class="cat">⚖️ Fiqhiy kitoblar</button>
-      <button class="cat">🧠 Aqida kitoblari</button>
-      <button class="cat">📚 Tarix kitoblari</button>
-      <button class="cat">🖼️ Sīrat kitoblari</button>
-      <button class="cat">👥 Sahobalar hayoti</button>
-      <button class="cat">🌿 Axloq va tarbiya</button>
-      <button class="cat">🙏 Duo va zikrlar</button>
-    </nav>
-
-    <!-- GRID (Books) -->
-    <section class="grid" aria-label="Kitoblar ro‘yxati">
-      <article class="media-card">
-        <div class="media-body">
-          <h3 class="media-title">Misol Kitob</h3>
-          <p class="media-meta">Muallif: Abdulla Qodiriy</p>
-        </div>
-      </article>
-      <article class="media-card">
-        <div class="media-body">
-          <h3 class="media-title">Yana bir kitob</h3>
-          <p class="media-meta">Muallif: Cho‘lpon</p>
-        </div>
-      </article>
-    </section>
-
-    <!-- UPLOAD SECTION -->
-    <section id="uploadSection" aria-labelledby="uploadTitle">
-      <h2 id="uploadTitle">📤 Kitob yuklash</h2>
-      <form id="uploadForm">
-        <div class="form-row">
-          <input type="text" class="input" placeholder="Kitob nomi" required>
-          <select required>
-            <option value="">Turini tanlang</option>
-            <option value="quran">Qur’on</option>
-            <option value="hadis">Hadis</option>
-            <option value="fiqh">Fiqh</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label class="file-btn">
-            <span>📂 Fayl tanlash</span>
-            <input type="file" accept=".pdf,.epub,.docx" required>
-          </label>
-          <button type="submit" class="btn btn--primary">⬆️ Yuklash</button>
-        </div>
-      </form>
-
-      <!-- Progress -->
-      <div class="progress" aria-hidden="true">
-        <div class="progress__bar" style="width:0%">0%</div>
-      </div>
-    </section>
-
-    <!-- PDF OPTIONS -->
-    <section id="pdfOptions">
-      <h2>📑 PDF sozlamalari</h2>
-      <p class="success-text">Kitob muvaffaqiyatli yuklandi!</p>
-      <button class="btn btn--accent">📥 Yuklab olish</button>
-      <button class="btn btn--ghost">🔄 Qayta yuklash</button>
-    </section>
-
+  <main>
+    <div id="booksContainer" class="grid"></div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>&copy; 2025 Kutubxona | <a href="#">Admin Rejim</a></p>
+  <div class="center">
+    <button id="showUploadBtn" class="btn btn-primary">🔑 Admin Rejim</button>
+  </div>
+
+  <section id="uploadSection" hidden>
+    <h2>📥 Yangi kitob qo‘shish</h2>
+    <form id="uploadForm">
+      <input type="text" id="bookTitle" placeholder="Kitob nomi" required/>
+      <input type="text" id="bookDescription" placeholder="Tavsif" required/>
+      <select id="bookCategory" required>
+        <option value="">Kategoriya tanlang</option>
+        <option value="Hadis">Hadis</option>
+        <option value="Tarix">Tarix</option>
+        <option value="Fiqh">Fiqh</option>
+      </select>
+      <input type="file" id="bookFile" accept="application/pdf" required/>
+      <button type="submit" class="btn btn-primary">Qo‘shish</button>
+
+      <div id="progressContainer" hidden>
+        <div id="progressBar">0%</div>
+      </div>
+    </form>
+  </section>
+
+  <section id="pdfOptions" hidden>
+    <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
+    <button id="openPDFBtn" class="btn btn-ghost">📖 Brauzerda ochish</button>
+    <button id="downloadPDFBtn" class="btn btn-danger">⬇️ Yuklab olish</button>
+
+    <div id="downloadMessage" hidden>
+      <p class="success-text">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
+      <a id="openDownloaded" href="" target="_blank" class="open-pdf-link btn btn-primary">📂 Yuklangan PDF ni ochish</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Kutubxona</p>
   </footer>
 
-  <!-- JS (dark mode toggle demo) -->
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script>
-    const toggleTheme = document.getElementById('toggleTheme');
-    toggleTheme.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-    });
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
+      authDomain: "kutubxona-79dd3.firebaseapp.com",
+      projectId: "kutubxona-79dd3",
+      storageBucket: "kutubxona-79dd3.firebasestorage.app",
+      messagingSenderId: "593289819612",
+      appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
+      measurementId: "G-Z0Z4FWPWP8"
+    };
+    firebase.initializeApp(firebaseConfig);
   </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
