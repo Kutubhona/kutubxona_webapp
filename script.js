@@ -50,7 +50,6 @@
   };
 
   function setBodyTheme(mode) {
-    // mode: 'dark' | 'light' | 'auto'
     if (mode === "dark") {
       document.body.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -60,7 +59,6 @@
       localStorage.setItem("theme", "light");
       if (toggleThemeBtn) toggleThemeBtn.textContent = "🌙 Qorong‘u";
     } else {
-      // auto: OS ga qarab
       const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
       setBodyTheme(prefersDark ? "dark" : "light");
       return;
@@ -80,7 +78,6 @@
     $$(".ripple", root).forEach(el => {
       if (el.__rippleBound) return;
       el.__rippleBound = true;
-
       el.addEventListener("pointerdown", e => {
         const rect = el.getBoundingClientRect();
         el.style.setProperty("--x", `${e.clientX - rect.left}px`);
@@ -120,14 +117,12 @@
       </div>
     `;
 
-    // Actions
     const openBtn = $(".js-open", card);
     const dlBtn = $(".js-download", card);
 
     openBtn.addEventListener("click", () => openPDF(doc.url));
     dlBtn.addEventListener("click", () => downloadPDF(doc.url, doc.title));
 
-    // Hook ripple to new nodes
     attachRipple(card);
 
     return card;
@@ -145,8 +140,6 @@
     const frag = document.createDocumentFragment();
     list.forEach(b => frag.appendChild(createBookCard(b)));
     booksContainer.appendChild(frag);
-
-    // Trigger reveal in view
     requestAnimationFrame(() => revealScan());
     updateEmptyState();
   }
@@ -174,19 +167,14 @@
   function openPDF(url) {
     if (!url) return;
     currentPDFUrl = url;
-
-    // PDF options panel (agar ishlatmoqchi bo‘lsangiz)
     show(pdfOptions);
     downloadMessage.hidden = true;
-
-    // Bitta bosishda darrov brauzerda ham ochib yuboramiz (user istagi)
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
   async function downloadPDF(url, suggestedName = "kitob") {
     if (!url) return;
     currentPDFUrl = url;
-
     try {
       const a = document.createElement("a");
       a.href = url;
@@ -194,8 +182,6 @@
       document.body.appendChild(a);
       a.click();
       a.remove();
-
-      // UI feedback
       downloadMessage.hidden = false;
       openDownloaded.href = url;
       openDownloaded.target = "_blank";
@@ -205,12 +191,9 @@
   }
 
   function sanitizeFilename(name) {
-    return (name || "kitob")
-      .replace(/[\/\\?%*:|"<>]/g, "-")
-      .slice(0, 100);
+    return (name || "kitob").replace(/[\/\\?%*:|"<>]/g, "-").slice(0, 100);
   }
 
-  // ------------- Splash -------------
   function closeSplash(delay = 1600) {
     if (!introScreen) return;
     setTimeout(() => {
@@ -219,7 +202,6 @@
     }, delay);
   }
 
-  // ------------- Reveal on scroll -------------
   let revealObserver;
   function setupReveal() {
     const els = $$(".reveal");
@@ -244,33 +226,18 @@
     });
   }
 
-  // ------------- Firebase -------------
   const db = firebase.firestore();
   const storage = firebase.storage();
 
   async function fetchBooks() {
     try {
       const snap = await db.collection("books").orderBy("createdAt", "desc").get();
-      ALL_BOOKS = snap.docs.map(d => ({
-        id: d.id,
-        ...(d.data() || {})
-      }));
+      ALL_BOOKS = snap.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
       filterBooks();
     } catch (e) {
       console.error(e);
       alert("Kitoblarni yuklashda muammo. Internetni tekshiring.");
     }
-  }
-
-  function watchBooksRealtime() {
-    // Agar real-time xohlasangiz (ixtiyoriy). Pastdagi fetchBooks o‘rniga chaqiring.
-    return db.collection("books").orderBy("createdAt", "desc")
-      .onSnapshot(snap => {
-        ALL_BOOKS = snap.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
-        filterBooks();
-      }, err => {
-        console.error(err);
-      });
   }
 
   async function uploadBook({ title, description, category, file }) {
@@ -279,7 +246,6 @@
     const path = `books/${safeTitle}-${ts}.pdf`;
     const ref = storage.ref().child(path);
 
-    // Progress UI
     setHidden(progressContainer, false);
     progressBar.style.width = "0%";
     progressBar.textContent = "0%";
@@ -318,21 +284,12 @@
     });
   }
 
-  // ------------- Events -------------
   document.addEventListener("DOMContentLoaded", () => {
-    // Theme
     applySavedTheme();
-
-    // Splash
     closeSplash(1400);
-
-    // Reveal
     setupReveal();
-
-    // Attach Ripple to initial
     attachRipple();
 
-    // Theme toggle
     if (toggleThemeBtn) {
       toggleThemeBtn.addEventListener("click", () => {
         const isDark = document.body.classList.contains("dark");
@@ -340,7 +297,6 @@
       });
     }
 
-    // Search
     if (searchInput) {
       searchInput.addEventListener("input", e => {
         currentFilter.search = fmt.trim(e.target.value);
@@ -348,15 +304,27 @@
       });
     }
 
-    // Categories
+    // -----------------------------
+    // Categories: original + selected animation
+    // -----------------------------
     catButtons.forEach(btn => {
       btn.addEventListener("click", () => {
+        // remove old selected
+        catButtons.forEach(b => b.classList.remove("selected"));
+
         const cat = btn.dataset.category || "";
-        currentFilter.category = (currentFilter.category === cat) ? "" : cat; // toggle
+        // toggle
+        if (currentFilter.category === cat) {
+          currentFilter.category = "";
+        } else {
+          currentFilter.category = cat;
+          btn.classList.add("selected"); // qizil animatsiya
+        }
+
         markActiveCategory(currentFilter.category);
         filterBooks();
       });
-      // Mousemove highlight for cat-btn hover glow origin
+
       btn.addEventListener("pointermove", e => {
         const rect = btn.getBoundingClientRect();
         btn.style.setProperty("--x", `${e.clientX - rect.left}px`);
@@ -364,27 +332,22 @@
       }, { passive: true });
     });
 
-    // Admin panel show/hide
     if (showUploadBtn && uploadSection) {
       showUploadBtn.addEventListener("click", () => {
         uploadSection.hidden = !uploadSection.hidden;
-        // Scroll to panel when shown
         if (!uploadSection.hidden) {
           uploadSection.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       });
     }
 
-    // Upload form
     if (uploadForm) {
       uploadForm.addEventListener("submit", async e => {
         e.preventDefault();
-
         const title = fmt.trim(bookTitle.value);
         const description = fmt.trim(bookDescription.value);
         const category = fmt.trim(bookCategory.value);
         const file = bookFile.files && bookFile.files[0];
-
         if (!title || !description || !category || !file) {
           alert("Iltimos, barcha maydonlarni to‘ldiring va PDF tanlang.");
           return;
@@ -393,20 +356,13 @@
           alert("Faqat PDF fayllar qabul qilinadi.");
           return;
         }
-
         try {
           const url = await uploadBook({ title, description, category, file });
           currentPDFUrl = url;
-
-          // UI
           uploadForm.reset();
           show(pdfOptions);
           downloadMessage.hidden = true;
-
-          // Kitoblar ro‘yxatini yangilash
           fetchBooks();
-
-          // Foydalanuvchiga tez amallar
           openPDFBtn?.focus();
         } catch (e2) {
           console.error(e2);
@@ -415,7 +371,6 @@
       });
     }
 
-    // PDF options panel actions
     if (openPDFBtn) {
       openPDFBtn.addEventListener("click", () => {
         if (!currentPDFUrl) {
@@ -425,6 +380,7 @@
         window.open(currentPDFUrl, "_blank", "noopener,noreferrer");
       });
     }
+
     if (downloadPDFBtn) {
       downloadPDFBtn.addEventListener("click", () => {
         if (!currentPDFUrl) {
@@ -435,22 +391,16 @@
       });
     }
 
-    // Initial data
     fetchBooks();
-    // Re-attach ripple for dynamically added content (observer)
     observeMutationsForRipple();
   });
 
-  // ------------- Mutation observer for ripple on dynamic nodes -------------
   function observeMutationsForRipple() {
     const mo = new MutationObserver(muts => {
       for (const m of muts) {
         if (m.addedNodes && m.addedNodes.length) {
           m.addedNodes.forEach(n => {
-            if (n.nodeType === 1) {
-              // attach ripple inside new subtree
-              attachRipple(n);
-            }
+            if (n.nodeType === 1) attachRipple(n);
           });
         }
       }
@@ -459,4 +409,3 @@
   }
 
 })();
-```
