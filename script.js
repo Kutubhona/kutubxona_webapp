@@ -1,57 +1,59 @@
-// ==================== 🧩 ELEMENTLAR ====================
+// ==================== 🧩 ELEMENTLARNI TANLASH ====================
 const booksContainer = document.getElementById('booksContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryButtons = document.querySelectorAll('.category-btn');
 const toggleThemeBtn = document.getElementById('toggleTheme');
-const uploadSection = document.getElementById('uploadSection');
+const body = document.body;
+
+// 📄 Modal va forma elementlari
+const adminModal = document.getElementById('adminModal');
+const adminForm = document.getElementById('adminForm');
+const closeButtons = document.querySelectorAll('.modal-content .close-btn');
 const showUploadBtn = document.getElementById('showUploadBtn');
+const uploadSection = document.getElementById('uploadSection');
 const uploadForm = document.getElementById('uploadForm');
 const progressContainer = document.getElementById('progressContainer');
 const progressBar = document.getElementById('progressBar');
-const body = document.body;
-
-// 📄 PDF tanlov oynasi elementlari
 const pdfOptions = document.getElementById('pdfOptions');
 const openPDFBtn = document.getElementById('openPDFBtn');
 const downloadPDFBtn = document.getElementById('downloadPDFBtn');
 const downloadMessage = document.getElementById('downloadMessage');
-const openDownloaded = document.getElementById('openDownloaded');
 
 let activeCategory = "";
 let allBooks = [];
 let isAdmin = false;
 let currentPDF = "";
 
+const ADMIN_PASSWORD = "ibr2010071717.se";
+
 // ==================== 📦 KITOBLARNI CHIQARISH ====================
 function renderBooks(list) {
   booksContainer.innerHTML = list.length
-    ? list.map(book => `
-      <div class="book-card reveal">
+    ? list.map((book, index) => `
+      <div class="book-card reveal" style="--i: ${index};">
         <div class="book-title">${book.title || "Nomsiz kitob"}</div>
         <div class="book-desc">${book.description || ""}</div>
         <div class="card-actions">
-          <button class="btn btn-ghost" onclick="showPDFOptions('${book.link}')">📄 PDF</button>
-          ${isAdmin ? `<button class="btn btn-danger" onclick="deleteBook('${book.id}', '${book.link}')">❌ O‘chirish</button>` : ""}
+          <button class="btn btn-ghost" onclick="showPDFOptions('${book.link}')">
+            <i class="fas fa-file-pdf"></i> PDF
+          </button>
+          ${isAdmin ? `<button class="btn btn-danger" onclick="deleteBook('${book.id}', '${book.link}')">
+            <i class="fas fa-trash-alt"></i> O‘chirish
+          </button>` : ""}
         </div>
       </div>
     `).join('')
-    : '<p style="text-align:center;opacity:0.7;">Hozircha bu yerda kitob yo‘q...</p>';
-  revealAll(); // scroll reveal
+    : '<p class="no-books">Hozircha bu yerda kitob yo‘q...</p>';
 }
 
 // ==================== 📄 PDF TANLOV OYNASI ====================
 function showPDFOptions(pdfURL) {
   currentPDF = pdfURL;
-  pdfOptions.removeAttribute('hidden');
-  downloadMessage.setAttribute('hidden', '');
+  pdfOptions.classList.add('show');
 }
-
-// 📖 Brauzerda ochish
 openPDFBtn.addEventListener('click', () => {
   if (currentPDF) window.open(currentPDF, "_blank");
 });
-
-// ⬇️ Yuklab olish
 downloadPDFBtn.addEventListener('click', () => {
   if (!currentPDF) return;
   const link = document.createElement("a");
@@ -60,40 +62,40 @@ downloadPDFBtn.addEventListener('click', () => {
   document.body.appendChild(link);
   link.click();
   link.remove();
-
-  openDownloaded.href = currentPDF;
-  downloadMessage.removeAttribute('hidden');
+  downloadMessage.classList.add('show');
+  setTimeout(() => downloadMessage.classList.remove('show'), 5000);
 });
 
-// ==================== 🔍 FILTRLASH ====================
+// ==================== 🔍 FILTRLASH VA QIDIRUV ====================
 function filterBooks() {
-  const query = searchInput.value.toLowerCase();
+  const query = searchInput.value.toLowerCase().trim();
   const filtered = allBooks.filter(book =>
     (!activeCategory || book.category === activeCategory) &&
-    (!query || (book.title && book.title.toLowerCase().includes(query)))
+    (!query || (book.title && book.title.toLowerCase().includes(query)) || (book.description && book.description.toLowerCase().includes(query)))
   );
   renderBooks(filtered);
 }
-
-// 🎯 Kategoriya tugmalari
 categoryButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     categoryButtons.forEach(b => b.classList.remove('active'));
-    activeCategory = activeCategory === btn.dataset.category ? "" : btn.dataset.category;
-    if (activeCategory) btn.classList.add('active');
+    if (btn.dataset.category === activeCategory) {
+      activeCategory = "";
+    } else {
+      activeCategory = btn.dataset.category;
+      btn.classList.add('active');
+    }
     filterBooks();
   });
 });
-
-// 🔎 Qidiruv
 searchInput.addEventListener('input', filterBooks);
 
 // ==================== 🌗 TEMA BOSHQARUVI ====================
 function updateThemeButton() {
-  toggleThemeBtn.textContent = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
+  toggleThemeBtn.innerHTML = body.classList.contains('dark') ? "🌞 Yorug' rejim" : "🌙 Qorong'u rejim";
 }
 function loadTheme() {
-  body.className = localStorage.getItem('theme') || 'light';
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  body.className = savedTheme;
   updateThemeButton();
 }
 toggleThemeBtn.addEventListener('click', () => {
@@ -103,22 +105,32 @@ toggleThemeBtn.addEventListener('click', () => {
   updateThemeButton();
 });
 
-// ==================== 📥 ADMIN REJIM ====================
+// ==================== 🔑 ADMIN REJIM MODAL ====================
 showUploadBtn.addEventListener('click', () => {
-  const password = prompt("Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
-  if (password === "ibr2010071717.se") {
-    uploadSection.removeAttribute('hidden');
+  adminModal.classList.add('show');
+});
+adminForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const password = document.getElementById('adminPassword').value;
+  if (password === ADMIN_PASSWORD) {
     isAdmin = true;
+    adminModal.classList.remove('show');
+    uploadSection.removeAttribute('hidden');
     filterBooks();
+    alert("✅ Admin rejimiga muvaffaqiyatli kirildi!");
   } else {
     alert("❌ Noto‘g‘ri parol!");
   }
+});
+closeButtons.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.target.closest('.modal-overlay').classList.remove('show');
+  });
 });
 
 // ==================== 📤 YANGI KITOB QO‘SHISH ====================
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const title = document.getElementById('bookTitle').value.trim();
   const description = document.getElementById('bookDescription').value.trim();
   const category = document.getElementById('bookCategory').value;
@@ -128,19 +140,21 @@ uploadForm.addEventListener('submit', async (e) => {
     alert("❌ PDF fayl tanlanmagan!");
     return;
   }
+  
+  // Parol tekshiruvi. Bu xavfsizlik uchun emas, faqat UI uchun!
+  if (!isAdmin) {
+    alert("❌ Sizda kitob qo'shish huquqi yo'q!");
+    return;
+  }
 
   try {
     const cleanFileName = file.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_\-.]/g, '');
     const uniqueName = `${Date.now()}_${cleanFileName}`;
-
     const storageRef = firebase.storage().ref(`books/${uniqueName}`);
-    const uploadTask = storageRef.put(file, {
-      customMetadata: { secret_code: "ibr2010071717.se" }
-    });
+    const uploadTask = storageRef.put(file);
 
     progressContainer.removeAttribute('hidden');
-    progressBar.style.width = '0%';
-    progressBar.textContent = '0%';
+    uploadForm.style.display = 'none';
 
     uploadTask.on('state_changed',
       (snapshot) => {
@@ -151,6 +165,7 @@ uploadForm.addEventListener('submit', async (e) => {
       (error) => {
         console.error("❌ Yuklash xatolik:", error);
         progressContainer.setAttribute('hidden', '');
+        uploadForm.style.display = 'block';
         alert("❌ Yuklashda xatolik: " + error.message);
       },
       async () => {
@@ -160,11 +175,12 @@ uploadForm.addEventListener('submit', async (e) => {
           description,
           category,
           link: fileURL,
-          secret_code: "ibr2010071717.se"
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         alert("✅ Kitob muvaffaqiyatli qo‘shildi!");
         progressContainer.setAttribute('hidden', '');
+        uploadForm.style.display = 'block';
         uploadForm.reset();
         uploadSection.setAttribute('hidden', '');
       }
@@ -173,7 +189,6 @@ uploadForm.addEventListener('submit', async (e) => {
   } catch (err) {
     console.error("❌ Xatolik:", err);
     alert("❌ Xatolik: " + err.message);
-    progressContainer.setAttribute('hidden', '');
   }
 });
 
@@ -184,7 +199,6 @@ async function deleteBook(bookId, fileURL) {
     return;
   }
   if (!confirm("Haqiqatan ham bu kitobni o‘chirmoqchimisiz?")) return;
-
   try {
     await firebase.firestore().collection("books").doc(bookId).delete();
     const storageRef = firebase.storage().refFromURL(fileURL);
@@ -198,7 +212,7 @@ async function deleteBook(bookId, fileURL) {
 
 // ==================== 🔄 FIRESTORE'DAN KITOBLARNI O‘QISH ====================
 function loadBooksFromFirestore() {
-  firebase.firestore().collection("books").onSnapshot(snapshot => {
+  firebase.firestore().collection("books").orderBy("createdAt", "desc").onSnapshot(snapshot => {
     allBooks = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
@@ -210,5 +224,7 @@ function loadBooksFromFirestore() {
 }
 
 // ==================== 🚀 BOSHLANG‘ICH ISHGA TUSHIRISH ====================
-loadTheme();
-loadBooksFromFirestore();
+document.addEventListener('DOMContentLoaded', () => {
+  loadTheme();
+  loadBooksFromFirestore();
+});
