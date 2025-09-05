@@ -30,27 +30,33 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
   font-family: 'Poppins', sans-serif;
   background: var(--light-bg);
   color: var(--light-text);
   transition: background var(--transition-medium), color var(--transition-medium);
 }
+
 body.dark {
   background: var(--dark-bg);
   color: var(--dark-text);
 }
+
 img {
   max-width: 100%;
   display: block;
 }
+
 a {
   text-decoration: none;
   color: inherit;
 }
+
 .visually-hidden {
   position: absolute;
   left: -9999px;
@@ -79,22 +85,26 @@ header {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   animation: fadeSlideDown 0.8s ease both;
 }
+
 header h1 {
   font-family: 'Montserrat', sans-serif;
   font-size: clamp(2rem, 5vw, 2.8rem);
   font-weight: 700;
   text-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
+
 .subtitle {
   margin: 0.5rem 0 1rem;
   opacity: 0.9;
 }
+
 .header-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
+
 @media (min-width: 768px) {
   .header-actions {
     flex-direction: row;
@@ -108,6 +118,7 @@ header h1 {
   max-width: 400px;
   width: 100%;
 }
+
 .search-container input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.5rem;
@@ -117,13 +128,16 @@ header h1 {
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: background var(--transition-fast), box-shadow var(--transition-fast);
 }
+
 .search-container input::placeholder {
   color: rgba(255, 255, 255, 0.8);
 }
+
 .search-container input:focus {
   background: rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
+
 .search-container .fa-search {
   position: absolute;
   top: 50%;
@@ -144,10 +158,12 @@ header h1 {
   white-space: nowrap;
   animation: fadeIn 1s ease 0.4s both;
 }
+
 .dark #categories {
   background: var(--dark-surface);
   border-color: var(--dark-bg);
 }
+
 .category-btn {
   padding: 0.6rem 1.2rem;
   border-radius: 20px;
@@ -155,16 +171,20 @@ header h1 {
   color: var(--light-text);
   transition: all var(--transition-fast);
 }
+
 .dark .category-btn {
   background: rgba(255, 255, 255, 0.05);
   color: var(--dark-text);
 }
+
 .category-btn:hover {
   background: rgba(0, 0, 0, 0.1);
 }
+
 .dark .category-btn:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+
 .category-btn.active {
   background: var(--grad-primary);
   color: white;
@@ -178,11 +198,13 @@ main {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
+
 .book-card {
   background: var(--light-surface);
   border-radius: var(--radius);
@@ -192,30 +214,36 @@ main {
   transition: transform var(--transition-medium), box-shadow var(--transition-medium);
   animation: slideUpFadeIn 0.6s ease-out both;
 }
+
 .dark .book-card {
   background: var(--dark-surface);
   box-shadow: var(--dark-shadow);
 }
+
 .book-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
 }
+
 .book-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
+
 .book-desc {
   font-size: 0.9rem;
   opacity: 0.8;
   margin-bottom: 1rem;
 }
+
 .card-actions {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
 }
+
 .no-books {
   text-align: center;
   opacity: 0.6;
@@ -234,25 +262,31 @@ main {
   font-weight: 500;
   transition: transform var(--transition-fast), box-shadow var(--transition-medium);
 }
+
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
+
 .btn:active {
   transform: translateY(0);
 }
+
 .btn-primary {
   background: var(--grad-primary);
   color: white;
 }
+
 .btn-danger {
   background: var(--danger);
   color: white;
 }
+
 .btn-ghost {
   background: rgba(255, 255, 255, 0.15);
   color: var(--light-text);
 }
+
 .dark .btn-ghost {
   background: rgba(255, 255, 255, 0.05);
   color: var(--dark-text);
@@ -266,9 +300,4 @@ main {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
 }
