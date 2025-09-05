@@ -1,21 +1,19 @@
-```html
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kutubxona — Professional</title>
 
-  <!-- Tailwind (CDN) -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Custom CSS (ikki qismni ham ulab qo‘ying) -->
-  <link rel="stylesheet" href="style-part1.css" />
-  <link rel="stylesheet" href="style-part2.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
 </head>
 <body class="min-h-screen bg-surface text-ink transition-colors duration-700 antialiased dark:bg-surface-dark dark:text-ink-dark">
 
@@ -25,7 +23,7 @@
     <h2 class="intro-subtitle">Xush Kelibsiz</h2>
   </div>
 
-  <!-- Header -->
+  <!-- Hero Header -->
   <header class="hero reveal">
     <div class="hero__glow"></div>
     <h1 class="hero__title">📚 Kutubxonaga Xush Kelibsiz</h1>
@@ -46,13 +44,13 @@
     <button class="cat-btn ripple" data-category="Тафсир китоблар" aria-pressed="false">📖 Тафсир китоблар</button>
     <button class="cat-btn ripple" data-category="Ҳадис китоблар" aria-pressed="false">📜 Ҳадис китоблар</button>
     <button class="cat-btn ripple" data-category="Фиқҳий китоблар" aria-pressed="false">⚖️ Фиқҳий китоблар</button>
-    <button class="cat-btn ripple" data-category="Ақида китобlari" aria-pressed="false">🧠 Ақида китоблари</button>
+    <button class="cat-btn ripple" data-category="Ақида китоблари" aria-pressed="false">🧠 Ақида китоблари</button>
     <button class="cat-btn ripple" data-category="Тарих китоблари" aria-pressed="false">🏛️ Тарих китоблари</button>
     <button class="cat-btn ripple" data-category="Сийрат китоблари" aria-pressed="false">👣 Сийрат китоблари</button>
     <button class="cat-btn ripple" data-category="Саҳобалар ҳаёти" aria-pressed="false">👤 Саҳобалар ҳаёти</button>
-    <button class="cat-btn ripple" data-category="Ахлоқ ва тарбия" aria-pressed="false">🌱 Ахлоқ va tarbiya</button>
-    <button class="cat-btn ripple" data-category="Дуо ва зикрlar" aria-pressed="false">🙏 Дуо va zikrlar</button>
     <button class="cat-btn ripple" data-category="Ҳизб китоблари" aria-pressed="false">📒 Ҳизб китоблари</button>
+    <button class="cat-btn ripple" data-category="Ахлоқ ва тарбия" aria-pressed="false">🌱 Ахлоқ ва тарбия</button>
+    <button class="cat-btn ripple" data-category="Дуо ва зикрлар" aria-pressed="false">🙏 Дуо ва зикрлар</button>
   </nav>
 
   <!-- Kitoblar -->
@@ -71,48 +69,48 @@
     <h2 class="panel__title">📥 Yangi kitob qo‘shish</h2>
     <form id="uploadForm" class="form">
       <div class="field">
-        <input id="bookTitle" type="text" required class="field__input" placeholder="Kitob nomi" aria-label="Kitob nomi">
+        <input id="bookTitle" type="text" required class="field__input" placeholder="Kitob nomi">
         <label class="field__label" for="bookTitle">Kitob nomi</label>
       </div>
 
       <div class="field">
-        <input id="bookDescription" type="text" required class="field__input" placeholder="Tavsif" aria-label="Kitob tavsifi">
+        <input id="bookDescription" type="text" required class="field__input" placeholder="Tavsif">
         <label class="field__label" for="bookDescription">Tavsif</label>
       </div>
 
       <div class="field">
-        <select id="bookCategory" required class="field__input" aria-label="Kategoriya tanlash">
+        <select id="bookCategory" required class="field__input">
           <option value="">Kategoriya tanlang</option>
           <option value="Қуръони Карим">Қуръони Карим</option>
           <option value="Тафсир китоблар">Тафсир китоблар</option>
           <option value="Ҳадис китоблар">Ҳадис китоблар</option>
-          <option value="Фиқҳий китоблар">Фиқҳий китобlar</option>
-          <option value="Ақида китобlari">Ақида китобlari</option>
-          <option value="Тарих китоблари">Тарих китобlari</option>
-          <option value="Сийрат китоблари">Сийрат китобlari</option>
+          <option value="Фиқҳий китоблар">Фиқҳий китоблар</option>
+          <option value="Ақида китоблари">Ақида китоблари</option>
+          <option value="Тарих китоблари">Тарих китоблари</option>
+          <option value="Сийрат китоблари">Сийрат китоблари</option>
           <option value="Саҳобалар ҳаёти">Саҳобалар ҳаёти</option>
-          <option value="Ахлоқ ва тарбия">Ахлоq va tarbiya</option>
-          <option value="Дуо ва зикрlar">Дуо va zikrlar</option>
-          <option value="Ҳизб китоблари">Ҳизб китобlari</option>
+          <option value="Ҳизб китоблари">Ҳизб китоблари</option>
+          <option value="Ахлоқ ва тарбия">Ахлоқ ва тарбия</option>
+          <option value="Дуо ва зикрлар">Дуо ва зикрлар</option>
         </select>
         <label class="field__label" for="bookCategory">Kategoriya</label>
       </div>
 
       <div class="field">
-        <input id="bookFile" type="file" accept="application/pdf" required class="field__input" aria-label="PDF fayl">
+        <input id="bookFile" type="file" accept="application/pdf" required class="field__input">
         <label class="field__label" for="bookFile">PDF fayl</label>
       </div>
 
       <button type="submit" class="btn btn--primary btn--block ripple">➕ Qo‘shish</button>
 
-      <div id="progressContainer" hidden class="progress" aria-hidden="true">
+      <div id="progressContainer" hidden class="progress">
         <div id="progressBar" class="progress__bar">0%</div>
       </div>
     </form>
   </section>
 
   <!-- PDF variantlari -->
-  <section id="pdfOptions" hidden class="panel panel--soft reveal" aria-label="PDF variantlari">
+  <section id="pdfOptions" hidden class="panel panel--soft reveal">
     <h3 class="panel__title">📚 PDF bilan nima qilmoqchisiz?</h3>
     <div class="panel__actions">
       <button id="openPDFBtn" class="btn btn--ghost ripple">📖 Brauzerda ochish</button>
@@ -131,28 +129,10 @@
   </footer>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-  <!-- Firebase init (o‘zingdagi config bilan bir xil) -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-      authDomain: "kutubxona-79dd3.firebaseapp.com",
-      projectId: "kutubxona-79dd3",
-      storageBucket: "kutubxona-79dd3.firebasestorage.app",
-      messagingSenderId: "593289819612",
-      appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-      measurementId: "G-Z0Z4FWPWP8"
-    };
-    if (!window.firebase?.apps?.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-  </script>
+  <script type="module" src="firebase-init.js"></script>
 
   <!-- Custom JS -->
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
+
 </body>
 </html>
-```
