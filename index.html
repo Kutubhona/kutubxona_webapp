@@ -2,94 +2,124 @@
 <html lang="uz">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kutubxona</title>
-  <!-- Tailwind CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kutubxona — Professional</title>
+
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <!-- Icons (optional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-700">
+<body class="min-h-screen bg-surface text-ink transition-colors duration-700 antialiased dark:bg-surface-dark dark:text-ink-dark">
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-center py-10 shadow-lg rounded-b-3xl animate__animated animate__fadeInDown">
-    <h1 class="text-4xl font-bold drop-shadow-lg">📚 Kutubxonaga Xush kelibsiz</h1>
-    <p class="mt-2 opacity-90">Sizga kitobni tavsiya qilamiz!</p>
-    <div class="flex justify-center gap-2 mt-4 flex-wrap">
-      <input id="searchInput" type="text" placeholder="Qaysi kitobni qidiryapsiz?"
-        class="px-4 py-2 rounded-full w-72 max-w-full text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none shadow-md transition" />
-      <button id="toggleTheme" class="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition shadow-md">🌙</button>
+  <header class="hero reveal">
+    <div class="hero__glow"></div>
+    <h1 class="hero__title">📚 Kutubxonaga Xush Kelibsiz</h1>
+    <p class="hero__subtitle">Sizga kitobni tavsiya qilamiz!</p>
+
+    <div class="hero__actions">
+      <div class="field">
+        <input id="searchInput" type="text" class="field__input" placeholder="Qaysi kitobni qidiryapsiz?" aria-label="Kitob qidirish">
+        <span class="field__icon">🔎</span>
+      </div>
+
+      <button id="toggleTheme" class="btn btn--ghost ripple" aria-label="Mavzuni almashtirish">🌙 Qorongʻu</button>
     </div>
   </header>
 
   <!-- Kategoriyalar -->
-  <nav id="categories" class="flex flex-wrap justify-center gap-3 py-6 animate__animated animate__fadeInUp">
-    <button class="category-btn" data-category="Қуръони Карим">📘 Қуръони Карим</button>
-    <button class="category-btn" data-category="Тафсир китоблар">📖 Тафсир китоблар</button>
-    <button class="category-btn" data-category="Ҳадис китоблар">📜 Ҳадис китоблар</button>
-    <button class="category-btn" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китоблар</button>
-    <button class="category-btn" data-category="Ақида китоблари">🧠 Ақида китоблари</button>
-    <button class="category-btn" data-category="Тарих китоблари">🏛️ Тарих китоблари</button>
-    <button class="category-btn" data-category="Сийрат китоблари">👣 Сийрат китоблари</button>
-    <button class="category-btn" data-category="Саҳобалар ҳаёти">👤 Саҳобалар ҳаёти</button>
-    <button class="category-btn" data-category="Ахлоқ ва тарбия">🌱 Ахлоq va tarbiya</button>
-    <button class="category-btn" data-category="Дуо ва зикрлар">🙏 Дуо ва зикrlar</button>
-    <button class="category-btn" data-category="Ҳизб китоблари">📒 Ҳизб китоблари</button>
+  <nav id="categories" class="cats reveal">
+    <button class="cat-btn cat--quran ripple" data-category="Қуръони Карим">📘 Қуръони Карим</button>
+    <button class="cat-btn cat--tafsir ripple" data-category="Тафсир китоблар">📖 Тафсир китоблар</button>
+    <button class="cat-btn cat--hadis ripple" data-category="Ҳадис китоблар">📜 Ҳадис китоблар</button>
+    <button class="cat-btn cat--fiqh ripple" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китоблар</button>
+    <button class="cat-btn cat--aqida ripple" data-category="Ақида китобlari">🧠 Ақида китоблари</button>
+    <button class="cat-btn cat--tarix ripple" data-category="Тарих китоблари">🏛️ Тарих китоблари</button>
+    <button class="cat-btn cat--siyrat ripple" data-category="Сийрат китоблари">👣 Сийрат китоблари</button>
+    <button class="cat-btn cat--sahoba ripple" data-category="Саҳобалар ҳаёти">👤 Саҳобалар ҳаёти</button>
+    <button class="cat-btn cat--axloq ripple" data-category="Ахлоқ ва тарбия">🌱 Ахлоқ va tarbiya</button>
+    <button class="cat-btn cat--duo ripple" data-category="Дуо ва зикрлар">🙏 Дуо va zikrlar</button>
+    <button class="cat-btn cat--hizb ripple" data-category="Ҳизб китоблари">📒 Ҳизб китоблари</button>
   </nav>
 
-  <!-- Kitoblar joyi -->
-  <main>
-    <div id="booksContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-6xl mx-auto animate__animated animate__fadeInUp"></div>
+  <!-- Kitoblar -->
+  <main class="container reveal">
+    <div id="booksContainer" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+    <p id="emptyState" class="empty hidden">Hozircha bu yerda kitoblar yo‘q…</p>
   </main>
 
-  <!-- Admin rejim tugmasi -->
-  <div class="flex justify-center mt-6">
-    <button id="showUploadBtn" class="btn-primary">🔑 Admin Rejim</button>
+  <!-- Admin Rejim -->
+  <div class="center reveal">
+    <button id="showUploadBtn" class="btn btn--primary ripple">🔑 Admin Rejim</button>
   </div>
 
   <!-- Upload bo‘limi -->
-  <section id="uploadSection" hidden class="max-w-2xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 mt-8 animate__animated animate__fadeInUp">
-    <h2 class="text-xl font-bold mb-4">📥 Yangi kitob qo‘shish</h2>
-    <form id="uploadForm" class="space-y-3">
-      <input type="text" id="bookTitle" placeholder="Kitob nomi" required class="form-input"/>
-      <input type="text" id="bookDescription" placeholder="Tavsif" required class="form-input"/>
-      <select id="bookCategory" required class="form-input">
-        <option value="">Kategoriya tanlang</option>
-        <option value="Қуръони Карим">Қуръони Карим</option>
-        <option value="Тафсир китоблар">Тафсир китобlar</option>
-        <option value="Ҳадис китоблар">Ҳадис китобlar</option>
-        <option value="Фиқҳий китоблар">Фиқҳий китобlar</option>
-        <option value="Ақида китоблари">Ақида китоблари</option>
-        <option value="Тарих китоблари">Тарих китобlari</option>
-        <option value="Сийрат китоблари">Сийрат китобlari</option>
-        <option value="Саҳобалар ҳаёти">Саҳобалар ҳаёти</option>
-        <option value="Ахлоқ ва тарбия">Ахлоқ va tarbiya</option>
-        <option value="Дуо ва зикрлар">Дуо va зикрlar</option>
-        <option value="Ҳизб китоблари">Ҳизб китоблари</option>
-      </select>
-      <input type="file" id="bookFile" accept="application/pdf" required class="form-input"/>
-      <button type="submit" class="btn-primary w-full">Qo‘shish</button>
+  <section id="uploadSection" hidden class="panel reveal">
+    <h2 class="panel__title">📥 Yangi kitob qo‘shish</h2>
+    <form id="uploadForm" class="form">
+      <div class="field">
+        <input id="bookTitle" type="text" required class="field__input" placeholder="Kitob nomi">
+        <label class="field__label">Kitob nomi</label>
+      </div>
+
+      <div class="field">
+        <input id="bookDescription" type="text" required class="field__input" placeholder="Tavsif">
+        <label class="field__label">Tavsif</label>
+      </div>
+
+      <div class="field">
+        <select id="bookCategory" required class="field__input">
+          <option value="">Kategoriya tanlang</option>
+          <option value="Қуръони Карим">Қуръони Карим</option>
+          <option value="Тафсир китоблар">Тафсир китоблар</option>
+          <option value="Ҳадис китоблар">Ҳадис китоблар</option>
+          <option value="Фиқҳий китоблар">Фиқҳий китобlar</option>
+          <option value="Ақида китобlari">Ақида китобlari</option>
+          <option value="Тарих китоблари">Тарих китобlari</option>
+          <option value="Сийрат китоблари">Сийрат китобlari</option>
+          <option value="Саҳобалар ҳаёти">Саҳобалар ҳаёти</option>
+          <option value="Ахлоқ ва тарбия">Ахлоқ va tarbiya</option>
+          <option value="Дуо ва зикрлар">Дуо va zikrlar</option>
+          <option value="Ҳизб китоблари">Ҳизб китобlari</option>
+        </select>
+        <label class="field__label">Kategoriya</label>
+      </div>
+
+      <div class="field">
+        <input id="bookFile" type="file" accept="application/pdf" required class="field__input">
+        <label class="field__label">PDF fayl</label>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--block ripple">➕ Qo‘shish</button>
+
       <div id="progressContainer" hidden class="progress">
-        <div id="progressBar" class="progress-bar">0%</div>
+        <div id="progressBar" class="progress__bar">0%</div>
       </div>
     </form>
   </section>
 
   <!-- PDF variantlari -->
-  <section id="pdfOptions" hidden class="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mt-6 text-center animate__animated animate__fadeInUp">
-    <h3 class="text-lg font-semibold mb-3">📚 PDF bilan nima qilmoqchisiz?</h3>
-    <button id="openPDFBtn" class="btn-primary">📖 Brauzerda ochish</button>
-    <button id="downloadPDFBtn" class="btn-danger">⬇️ Yuklab olish</button>
-    <div id="downloadMessage" hidden class="mt-3">
-      <p class="text-green-600 font-semibold">✅ PDF muvaffaqiyatli yuklandi!</p>
-      <a id="openDownloaded" href="" target="_blank" class="btn-primary mt-2 inline-block">📂 Yuklangan PDF ni ochish</a>
+  <section id="pdfOptions" hidden class="panel panel--soft reveal">
+    <h3 class="panel__title">📚 PDF bilan nima qilmoqchisiz?</h3>
+    <div class="panel__actions">
+      <button id="openPDFBtn" class="btn btn--ghost ripple">📖 Brauzerda ochish</button>
+      <button id="downloadPDFBtn" class="btn btn--danger ripple">⬇️ Yuklab olish</button>
+    </div>
+
+    <div id="downloadMessage" hidden class="success">
+      <p>✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
+      <a id="openDownloaded" href="" target="_blank" class="btn btn--primary ripple">📂 Yuklangan PDF ni ochish</a>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-center py-4 mt-10 rounded-t-2xl shadow-inner animate__animated animate__fadeInUp">
+  <footer class="footer reveal">
     <p>&copy; 2025 Kutubxona</p>
   </footer>
 
