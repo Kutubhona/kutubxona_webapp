@@ -1,220 +1,162 @@
-/* ===============================
-   script.js — Professional Kutubxona
-   Author: You
-   Features: Splash, ripple, reveal, categories, search,
-             dark mode, admin, upload, delete, PDF options,
-             Firebase v9
-   =============================== */
-
-// ---------- Firebase init ----------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDuk-PhyFg6j7JkYnvfCYfBKGMOmXZtO2s",
-  authDomain: "kutubxona-79dd3.firebaseapp.com",
-  projectId: "kutubxona-79dd3",
-  storageBucket: "kutubxona-79dd3.appspot.com",
-  messagingSenderId: "593289819612",
-  appId: "1:593289819612:web:89b9a8dd933f945eb78b19"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-// ---------- Elements ----------
-const body = document.body;
-const booksContainer = document.getElementById('booksContainer');
-const emptyState = document.getElementById('emptyState');
-const searchInput = document.getElementById('searchInput');
-const toggleThemeBtn = document.getElementById('toggleTheme');
-const showUploadBtn = document.getElementById('showUploadBtn');
-const uploadSection = document.getElementById('uploadSection');
-const uploadForm = document.getElementById('uploadForm');
-const bookTitleEl = document.getElementById('bookTitle');
-const bookDescriptionEl = document.getElementById('bookDescription');
-const bookCategoryEl = document.getElementById('bookCategory');
-const bookFileEl = document.getElementById('bookFile');
-const progressContainer = document.getElementById('progressContainer');
-const progressBar = document.getElementById('progressBar');
-const pdfOptions = document.getElementById('pdfOptions');
-const openPDFBtn = document.getElementById('openPDFBtn');
-const downloadPDFBtn = document.getElementById('downloadPDFBtn');
-const downloadMessage = document.getElementById('downloadMessage');
-const openDownloaded = document.getElementById('openDownloaded');
-const introScreen = document.getElementById('introScreen');
-
-let allBooks = [];
-let activeCategory = '';
-let isAdmin = false;
-let currentPDF = '';
-let currentPDFTitle = '';
-
-// ---------- Splash ----------
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    introScreen?.classList.add('fade-out');
-    setTimeout(()=>introScreen?.remove(),1000);
-  },2000);
-});
-
-// ---------- Ripple ----------
-document.addEventListener('click', e => {
-  const btn = e.target.closest('.ripple');
-  if (!btn) return;
-  const rect = btn.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  btn.style.setProperty('--x', x+'px');
-  btn.style.setProperty('--y', y+'px');
-  btn.classList.remove('active');
-  void btn.offsetWidth;
-  btn.classList.add('active');
-});
-
-// ---------- Reveal ----------
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
-  });
-},{threshold:0.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-// ---------- Categories ----------
-document.querySelectorAll('.cat-btn').forEach(btn => {
-  btn.addEventListener('mousemove', e => {
-    btn.style.setProperty('--x', `${e.offsetX}px`);
-    btn.style.setProperty('--y', `${e.offsetY}px`);
-  });
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeCategory = btn.dataset.category || '';
-    filterBooks();
-  });
-});
-
-// ---------- Dark Mode ----------
-function applySavedTheme(){
-  if(localStorage.getItem('theme')==='dark') body.classList.add('dark');
-  updateThemeBtn();
-}
-function updateThemeBtn(){
-  toggleThemeBtn.textContent = body.classList.contains('dark')?'☀️ Yorug‘':'🌙 Qorong‘u';
-}
-toggleThemeBtn.addEventListener('click', ()=>{
-  body.classList.toggle('dark');
-  localStorage.setItem('theme', body.classList.contains('dark')?'dark':'light');
-  updateThemeBtn();
-});
-applySavedTheme();
-
-// ---------- Render Books ----------
-function renderBooks(list){
-  if(!list.length){ booksContainer.innerHTML=''; emptyState.classList.remove('hidden'); return;}
-  emptyState.classList.add('hidden');
-  booksContainer.innerHTML = list.map(book=>`
-    <article class="book reveal">
-      <h3 class="book__title">${escapeHTML(book.title)}</h3>
-      <p class="book__desc">${escapeHTML(book.description)}</p>
-      <div class="book__actions">
-        <a class="btn btn--primary ripple" href="${book.link}" target="_blank" rel="noopener">📖 PDF</a>
-        <button class="btn btn--ghost ripple" data-action="options" data-link="${book.link}" data-title="${encodeURIComponent(book.title)}">📄 Variantlar</button>
-        ${isAdmin?`<button class="btn btn--danger ripple" data-action="delete" data-id="${book.id}" data-link="${book.link}" data-title="${escapeHTML(book.title)}">❌ O‘chirish</button>`:''}
-      </div>
-    </article>
-  `).join('');
-  booksContainer.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-}
-function escapeHTML(str){
-  return String(str||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
+/* =========================================================
+   General Reset & Variables
+========================================================= */
+:root {
+  --primary: #4f46e5;
+  --primary-2: #6366f1;
+  --surface: #f9fafb;
+  --surface-dark: #1e293b;
+  --ink: #111827;
+  --ink-dark: #f3f4f6;
+  --accent: #16a34a;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --radius: 12px;
 }
 
-// ---------- Filter ----------
-function filterBooks(){
-  const q=(searchInput.value||'').toLowerCase();
-  const filtered = allBooks.filter(b=>{
-    const catOk = !activeCategory || b.category === activeCategory;
-    const txtOk = (b.title||'').toLowerCase().includes(q) || (b.description||'').toLowerCase().includes(q);
-    return catOk && txtOk;
-  });
-  renderBooks(filtered);
-}
-searchInput.addEventListener('input', filterBooks);
-
-// ---------- Admin ----------
-showUploadBtn?.addEventListener('click',()=>{
-  const password = prompt("Kitob qo‘shish va o‘chirish uchun parol:");
-  if(password==='ibr2010071717.se'){
-    isAdmin=true;
-    uploadSection.hidden=false;
-    filterBooks();
-  } else alert('❌ Noto‘g‘ri parol!');
-});
-
-// ---------- Upload ----------
-uploadForm?.addEventListener('submit', async e=>{
-  e.preventDefault();
-  const title=(bookTitleEl.value||'').trim();
-  const description=(bookDescriptionEl.value||'').trim();
-  const category=bookCategoryEl.value;
-  const file=bookFileEl.files[0];
-  if(!file) return;
-  const name = Date.now()+'_'+file.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_\-.]/g,'');
-  const storageRef = ref(storage, 'books/'+name);
-  const task = uploadBytesResumable(storageRef, file);
-  progressContainer.hidden=false; progressBar.style.width='0%';
-  task.on('state_changed', snap=>{
-    const p = Math.round(snap.bytesTransferred/snap.totalBytes*100);
-    progressBar.style.width=p+'%'; progressBar.textContent=p+'%';
-  });
-  await task;
-  const link = await getDownloadURL(storageRef);
-  await addDoc(collection(db,'books'), {title,description,category,link});
-  uploadForm.reset(); progressContainer.hidden=true;
-  alert('✅ Kitob muvaffaqiyatli qo‘shildi!');
-});
-
-// ---------- Delete ----------
-async function deleteBook(id,url,title=''){
-  if(!isAdmin) return alert('❌ Sizda o‘chirish huquqi yo‘q!');
-  if(!confirm(`"${title}" kitobini o‘chirmoqchimisiz?`)) return;
-  await deleteDoc(doc(db,'books',id));
-  await deleteObject(ref(storage,url));
-  alert('🗑️ Kitob o‘chirildi.');
+body {
+  font-family: 'Inter', sans-serif;
+  margin:0;
+  padding:0;
+  background:var(--surface);
+  color:var(--ink);
+  transition: background .3s, color .3s;
 }
 
-// ---------- Options / Delete delegation ----------
-booksContainer?.addEventListener('click', e=>{
-  const btn = e.target.closest('button,a');
-  if(!btn) return;
-  const action = btn.dataset.action;
-  if(action==='options'){
-    currentPDF=btn.dataset.link; currentPDFTitle=decodeURIComponent(btn.dataset.title);
-    pdfOptions.hidden=false;
-    downloadMessage.hidden=true;
-  } else if(action==='delete'){
-    deleteBook(btn.dataset.id,btn.dataset.link,btn.dataset.title);
-  }
-});
+/* Dark mode */
+body.dark {
+  background: var(--surface-dark);
+  color: var(--ink-dark);
+}
 
-// ---------- PDF Options ----------
-openPDFBtn?.addEventListener('click',()=>{ if(currentPDF) window.open(currentPDF,'_blank'); });
-downloadPDFBtn?.addEventListener('click',()=>{
-  if(!currentPDF) return;
-  const a = document.createElement('a');
-  a.href=currentPDF;
-  a.download=(currentPDFTitle||'kitob').replace(/[\\/:*?"<>|]+/g,'')+'.pdf';
-  document.body.appendChild(a); a.click(); a.remove();
-  if(openDownloaded) openDownloaded.href=currentPDF;
-  if(downloadMessage) downloadMessage.hidden=false;
-});
+/* =========================================================
+   Buttons & Ripple
+========================================================= */
+.btn {
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 14px;
+  border-radius:var(--radius);
+  cursor:pointer;
+  border:0;
+  user-select:none;
+  box-shadow:var(--shadow);
+  transition: transform .16s ease, box-shadow .25s ease;
+}
+.btn:hover { transform:translateY(-2px) scale(1.02);}
+.btn:active { transform:translateY(0) scale(.98);}
+.btn--primary { background: linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff;}
+.btn--danger { background: linear-gradient(135deg,#ef4444,#dc2626); color:#fff;}
+.btn--ghost { background: rgba(0,0,0,0.05); color: var(--ink); border:1px solid rgba(0,0,0,0.1);}
+body.dark .btn--ghost { background: rgba(255,255,255,0.12); color: var(--ink-dark); border-color: rgba(255,255,255,0.2);}
 
-// ---------- Real-time subscription ----------
-const q = query(collection(db,'books'), orderBy('title'));
-onSnapshot(q,snap=>{
-  allBooks = snap.docs.map(d=>({id:d.id,...d.data()}));
-  filterBooks();
-});
+.ripple::after {
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  width:0;
+  height:0;
+  opacity:.4;
+  background:#fff;
+  top:var(--y,0);
+  left:var(--x,0);
+  transform:translate(-50%,-50%);
+  transition: width .35s ease,height .35s ease,opacity .45s ease;
+}
+.ripple.active::after { width:200px; height:200px; opacity:0;}
+
+/* =========================================================
+   Hero & Intro
+========================================================= */
+.intro-screen {
+  position:fixed; inset:0;
+  background: linear-gradient(135deg,var(--primary),var(--primary-2));
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+.intro-title { font-size:2.5rem; margin:0; font-weight:800; }
+.intro-subtitle { font-size:1.25rem; }
+
+/* =========================================================
+   Container & Panels
+========================================================= */
+.container { max-width:1200px; margin:24px auto; padding:0 16px; }
+.panel { background:var(--surface); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin:12px 0; }
+body.dark .panel { background: #111827; }
+
+/* =========================================================
+   Book Cards
+========================================================= */
+.book {
+  position:relative;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding:16px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  transition: transform .2s ease, box-shadow .25s ease;
+}
+body.dark .book { background:#1e293b; }
+.book:hover { transform: translateY(-6px) rotateX(3deg) rotateY(-3deg);}
+.book__glow {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(120% 120% at 50% -20%, rgba(255,255,255,0.15), transparent 60%);
+  opacity:0;
+  transition:opacity .3s ease;
+}
+.book:hover .book__glow { opacity:1; }
+.book__title { font-weight:700; margin-bottom:6px; }
+.book__desc { font-size:.95rem; opacity:.85; }
+.book__actions { display:flex; justify-content:center; gap:8px; margin-top:12px; flex-wrap:wrap; }
+
+/* =========================================================
+   Category Buttons
+========================================================= */
+.cat-btn {
+  position:relative;
+  padding:8px 16px;
+  border-radius:var(--radius);
+  background: linear-gradient(135deg,#e0e7ff,#c7d2fe);
+  border:none;
+  cursor:pointer;
+  transition: transform .2s, box-shadow .25s;
+}
+.cat-btn:hover { transform:translateY(-2px) scale(1.02);}
+.cat-btn.active { box-shadow:0 4px 12px rgba(0,0,0,0.15); background: linear-gradient(135deg,#4f46e5,#6366f1); color:#fff; }
+
+/* =========================================================
+   Progress Bar (Upload)
+========================================================= */
+.progress { width:100%; max-width:500px; height:18px; border-radius:12px; overflow:hidden; background: #e5e7eb; margin-top:12px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);}
+.progress__bar { height:100%; width:0%; text-align:center; line-height:18px; color:#fff; font-weight:700; border-radius:12px; transition:width .4s ease,background .4s ease; background:linear-gradient(90deg,#22c55e,#16a34a); }
+
+/* =========================================================
+   Empty & Success Messages
+========================================================= */
+.empty { text-align:center; color: rgba(0,0,0,0.4); }
+body.dark .empty { color: rgba(255,255,255,0.4);}
+.success { color: var(--accent); font-weight:700; text-align:center; margin-top:12px; }
+
+/* =========================================================
+   Footer
+========================================================= */
+.footer { text-align:center; padding:16px; border-radius:20px 20px 0 0; background: linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff; box-shadow:var(--shadow); }
+
+/* =========================================================
+   Animations
+========================================================= */
+@keyframes fadeOut { 0%{opacity:1;} 100%{opacity:0;visibility:hidden;} }
+.reveal { opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+.reveal.in { opacity:1; transform:translateY(0); }
+
+@media (prefers-reduced-motion:reduce){
+  *{ transition:none!important; animation:none!important;}
+}
