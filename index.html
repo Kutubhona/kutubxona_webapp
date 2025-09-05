@@ -3,52 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kutubxona</title>
+  <meta name="description" content="Islomiy kitoblar kutubxonasi - Qur'on, Hadis, Tafsir va boshqa diniy kitoblar to‘plami." />
+  <meta name="keywords" content="Islom, kitoblar, Qur'on, Hadis, Tafsir, Kutubxona" />
+  <meta name="author" content="IBROHIM" />
+  <title>Kutubxona | Islomiy Kitoblar</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-ieoQ/hB8SjU2sK+J9GgJj6h8qL7v3D/X6R/xL4n4L/kLz8t6A9t6L6N7L+n7N/o4p4T4t4qL7n7/A9n7/j4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="light">
-  
-  <header>
-    <h1>Kutubxona</h1>
-    <p class="subtitle">Islomiy kitoblar kutubxonasi</p>
-    <div class="header-actions">
-      <div class="search-container">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Kitob qidirish..." aria-label="Kitob qidirish" />
+  <!-- Header -->
+  <header role="banner">
+    <div class="container">
+      <h1>Kutubxona</h1>
+      <p class="subtitle">Islomiy kitoblar kutubxonasi</p>
+      <div class="header-actions">
+        <div class="search-container">
+          <label for="searchInput" class="visually-hidden">Kitob qidirish</label>
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Kitob qidirish..." aria-label="Kitob qidirish" />
+        </div>
+        <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">🌙 Qorong'u rejim</button>
       </div>
-      <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">🌙 Qorong'u rejim</button>
     </div>
   </header>
 
-  <nav id="categories">
-    <button class="category-btn active" data-category="">Hammasi</button>
-    <button class="category-btn" data-category="Қуръони Карим">📘 Қуръони Карим</button>
-    <button class="category-btn" data-category="Тафсир китоблар">📖 Тафсир китоблар</button>
-    <button class="category-btn" data-category="Ҳадис китоблар">📜 Ҳадис китоблар</button>
-    <button class="category-btn" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китоблар</button>
-    <button class="category-btn" data-category="Ақида китоблари">🧠 Ақида китоблари</button>
-    <button class="category-btn" data-category="Тарих китоблари">🏛️ Тарих китоблари</button>
-    <button class="category-btn" data-category="Сийрат китоблари">👣 Сийрат китоблари</button>
-    <button class="category-btn" data-category="Саҳобалар ҳаёти">👤 Саҳобалар ҳаёти</button>
-    <button class="category-btn" data-category="Ахлоқ ва тарбия">🌱 Ахлоқ ва тарбия</button>
-    <button class="category-btn" data-category="Дуо ва зикрлар">🙏 Дуо va zikrlar</button>
+  <!-- Navigation -->
+  <nav id="categories" role="navigation" aria-label="Kitob kategoriyalari">
+    <div class="container">
+      <button class="category-btn active" data-category="">Hammasi</button>
+      <button class="category-btn" data-category="Қуръони Карим">📘 Қуръони Карим</button>
+      <button class="category-btn" data-category="Тафсир китоблар">📖 Тафсир китоблар</button>
+      <button class="category-btn" data-category="Ҳадис китоблар">📜 Ҳадис китоблар</button>
+      <button class="category-btn" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китоблар</button>
+      <button class="category-btn" data-category="Ақида китоблари">🧠 Ақида китоблари</button>
+      <button class="category-btn" data-category="Тарих китоблари">🏛️ Тарих китоблари</button>
+      <button class="category-btn" data-category="Сийрат китоблари">👣 Сийрат китоблари</button>
+      <button class="category-btn" data-category="Саҳобалар ҳаёти">👤 Саҳобалар ҳаёти</button>
+      <button class="category-btn" data-category="Ахлоқ ва тарбия">🌱 Ахлоқ ва tarbiya</button>
+      <button class="category-btn" data-category="Дуо ва зикрлар">🙏 Дуо va zikrlar</button>
+    </div>
   </nav>
 
-  <main>
-    <div id="booksContainer" class="grid"></div>
-    <div class="center">
-      <button id="showUploadBtn" class="btn btn-primary">🔑 Admin Rejim</button>
+  <!-- Main Content -->
+  <main role="main">
+    <div class="container">
+      <section id="booksContainer" class="grid" aria-live="polite"></section>
+      <div class="center">
+        <button id="showUploadBtn" class="btn btn-primary">🔑 Admin Rejim</button>
+      </div>
     </div>
   </main>
-  
-  <div id="adminModal" class="modal-overlay">
+
+  <!-- Admin Modal -->
+  <div id="adminModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h2>🔑 Admin Rejim</h2>
+      <span class="close-btn" aria-label="Yopish">&times;</span>
+      <h2 id="adminTitle">🔑 Admin Rejim</h2>
       <form id="adminForm">
         <input type="password" id="adminPassword" placeholder="Parolni kiriting..." required />
         <button type="submit" class="btn btn-primary">Kirish</button>
@@ -61,16 +78,7 @@
           <input type="text" id="bookDescription" placeholder="Tavsif" required />
           <select id="bookCategory" required>
             <option value="">Kategoriya tanlang</option>
-            <option value="Қуръони Карим">Қуръони Карим</option>
-            <option value="Тафсир китоблар">Тафсир китоблар</option>
-            <option value="Ҳадис китоблар">Ҳадис китоблар</option>
-            <option value="Фиқҳий китоблар">Фиқҳий китоблар</option>
-            <option value="Ақида китоблари">Ақида китоблари</option>
-            <option value="Тарих китоблари">Тарих китоблари</option>
-            <option value="Сийрат китоблари">Сийрат китоблари</option>
-            <option value="Саҳобалар ҳаёти">Саҳобалар ҳаёти</option>
-            <option value="Ахлоқ ва тарбия">Ахлоқ va tarbiya</option>
-            <option value="Дуо va zikrlar">Дуо va zikrlar</option>
+            <!-- Kategoriyalar -->
           </select>
           <input type="file" id="bookFile" accept="application/pdf" required />
           <button type="submit" class="btn btn-primary">Qo‘shish</button>
@@ -82,10 +90,11 @@
     </div>
   </div>
 
-  <div id="pdfOptions" class="modal-overlay">
+  <!-- PDF Options Modal -->
+  <div id="pdfOptions" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
     <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
+      <span class="close-btn" aria-label="Yopish">&times;</span>
+      <h3 id="pdfTitle">📚 PDF bilan nima qilmoqchisiz?</h3>
       <div class="modal-actions">
         <button id="openPDFBtn" class="btn btn-ghost">📖 Brauzerda ochish</button>
         <button id="downloadPDFBtn" class="btn btn-danger">⬇️ Yuklab olish</button>
@@ -97,26 +106,17 @@
     </div>
   </div>
 
-  <footer>
-    <p>&copy; 2025 Kutubxona. Barcha huquqlar himoyalangan.</p>
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="container">
+      <p>&copy; 2025 Kutubxona. Barcha huquqlar himoyalangan.</p>
+    </div>
   </footer>
 
+  <!-- Firebase & Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-      authDomain: "kutubxona-79dd3.firebaseapp.com",
-      projectId: "kutubxona-79dd3",
-      storageBucket: "kutubxona-79dd3.firebasestorage.app",
-      messagingSenderId: "593289819612",
-      appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-      measurementId: "G-Z0Z4FWPWP8"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
-
   <script src="script.js"></script>
 </body>
 </html>
