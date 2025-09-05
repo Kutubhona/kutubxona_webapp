@@ -1,17 +1,22 @@
-// =============================
-// script.js — Kutubxona funksiyalari
-// =============================
+/* =========================================================
+Unified JS — script-part1 + script-part2
+========================================================= */
 
-// Elements
+/* ---------- Elementlar ---------- */
 const body = document.body;
 const booksContainer = document.getElementById('booksContainer');
 const emptyState = document.getElementById('emptyState');
 
 const searchInput = document.getElementById('searchInput');
 const toggleThemeBtn = document.getElementById('toggleTheme');
+
 const showUploadBtn = document.getElementById('showUploadBtn');
 const uploadSection = document.getElementById('uploadSection');
 const uploadForm = document.getElementById('uploadForm');
+const bookTitleEl = document.getElementById('bookTitle');
+const bookDescriptionEl = document.getElementById('bookDescription');
+const bookCategoryEl = document.getElementById('bookCategory');
+const bookFileEl = document.getElementById('bookFile');
 
 const progressContainer = document.getElementById('progressContainer');
 const progressBar = document.getElementById('progressBar');
@@ -22,27 +27,30 @@ const downloadPDFBtn = document.getElementById('downloadPDFBtn');
 const downloadMessage = document.getElementById('downloadMessage');
 const openDownloaded = document.getElementById('openDownloaded');
 
+const introScreen = document.getElementById('introScreen');
+
 let allBooks = [];
 let activeCategory = '';
 let isAdmin = false;
-let currentPDF = "";
+let currentPDF = '';
+let currentPDFTitle = '';
 
-// =============================
-// Splash Screen
-// =============================
+/* =========================================================
+Splash screen — 2 soniya ko‘rinadi, keyin yo‘qoladi
+========================================================= */
 window.addEventListener('load', () => {
   setTimeout(() => {
-    const intro = document.getElementById('introScreen');
-    if (intro) {
-      intro.style.animation = 'fadeOut 1s ease forwards';
-      setTimeout(() => intro.remove(), 1000);
-    }
+    if (!introScreen) return;
+    introScreen.style.animation = 'fadeOut 1s ease forwards';
+    setTimeout(() => {
+      introScreen.remove();
+    }, 1000);
   }, 2000);
 });
 
-// =============================
-// Ripple effect
-// =============================
+/* =========================================================
+Ripple effekti
+========================================================= */
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.ripple');
   if (!btn) return;
@@ -56,51 +64,66 @@ document.addEventListener('click', (e) => {
   btn.classList.add('active');
 });
 
-// =============================
-// Reveal on scroll
-// =============================
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if (en.isIntersecting) {
-      en.target.classList.add('in');
-      io.unobserve(en.target);
-    }
-  });
-},{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+/* =========================================================
+Reveal on scroll
+========================================================= */
+const io = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) {
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  },
+  { threshold: 0.12 }
+);
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
-// =============================
-// Category click
-// =============================
-document.querySelectorAll('.cat-btn').forEach(btn => {
+/* =========================================================
+Kategoriya tugmalari
+========================================================= */
+document.querySelectorAll('.cat-btn').forEach((btn) => {
   btn.addEventListener('mousemove', (e) => {
     btn.style.setProperty('--x', `${e.offsetX}px`);
     btn.style.setProperty('--y', `${e.offsetY}px`);
   });
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.cat-btn').forEach((b) => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('active');
-    activeCategory = btn.dataset.category;
+    btn.setAttribute('aria-pressed', 'true');
+    activeCategory = btn.dataset.category || '';
     filterBooks();
   });
 });
 
-// =============================
-// Theme toggle
-// =============================
+/* =========================================================
+Tema toggle — localStorage bilan
+========================================================= */
+function applySavedTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') body.classList.add('dark');
+  if (saved === 'light') body.classList.remove('dark');
+  updateThemeButton();
+}
 function updateThemeButton() {
   const isDark = body.classList.contains('dark');
-  toggleThemeBtn.textContent = isDark ? "☀️ Yorug‘" : "🌙 Qorong‘u";
+  toggleThemeBtn.textContent = isDark ? '☀️ Yorug‘' : '🌙 Qorong‘u';
 }
 toggleThemeBtn.addEventListener('click', () => {
   body.classList.toggle('dark');
+  const isDark = body.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
   updateThemeButton();
 });
-updateThemeButton();
+applySavedTheme();
 
-// =============================
-// Render books
-// =============================
+/* =========================================================
+Kitoblarni render qilish
+========================================================= */
 function renderBooks(list) {
   if (!list.length) {
     booksContainer.innerHTML = '';
@@ -109,28 +132,49 @@ function renderBooks(list) {
   }
   emptyState.classList.add('hidden');
 
-  booksContainer.innerHTML = list.map(book => `
+  booksContainer.innerHTML = list
+    .map(
+      (book) => `
     <article class="book reveal">
       <div class="book__glow"></div>
-      <h3 class="book__title">${book.title || "Nomsiz kitob"}</h3>
-      <p class="book__desc">${book.description || ""}</p>
+      <h3 class="book__title">${escapeHTML(book.title) || 'Nomsiz kitob'}</h3>
+      <p class="book__desc">${escapeHTML(book.description || '')}</p>
       <div class="book__actions">
         <a class="btn btn--primary ripple" href="${book.link}" target="_blank" rel="noopener">📖 PDF</a>
-        <button class="btn btn--ghost ripple" onclick="showPDFOptions('${book.link}')">📄 Variantlar</button>
-        ${isAdmin ? `<button class="btn btn--danger ripple" onclick="deleteBook('${book.id}','${book.link}')">❌ O‘chirish</button>` : ""}
+        <button class="btn btn--ghost ripple" data-action="options" data-link="${book.link}" data-title="${encodeURIComponent(
+        book.title || 'kitob'
+      )}">📄 Variantlar</button>
+        ${
+          isAdmin
+            ? `<button class="btn btn--danger ripple" data-action="delete" data-id="${book.id}" data-link="${book.link}" data-title="${escapeHTML(
+                book.title || ''
+              )}">❌ O‘chirish</button>`
+            : ''
+        }
       </div>
     </article>
-  `).join('');
+  `
+    )
+    .join('');
 
-  booksContainer.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  booksContainer.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 }
 
-// =============================
-// Filter books
-// =============================
+function escapeHTML(str) {
+  return String(str)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+/* =========================================================
+Filter — qidiruv + kategoriya
+========================================================= */
 function filterBooks() {
   const q = (searchInput.value || '').toLowerCase();
-  const filtered = allBooks.filter(b => {
+  const filtered = allBooks.filter((b) => {
     const catOk = !activeCategory || b.category === activeCategory;
     const txtOk =
       (b.title || '').toLowerCase().includes(q) ||
@@ -141,40 +185,40 @@ function filterBooks() {
 }
 searchInput.addEventListener('input', filterBooks);
 
-// =============================
-// Admin mode
-// =============================
-showUploadBtn.addEventListener('click', () => {
+/* =========================================================
+Admin rejim
+========================================================= */
+showUploadBtn?.addEventListener('click', () => {
   const password = prompt("Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
-  if (password === "ibr2010071717.se") {
+  if (password === 'ibr2010071717.se') {
     isAdmin = true;
     uploadSection.hidden = false;
     filterBooks();
   } else {
-    alert("❌ Noto‘g‘ri parol!");
+    alert('❌ Noto‘g‘ri parol!');
   }
 });
 
-// =============================
-// Upload book
-// =============================
-uploadForm.addEventListener('submit', async (e) => {
+/* =========================================================
+Upload — Firebase Storage + Firestore
+========================================================= */
+uploadForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const title = document.getElementById('bookTitle').value.trim();
-  const description = document.getElementById('bookDescription').value.trim();
-  const category = document.getElementById('bookCategory').value;
-  const file = document.getElementById('bookFile').files[0];
+  const title = (bookTitleEl.value || '').trim();
+  const description = (bookDescriptionEl.value || '').trim();
+  const category = bookCategoryEl.value;
+  const file = bookFileEl.files[0];
   if (!file) return;
 
   try {
-    const clean = file.name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_\-.]/g,'');
+    const clean = file.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_\-.]/g, '');
     const unique = `${Date.now()}_${clean}`;
 
     const storageRef = firebase.storage().ref(`books/${unique}`);
     const task = storageRef.put(file);
 
     progressContainer.hidden = false;
-    progressBar.style.width = '0%'; 
+    progressBar.style.width = '0%';
     progressBar.textContent = '0%';
 
     task.on('state_changed', (snap) => {
@@ -190,60 +234,98 @@ uploadForm.addEventListener('submit', async (e) => {
 
     uploadForm.reset();
     progressContainer.hidden = true;
+    alert('✅ Kitob muvaffaqiyatli qo‘shildi!');
   } catch (err) {
     console.error(err);
-    alert("❌ Kitob qo‘shishda xatolik!");
+    alert('❌ Kitob qo‘shishda xatolik!');
   }
 });
 
-// =============================
-// Delete book
-// =============================
-async function deleteBook(bookId, fileURL) {
-  if (!isAdmin) return alert("❌ Sizda o‘chirish huquqi yo‘q!");
-  if (!confirm("Haqiqatan ham bu kitobni o‘chirmoqchimisiz?")) return;
+/* =========================================================
+O‘chirish — Firestore + Storage
+========================================================= */
+async function deleteBook(bookId, fileURL, bookTitle = '') {
+  if (!isAdmin) return alert('❌ Sizda o‘chirish huquqi yo‘q!');
+  const name = bookTitle ? `"${bookTitle}" ` : '';
+  if (!confirm(`${name}nomli kitobni o‘chirmoqchimisiz?`)) return;
   try {
     await firebase.firestore().collection('books').doc(bookId).delete();
     const sr = firebase.storage().refFromURL(fileURL);
     await sr.delete();
+    alert('🗑️ Kitob o‘chirildi.');
   } catch (err) {
     console.error(err);
-    alert("❌ O‘chirishda xatolik!");
+    alert('❌ O‘chirishda xatolik!');
   }
 }
-window.deleteBook = deleteBook;
 
-// =============================
-// PDF options
-// =============================
-function showPDFOptions(url){
-  currentPDF = url;
-  pdfOptions.hidden = false;
-  downloadMessage.hidden = true;
-}
-window.showPDFOptions = showPDFOptions;
+/* =========================================================
+Event delegation — options/delete tugmalari
+========================================================= */
+booksContainer?.addEventListener('click', (e) => {
+  const btn = e.target.closest('button, a');
+  if (!btn) return;
 
-openPDFBtn.addEventListener('click', () => currentPDF && window.open(currentPDF, '_blank'));
-downloadPDFBtn.addEventListener('click', () => {
-  if (!currentPDF) return;
-  const a = document.createElement('a');
-  a.href = currentPDF; 
-  a.download = 'kitob.pdf';
-  document.body.appendChild(a); 
-  a.click(); 
-  a.remove();
-  openDownloaded.href = currentPDF;
-  downloadMessage.hidden = false;
+  const action = btn.getAttribute('data-action');
+  if (action === 'options') {
+    const link = btn.getAttribute('data-link');
+    const encTitle = btn.getAttribute('data-title') || 'kitob';
+    showPDFOptions(link, decodeURIComponent(encTitle));
+  } else if (action === 'delete') {
+    const id = btn.getAttribute('data-id');
+    const link = btn.getAttribute('data-link');
+    const title = btn.getAttribute('data-title') || '';
+    deleteBook(id, link, title);
+  }
 });
 
-// =============================
-// Live load from Firestore
-// =============================
-function subscribeBooks(){
-  firebase.firestore().collection('books').orderBy('title')
-    .onSnapshot((snap) => {
-      allBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      filterBooks();
-    }, (err)=> console.error(err));
+/* =========================================================
+PDF variantlari — ochish / yuklab olish
+========================================================= */
+function showPDFOptions(url, title = 'kitob') {
+  currentPDF = url;
+  currentPDFTitle = title || 'kitob';
+  if (pdfOptions) {
+    pdfOptions.hidden = false;
+  }
+  if (downloadMessage) {
+    downloadMessage.hidden = true;
+  }
+}
+
+openPDFBtn?.addEventListener('click', () => {
+  if (!currentPDF) return;
+  window.open(currentPDF, '_blank', 'noopener');
+});
+
+downloadPDFBtn?.addEventListener('click', () => {
+  if (!currentPDF) return;
+  const a = document.createElement('a');
+  a.href = currentPDF;
+  const safeName = (currentPDFTitle || 'kitob').replace(/[\\/:*?"<>|]+/g, '').trim() || 'kitob';
+  a.download = `${safeName}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  if (openDownloaded) openDownloaded.href = currentPDF;
+  if (downloadMessage) downloadMessage.hidden = false;
+});
+
+/* =========================================================
+Firestore — real-time obuna
+========================================================= */
+function subscribeBooks() {
+  firebase
+    .firestore()
+    .collection('books')
+    .orderBy('title')
+    .onSnapshot(
+      (snap) => {
+        allBooks = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        filterBooks();
+      },
+      (err) => console.error(err)
+    );
 }
 subscribeBooks();
