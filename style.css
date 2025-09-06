@@ -35,6 +35,32 @@ body.dark {
   color: var(--text-dark);
 }
 
+/* Animatsiyalangan orqa fon */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #6C63FF, #00C9A7, #6C63FF);
+  background-size: 400% 400%;
+  animation: gradientBackground 15s ease infinite;
+  opacity: 0.03;
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+body.dark::before {
+  opacity: 0.05;
+}
+
+@keyframes gradientBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 /* Splash Screen */
 #splash {
   position: fixed;
@@ -146,6 +172,21 @@ header .subtitle {
   transform: translateY(-2px);
 }
 
+/* Qorong'u rejim uchun input sozlamalari */
+body.dark .header-actions input {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark .header-actions input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark .header-actions input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
 /* Buttons */
 .btn {
   cursor: pointer;
@@ -221,6 +262,29 @@ body.light .btn-ghost {
   border: 1px solid rgba(0,0,0,0.1);
 }
 
+/* Qorong'u rejim uchun tugma sozlamalari */
+body.dark .btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark .btn-primary {
+  background: var(--primary-dark);
+}
+
+body.dark .btn-primary:hover {
+  background: var(--primary);
+}
+
+body.dark .btn-danger {
+  background: #e53935;
+}
+
+body.dark .btn-danger:hover {
+  background: #d32f2f;
+}
+
 /* Categories */
 .categories-row {
   display: flex;
@@ -242,6 +306,12 @@ body.dark .categories-row {
   padding: 0.7rem 1.2rem;
   font-size: 0.95rem;
   transition: all 0.3s ease;
+  border-radius: var(--radius);
+  flex: 1;
+  min-width: 160px;
+  max-width: 200px;
+  text-align: center;
+  justify-content: center;
 }
 .category-btn.active {
   box-shadow: 0 0 0 3px var(--accent);
@@ -285,7 +355,8 @@ body.dark .categories-row {
   transform: scaleX(1);
 }
 body.dark .card {
-  background: var(--card-dark);
+  background: #1e1e1e;
+  border: 1px solid #333;
 }
 .card:hover {
   transform: translateY(-8px);
@@ -346,7 +417,8 @@ body.dark .book-category {
   transition: all 0.4s ease;
 }
 body.dark #uploadSection {
-  background: var(--card-dark);
+  background: #1e1e1e;
+  border: 1px solid #333;
 }
 #uploadSection h2 {
   margin-bottom: 1.8rem;
@@ -372,9 +444,9 @@ body.dark #uploadSection h2 {
 }
 body.dark #uploadForm input,
 body.dark #uploadForm select {
+  background: #2d2d2d;
+  color: #e0e0e0;
   border: 1px solid #444;
-  background: rgba(30, 30, 30, 0.5);
-  color: #fff;
 }
 #uploadForm input:focus,
 #uploadForm select:focus {
@@ -390,7 +462,7 @@ body.dark #uploadForm select {
   height: 24px;
 }
 body.dark #progressWrap {
-  background: #2a2a2a;
+  background: #2d2d2d;
 }
 #progressBar {
   background: linear-gradient(to right, var(--primary), var(--accent));
@@ -439,8 +511,9 @@ body.dark #progressWrap {
   transform: translateY(0) scale(1);
 }
 body.dark .modal-content {
-  background: var(--card-dark);
-  color: var(--text-dark);
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #333;
 }
 .modal-close {
   position: absolute;
@@ -517,6 +590,7 @@ footer {
   .category-btn {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
+    min-width: 140px;
   }
   
   #uploadSection {
