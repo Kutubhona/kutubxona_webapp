@@ -22,7 +22,7 @@ let isAdmin = false;
 
 /* ---------- THEME ---------- */
 function setTheme(theme) {
-  if(theme==='dark') html.classList.add('dark');
+  if (theme === 'dark') html.classList.add('dark');
   else html.classList.remove('dark');
   localStorage.setItem('theme', theme);
 }
@@ -56,7 +56,7 @@ function bookCard(book){
       <div class="book-desc">${escapeHtml(book.description)}</div>
       <div class="card-actions">
         <button class="btn btn-ghost" data-action="open-pdf" data-link="${book.link}">📄 PDF</button>
-        ${isAdmin? `<button class="btn btn-danger" data-action="delete" data-id="${book.id}" data-link="${book.link}">❌ O‘chirish</button>` : ''}
+        ${isAdmin ? `<button class="btn btn-danger" data-action="delete" data-id="${book.id}" data-link="${book.link}">❌ O‘chirish</button>` : ''}
       </div>
     </article>
   `;
@@ -69,8 +69,8 @@ function renderBooks(list){
 /* ---------- FILTER & SEARCH ---------- */
 function filterBooks(){
   const q = (searchInput.value||'').toLowerCase().trim();
-  const filtered = allBooks.filter(b=>
-    (!activeCategory || b.category===activeCategory) &&
+  const filtered = allBooks.filter(b =>
+    (!activeCategory || b.category === activeCategory) &&
     (!q || (b.title && b.title.toLowerCase().includes(q)))
   );
   renderBooks(filtered);
@@ -87,7 +87,7 @@ categoriesRow.addEventListener('click', e=>{
     btn.classList.remove('active');
   } else {
     activeCategory=cat;
-    categoriesRow.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category===cat));
+    categoriesRow.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.category===cat));
   }
   filterBooks();
 });
@@ -132,23 +132,27 @@ uploadForm.addEventListener('submit', async e=>{
     progressBar.style.width='0%';
     progressBar.textContent='0%';
 
-    uploadTask.on('state_changed', snapshot=>{
-      const p = snapshot.bytesTransferred/snapshot.totalBytes*100;
-      progressBar.style.width=`${p.toFixed(0)}%`;
-      progressBar.textContent=`${p.toFixed(0)}%`;
-    }, err=>{
-      console.error('Upload error:',err);
-      alert('❌ Yuklash xatosi: '+err.message);
-      progressWrap.hidden=true;
-    }, async ()=>{
-      const fileURL = await storageRef.getDownloadURL();
-      await firebase.firestore().collection('books').add({
-        title, description, category, link:fileURL, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      alert('✅ Kitob muvaffaqiyatli qo‘shildi!');
-      uploadForm.reset();
-      progressWrap.hidden=true;
-    });
+    uploadTask.on('state_changed',
+      snapshot => {
+        const p = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+        progressBar.style.width = `${p.toFixed(0)}%`;
+        progressBar.textContent = `${p.toFixed(0)}%`;
+      },
+      err => {
+        console.error('Upload error:', err);
+        alert('❌ Yuklash xatosi: '+err.message);
+        progressWrap.hidden=true;
+      },
+      async () => {
+        const fileURL = await storageRef.getDownloadURL();
+        await firebase.firestore().collection('books').add({
+          title, description, category, link:fileURL, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert('✅ Kitob muvaffaqiyatli qo‘shildi!');
+        uploadForm.reset();
+        progressWrap.hidden=true;
+      }
+    );
   } catch(err){
     console.error(err);
     alert('❌ Xatolik: '+err.message);
