@@ -1,23 +1,3 @@
-/* ==========================
-   PREMIUM SCRIPT (FULL)
-   - Firebase integration preserved
-   - Admin modal login (not prompt)
-   - Upload / delete functioning identical to original
-   - Splash, theme, modals, reveal on scroll
-   ========================== */
-
-/* ---------- FIREBASE INIT (unchanged) ---------- */
-const firebaseConfig = {
-  apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-  authDomain: "kutubxona-79dd3.firebaseapp.com",
-  projectId: "kutubxona-79dd3",
-  storageBucket: "kutubxona-79dd3.firebasestorage.app",
-  messagingSenderId: "593289819612",
-  appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-  measurementId: "G-Z0Z4FWPWP8"
-};
-firebase.initializeApp(firebaseConfig);
-
 /* ---------- ELEMENTS ---------- */
 const html = document.documentElement;
 const themeToggle = document.getElementById('toggleTheme');
