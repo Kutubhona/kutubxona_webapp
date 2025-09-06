@@ -1,88 +1,74 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Premium Кутубхона</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Премиум Кутубхона</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="light">
-  <!-- Splash -->
-  <div id="splash" aria-hidden="true">
-    <h1 data-cyrl="Кутубхонага" data-latn="Kutubxonaga">Кутубхонага</h1>
-    <p data-cyrl="Хуш келибсиз!" data-latn="Xush kelibsiz!">Хуш келибсиз!</p>
+  <div id="splash">
+    <h1 id="splashTitle">Кутубхонага</h1>
+    <p id="splashSubtitle">Хуш келибсиз!</p>
   </div>
 
   <header>
-    <h1 id="welcomeTitle"
-        data-cyrl="Кутубхонага хуш келибсиз!"
-        data-latn="Kutubxonaga xush kelibsiz!">Кутубхонага хуш келибсиз!</h1>
-    <p class="subtitle"
-       data-cyrl="Сизга китоб тавсия қиламиз!"
-       data-latn="Sizga kitob tavsiya qilamiz!">Сизга китоб тавсия қиламиз!</p>
-
+    <h1>Кутубхонага Хуш келибсиз!</h1>
+    <p class="subtitle">Сизга китоб тавсия қиламиз!</p>
     <div class="header-actions">
-      <input type="text" id="searchInput"
-             placeholder="Қайси китобни қидиряпсиз?"
-             aria-label="Китоб қидириш"
-             data-ph-cyrl="Қайси китобни қидиряпсиз?"
-             data-ph-latn="Qaysi kitobni qidiryapsiz?" />
-
-      <button id="toggleTheme" class="btn btn-ghost" aria-label="Қоронғу/Ёруғ режим">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Қайси китобни қидиряпсиз?"
+        aria-label="Китоб қидириш"
+      />
+      <button id="toggleTheme" class="btn btn-ghost" aria-label="Мавзуни алмаштириш">
         <i class="fas fa-moon"></i> Қоронғу режим
       </button>
-
-      <button id="toggleLang" class="btn btn-ghost" aria-label="Тилни алмаштириш"
-              data-cyrl="Тил: Кирилл" data-latn="Til: Lotin">
-        <i class="fas fa-language"></i> Тил: Кирилл
+      <button id="toggleLang" class="btn btn-ghost" aria-label="Тилни алмаштириш">
+        <i class="fas fa-language"></i> Тил
       </button>
     </div>
   </header>
 
-  <!-- Kategoriyalar -->
-  <nav class="categories-row" id="categories">
-    <button class="category-btn btn" data-category="Қуръони Карим">Қуръони Карим</button>
-    <button class="category-btn btn" data-category="Тафсир китоблари">Тафсир китоблари</button>
-    <button class="category-btn btn" data-category="Ҳадис китоблари">Ҳадис китоблари</button>
-    <button class="category-btn btn" data-category="Фиқҳий китоблар">Фиқҳий китоблар</button>
-    <button class="category-btn btn" data-category="Ақида китоблари">Ақида китоблари</button>
-    <button class="category-btn btn" data-category="Тарих китоблари">Тарих китоблари</button>
-    <button class="category-btn btn" data-category="Сийрат китоблари">Сийрат китоблари</button>
-    <button class="category-btn btn" data-category="Саҳобалар ҳаёти">Саҳобалар ҳаёти</button>
-    <button class="category-btn btn" data-category="Ахлоқ ва тарбия">Ахлоқ ва тарбия</button>
-    <button class="category-btn btn" data-category="Дуо ва зикрлар">Дуо ва зикрлар</button>
-    <!-- yangi 2ta -->
-    <button class="category-btn btn" data-category="Ал-Ваъй журнали">Ал-Ваъй журнали</button>
-    <button class="category-btn btn" data-category="Ҳизб китоблари">Ҳизб китоблари</button>
+  <nav class="categories-row">
+    <button class="category-btn btn" data-category="Қуръони Карим" data-lt="Qur’oni Karim"><i class="fas fa-book-quran"></i> Қуръони Карим</button>
+    <button class="category-btn btn" data-category="Тафсир китоблари" data-lt="Tafsir kitoblari"><i class="fas fa-book"></i> Тафсир китоблари</button>
+    <button class="category-btn btn" data-category="Ҳадис китоблари" data-lt="Hadis kitoblari"><i class="fas fa-quote-right"></i> Ҳадис китоблари</button>
+    <button class="category-btn btn" data-category="Фиқҳий китоблари" data-lt="Fiqhiy kitoblari"><i class="fas fa-balance-scale"></i> Фиқҳий китоблари</button>
+    <button class="category-btn btn" data-category="Ақида китоблари" data-lt="Aqida kitoblari"><i class="fas fa-brain"></i> Ақида китоблари</button>
+    <button class="category-btn btn" data-category="Тарих китоблари" data-lt="Tarix kitoblari"><i class="fas fa-landmark"></i> Тарих китоблари</button>
+    <button class="category-btn btn" data-category="Сийрат китоблари" data-lt="Siyrat kitoblari"><i class="fas fa-road"></i> Сийрат китоблари</button>
+    <button class="category-btn btn" data-category="Саҳобалар ҳаёти" data-lt="Sahobalar hayoti"><i class="fas fa-users"></i> Саҳобалар ҳаёти</button>
+    <button class="category-btn btn" data-category="Ахлоқ ва тарбия" data-lt="Axloq va tarbiya"><i class="fas fa-seedling"></i> Ахлоқ ва тарбия</button>
+    <button class="category-btn btn" data-category="Дуо ва зикрлар" data-lt="Duo va zikrlar"><i class="fas fa-hands-praying"></i> Дуо ва зикрлар</button>
+    <button class="category-btn btn" data-category="Ал-Ваъй журнали" data-lt="Al-Va'y jurnali"><i class="fas fa-journal-whills"></i> Ал-Ваъй журнали</button>
+    <button class="category-btn btn" data-category="Ҳизб китоблари" data-lt="Hizb kitoblari"><i class="fas fa-book-reader"></i> Ҳизб китоблари</button>
   </nav>
 
   <main>
-    <div id="booksContainer" class="grid">
-      <!-- Kartalar JS orqali keladi. Matnlar til tugmasi bosilganda translit qilinadi. -->
-    </div>
+    <div id="booksContainer" class="grid"></div>
   </main>
 
   <div class="center">
-    <!-- Admin Rejim matni o‘zgarmaydi -->
-    <button id="adminToggle" class="btn btn-primary no-translate"><i class="fas fa-key"></i> Admin Rejim</button>
+    <button id="adminToggle" class="btn btn-primary"><i class="fas fa-key"></i> Admin Rejim</button>
   </div>
 
-  <!-- Upload Section (faqat Admin rejimda ko'rinadi) -->
   <section id="uploadSection" hidden>
-    <form id="uploadForm" class="card">
-      <h3>Китоб қўшиш</h3>
-      <input type="text" id="bookTitle" placeholder="Китоб номи" required>
-      <textarea id="bookDescription" placeholder="Қисқача тавсиф" required></textarea>
-      <select id="bookCategory">
+    <h2><i class="fas fa-plus-circle"></i> Янги китоб қўшиш</h2>
+    <form id="uploadForm">
+      <input type="text" id="bookTitle" placeholder="Китоб номи" required />
+      <input type="text" id="bookDescription" placeholder="Тавсиф" required />
+      <select id="bookCategory" required>
+        <option value="">Категория танланг</option>
         <option value="Қуръони Карим">Қуръони Карим</option>
         <option value="Тафсир китоблари">Тафсир китоблари</option>
         <option value="Ҳадис китоблари">Ҳадис китоблари</option>
-        <option value="Фиқҳий китоблар">Фиқҳий китоблар</option>
+        <option value="Фиқҳий китоблари">Фиқҳий китоблари</option>
         <option value="Ақида китоблари">Ақида китоблари</option>
         <option value="Тарих китоблари">Тарих китоблари</option>
         <option value="Сийрат китоблари">Сийрат китоблари</option>
@@ -92,50 +78,31 @@
         <option value="Ал-Ваъй журнали">Ал-Ваъй журнали</option>
         <option value="Ҳизб китоблари">Ҳизб китоблари</option>
       </select>
-      <input type="file" id="bookFile" accept="application/pdf" required>
-      <div id="progressWrap" hidden><div id="progressBar">0%</div></div>
-      <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Юклаш</button>
+      <input type="file" id="bookFile" accept="application/pdf" required />
+      <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Китоб қўшиш</button>
+
+      <div id="progressWrap" hidden>
+        <div id="progressBar">0%</div>
+      </div>
     </form>
   </section>
 
-  <!-- Modal (PDF) -->
   <div id="pdfModal" class="modal" hidden>
     <div class="modal-content">
-      <span class="modal-close" title="Ёпиш">&times;</span>
+      <span class="modal-close">&times;</span>
       <h3><i class="fas fa-file-pdf"></i> PDF билан нима қилмоқчисиз?</h3>
       <button id="openPDFBtn" class="btn btn-ghost"><i class="fas fa-eye"></i> Браузерда очиш</button>
       <button id="downloadPDFBtn" class="btn btn-danger"><i class="fas fa-download"></i> Юклаб олиш</button>
       <div id="downloadNotice" hidden>
         <p class="success-text"><i class="fas fa-check-circle"></i> PDF қурилмангизга муваффақиятли юкланди!</p>
-        <a id="openDownloaded" href="" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Юкланган PDF ни очиш</a>
+        <a id="openDownloaded" href="" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Юкланган PDF'ни очиш</a>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>&copy; 2025 Premium Кутубхона.</p>
+    <p>&copy; 2025 Премиум Кутубхона.</p>
   </footer>
-
-  <!-- Firebase SDK va config -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-    import { getStorage } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-storage.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-      authDomain: "kutubxona-79dd3.firebaseapp.com",
-      projectId: "kutubxona-79dd3",
-      storageBucket: "kutubxona-79dd3.firebasestorage.app",
-      messagingSenderId: "593289819612",
-      appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-      measurementId: "G-Z0Z4FWPWP8"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
 
   <script src="script.js"></script>
 </body>
