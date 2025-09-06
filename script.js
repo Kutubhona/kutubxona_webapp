@@ -65,8 +65,9 @@ function toCyr(text){ return text.replace(/sh/g,'ш').replace(/Sh/g,'Ш'); }
 function toLat(text){ return text.replace(/ш/g,'sh').replace(/Ш/g,'Sh'); }
 
 function prepareTranslitTargets(){
-  const all = Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6, p, span, a, button, .category-btn, .book-title, .book-desc, .book-category'))
-    .filter(el => !isInAdmin(el) && !el.closest('.no-translate'));
+  const all = Array.from(document.querySelectorAll(
+    'h1,h2,h3,h4,h5,h6,p,span,a,div,button,.category-btn,.book-title,.book-desc,.book-category,.subtitle'
+  )).filter(el => !isInAdmin(el) && !el.closest('.no-translate'));
   return all;
 }
 function applyLanguage(lang){
@@ -117,7 +118,7 @@ function cardTemplate(b){
 function renderBooks(list){
   booksContainer.innerHTML = (list && list.length) ? list.map(cardTemplate).join('') : '<p class="no-books-message reveal">Ҳозирча китоб йўқ…</p>';
   revealAll();
-  applyLanguage(state.lang);
+  applyLanguage(state.lang); // qo'shimcha: kitob va kategoriyalar ham translit qilinsin
 }
 function filterBooks(){
   const q = (searchInput?.value || '').toLowerCase();
