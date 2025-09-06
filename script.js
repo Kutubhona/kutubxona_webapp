@@ -115,52 +115,78 @@ let isKirill = true;
 
 function switchLanguage() {
     isKirill = !isKirill;
-    const elements = document.querySelectorAll('h1, h2, p, button, input, option, .book-title, .book-desc, .book-category');
+    const elements = document.querySelectorAll('[data-original-text], h1, h2, p, button, input, option, .book-title, .book-desc, .book-category');
 
     elements.forEach(el => {
         const originalText = el.getAttribute('data-original-text') || el.textContent.trim();
         
-        if (!el.getAttribute('data-original-text') && el.tagName !== 'I' && !el.classList.contains('fa-key')) {
+        if (!el.hasAttribute('data-original-text') && el.tagName !== 'I' && el.tagName !== 'SPAN' && !el.classList.contains('fa-key')) {
             el.setAttribute('data-original-text', originalText);
         }
-
+        
+        const key = el.getAttribute('data-original-text');
+        
         if (isKirill) {
-            const foundKey = Object.keys(TRANSLATIONS).find(key => TRANSLATIONS[key] === originalText);
-            if (foundKey) {
-                el.textContent = foundKey;
-            } else if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder && TRANSLATIONS[el.placeholder]) {
-                el.placeholder = Object.keys(TRANSLATIONS).find(key => TRANSLATIONS[key] === el.placeholder) || el.placeholder;
-            } else if (el.tagName === 'BUTTON' && el.getAttribute('data-lt')) {
-                el.textContent = el.getAttribute('data-original-text');
-            } else if (el.tagName === 'SELECT' && el.options) {
-                Array.from(el.options).forEach(option => {
-                    const foundOptionKey = Object.keys(TRANSLATIONS).find(key => TRANSLATIONS[key] === option.textContent.trim());
-                    if (foundOptionKey) {
-                        option.textContent = foundOptionKey;
-                    }
-                });
-            }
+            el.textContent = key;
         } else { // Lotin
-            if (TRANSLATIONS[originalText]) {
-                el.textContent = TRANSLATIONS[originalText];
-            } else if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder && TRANSLATIONS[el.placeholder]) {
-                el.placeholder = TRANSLATIONS[el.placeholder];
-            } else if (el.tagName === 'BUTTON' && el.getAttribute('data-lt')) {
-                el.textContent = el.getAttribute('data-lt');
-            } else if (el.tagName === 'SELECT' && el.options) {
-                Array.from(el.options).forEach(option => {
-                    if (TRANSLATIONS[option.textContent.trim()]) {
-                        option.textContent = TRANSLATIONS[option.textContent.trim()];
-                    }
-                });
+            if (TRANSLATIONS[key]) {
+                el.textContent = TRANSLATIONS[key];
             }
         }
+
+        if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder) {
+            el.placeholder = isKirill ? Object.keys(TRANSLATIONS).find(k => TRANSLATIONS[k] === el.placeholder) || el.placeholder : TRANSLATIONS[el.placeholder] || el.placeholder;
+        }
+
+        if (el.tagName === 'SELECT' && el.options) {
+            Array.from(el.options).forEach(option => {
+                const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
+                if (!option.hasAttribute('data-original-text')) {
+                    option.setAttribute('data-original-text', originalOptionText);
+                }
+                const optionKey = option.getAttribute('data-original-text');
+
+                if (isKirill) {
+                    option.textContent = optionKey;
+                } else {
+                    if (TRANSLATIONS[optionKey]) {
+                        option.textContent = TRANSLATIONS[optionKey];
+                    }
+                }
+            });
+        }
     });
+
+    // Icons qayta tiklash
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        const icon = btn.querySelector('i');
+        const originalText = btn.getAttribute('data-original-text');
+        btn.innerHTML = `${icon.outerHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
+    });
+    
+    // Theme tugmasini yangilash
+    const themeIcon = toggleThemeBtn.querySelector('i');
+    const themeText = isKirill ? 'Қоронғу режим' : 'Qorong‘u rejim';
+    toggleThemeBtn.innerHTML = `${themeIcon.outerHTML} ${themeText}`;
+
+    // Admin tugmasini yangilash
+    const adminIcon = adminToggleBtn.querySelector('i');
+    const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim'; // Bu text o'zgarmaydi
+    adminToggleBtn.innerHTML = `${adminIcon.outerHTML} ${adminText}`;
+    
+    // Upload tugmasini yangilash
+    const uploadBtn = document.querySelector('#uploadForm .btn-primary');
+    if (uploadBtn) {
+        const uploadIcon = uploadBtn.querySelector('i');
+        const uploadText = isKirill ? 'Китоб қўшиш' : 'Kitob qo‘shish';
+        uploadBtn.innerHTML = `${uploadIcon.outerHTML} ${uploadText}`;
+    }
 
     filterBooks();
 }
 
 toggleLangBtn.addEventListener('click', switchLanguage);
+
 
 // =================== SPLASH SEQUENCE ===================
 function runSplash() {
