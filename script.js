@@ -331,12 +331,7 @@ adminToggleBtn.addEventListener('click', ()=>{
 
 // -------------------- 8) Mock / Initial Data (ixtiyoriy) --------------------
 /* Agar backend ulanmagan bo‘lsa, demo uchun 4 ta karta */
-state.allBooks = [
-  {id:'1',category:'Тафсир китоблари',title:'Ибн Касир тафсири — Жилд 1',description:'Қисқача изоҳ ва манбалар билан.',link:''},
-  {id:'2',category:'Ал-Ваъй журнали',title:'Ал-Ваъй — Январь сони',description:'Исломий фикр журналидан танлов мақолалар.',link:''},
-  {id:'3',category:'Ҳизб китоблари',title:'Низом китоблари тўплами',description:'Фиқҳий ва сиёсий матнлар йиғиндиси.',link:''},
-  {id:'4',category:'Ахлоқ ва тарбия',title:'Ота-онани ҳурмат қилиш',description:'Ахлоқий масалаларга бағишланган китоб.',link:''}
-];
+state.allBooks = [];
 
 // -------------------- 9) Init --------------------
 function init(){
