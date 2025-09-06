@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Premium Kutubxona</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
@@ -13,8 +14,8 @@
 <body class="light">
   <!-- Splash Screen -->
   <div id="splash">
-    <h1 id="splashTitle">Kutubxonaga</h1>
-    <p id="splashSubtitle">Xush kelibsiz</p>
+    <h1 id="splashTitle">Premium Kutubxona</h1>
+    <p id="splashSubtitle">Donishmandlik sari yo'l</p>
   </div>
 
   <header>
@@ -28,22 +29,22 @@
         aria-label="Kitob qidirish"
       />
       <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">
-        🌙 Qorong'u
+        <i class="fas fa-moon"></i> Qorong'u rejim
       </button>
     </div>
   </header>
 
   <nav class="categories-row">
-    <button class="category-btn btn" data-category="Қуръони Карим">📘 Қуръони Карим</button>
-    <button class="category-btn btn" data-category="Тафсир китоблар">📖 Тафсир китоблар</button>
-    <button class="category-btn btn" data-category="Ҳадис китоблар">📜 Ҳадис китоблар</button>
-    <button class="category-btn btn" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китоблар</button>
-    <button class="category-btn btn" data-category="Ақида китоблари">🧠 Ақида китоблари</button>
-    <button class="category-btn btn" data-category="Тарих китоблари">🏛️ Тарих китоблари</button>
-    <button class="category-btn btn" data-category="Сийрат китоблари">👣 Сийрат китоблари</button>
-    <button class="category-btn btn" data-category="Саҳобалар ҳаёти">👤 Саҳобалар ҳаёти</button>
-    <button class="category-btn btn" data-category="Ахлоқ ва тарбия">🌱 Ахлоқ ва тарбия</button>
-    <button class="category-btn btn" data-category="Дуо ва зикрлар">🙏 Дуо ва зикрлар</button>
+    <button class="category-btn btn" data-category="Қуръони Карим"><i class="fas fa-book-quran"></i> Қуръони Карим</button>
+    <button class="category-btn btn" data-category="Тафсир китоблар"><i class="fas fa-book"></i> Тафсир китоблар</button>
+    <button class="category-btn btn" data-category="Ҳадис китоблар"><i class="fas fa-quote-right"></i> Ҳадис китоблар</button>
+    <button class="category-btn btn" data-category="Фиқҳий китоблар"><i class="fas fa-balance-scale"></i> Фиқҳий китоблар</button>
+    <button class="category-btn btn" data-category="Ақида китоблари"><i class="fas fa-brain"></i> Ақида китоблари</button>
+    <button class="category-btn btn" data-category="Тарих китоблари"><i class="fas fa-landmark"></i> Тарих китоблари</button>
+    <button class="category-btn btn" data-category="Сийрат китоблари"><i class="fas fa-road"></i> Сийрат китоблари</button>
+    <button class="category-btn btn" data-category="Саҳобалар ҳаёти"><i class="fas fa-users"></i> Саҳобалар ҳаёти</button>
+    <button class="category-btn btn" data-category="Ахлоқ ва тарбия"><i class="fas fa-seedling"></i> Ахлоқ va тарбиya</button>
+    <button class="category-btn btn" data-category="Дуо ва зикрлар"><i class="fas fa-hands-praying"></i> Дуо va зикрlar</button>
   </nav>
 
   <main>
@@ -51,29 +52,29 @@
   </main>
 
   <div class="center">
-    <button id="adminToggle" class="btn btn-primary">🔑 Admin Rejim</button>
+    <button id="adminToggle" class="btn btn-primary"><i class="fas fa-key"></i> Admin Rejim</button>
   </div>
 
   <section id="uploadSection" hidden>
-    <h2>📥 Yangi kitob qo‘shish</h2>
+    <h2><i class="fas fa-plus-circle"></i> Yangi kitob qo'shish</h2>
     <form id="uploadForm">
       <input type="text" id="bookTitle" placeholder="Kitob nomi" required />
       <input type="text" id="bookDescription" placeholder="Tavsif" required />
       <select id="bookCategory" required>
         <option value="">Kategoriya tanlang</option>
         <option value="Қуръони Карим">Қуръони Карим</option>
-        <option value="Тафсир китоблар">Тафсир китоблар</option>
-        <option value="Ҳадис китоблар">Ҳадис китоблар</option>
-        <option value="Фиқҳий китоблар">Фиқҳий китоблар</option>
-        <option value="Ақида китоблари">Ақида китоблари</option>
-        <option value="Тарих китоблари">Тарих китоблари</option>
-        <option value="Сийрат китоблари">Сийрат китоблари</option>
-        <option value="Саҳобалар ҳаёти">Саҳобалар ҳаёти</option>
-        <option value="Ахлоқ ва тарбия">Ахлоқ ва тарбия</option>
-        <option value="Дуо ва зикрлар">Дуо ва зикрлар</option>
+        <option value="Тафсир китоблар">Тафсир китoblar</option>
+        <option value="Ҳадис китоблар">Ҳадис китoblar</option>
+        <option value="Фиқҳий китоблар">Фиқҳий китoblar</option>
+        <option value="Ақида китоблари">Ақида китoblari</option>
+        <option value="Тарих китоблари">Тарих китoblari</option>
+        <option value="Сийрат китоблари">Сийрат китoblari</option>
+        <option value="Саҳобалар ҳаёти">Саҳобалар ҳayoti</option>
+        <option value="Ахлоқ ва тарбия">Ахлоқ va тарбиya</option>
+        <option value="Дуо ва зикрлар">Дуо va зикрlar</option>
       </select>
       <input type="file" id="bookFile" accept="application/pdf" required />
-      <button type="submit" class="btn btn-primary">Qo‘shish</button>
+      <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Kitob qo'shish</button>
 
       <div id="progressWrap" hidden>
         <div id="progressBar">0%</div>
@@ -84,21 +85,21 @@
   <!-- PDF Modal -->
   <div id="pdfModal" class="modal" hidden>
     <div class="modal-content">
-      <span id="modalClose" class="modal-close">&times;</span>
-      <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
-      <button id="openPDFBtn" class="btn btn-ghost">📖 Brauzerda ochish</button>
-      <button id="downloadPDFBtn" class="btn btn-danger">⬇️ Yuklab olish</button>
+      <span class="modal-close">&times;</span>
+      <h3><i class="fas fa-file-pdf"></i> PDF bilan nima qilmoqchisiz?</h3>
+      <button id="openPDFBtn" class="btn btn-ghost"><i class="fas fa-eye"></i> Brauzerda ochish</button>
+      <button id="downloadPDFBtn" class="btn btn-danger"><i class="fas fa-download"></i> Yuklab olish</button>
       <div id="downloadNotice" hidden>
-        <p class="success-text">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
-        <a id="openDownloaded" href="" target="_blank" class="btn btn-primary">📂 Yuklangan PDF ni ochish</a>
+        <p class="success-text"><i class="fas fa-check-circle"></i> PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
+        <a id="openDownloaded" href="" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Yuklangan PDF ni ochish</a>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>&copy; 2025 Premium Kutubxona</p>
+    <p>&copy; 2025 Premium Kutubxona. Barcha huquqlar himoyalangan.</p>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
