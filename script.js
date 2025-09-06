@@ -49,10 +49,6 @@ function setTheme(theme) {
     'dark': '<i class="fas fa-sun"></i> Ёруғ режим'
   };
   toggleThemeBtn.innerHTML = themeText[theme];
-  
-  // Update body class for old browsers/compatibility
-  document.body.classList.toggle('dark', theme === 'dark');
-  document.body.classList.toggle('light', theme === 'light');
 }
 
 function loadTheme() {
@@ -119,29 +115,21 @@ let isKirill = true;
 
 function switchLanguage() {
     isKirill = !isKirill;
-    const elements = document.querySelectorAll('h1, h2, h3, p, button, input, option');
-    
+    const elements = document.querySelectorAll('h1, h2, p, button, input, option, .book-title, .book-desc, .book-category');
+
     elements.forEach(el => {
         const originalText = el.getAttribute('data-original-text') || el.textContent.trim();
         
-        // Skip elements that should not be translated
-        if (el.id === 'adminToggle' || el.tagName === 'I' || el.classList.contains('fa-key')) {
-            return;
-        }
-
-        if (!el.getAttribute('data-original-text')) {
+        if (!el.getAttribute('data-original-text') && el.tagName !== 'I' && !el.classList.contains('fa-key')) {
             el.setAttribute('data-original-text', originalText);
         }
-        
+
         if (isKirill) {
             const foundKey = Object.keys(TRANSLATIONS).find(key => TRANSLATIONS[key] === originalText);
             if (foundKey) {
                 el.textContent = foundKey;
-            } else if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder) {
-                const foundPlaceholderKey = Object.keys(TRANSLATIONS).find(key => TRANSLATIONS[key] === el.placeholder);
-                if (foundPlaceholderKey) {
-                    el.placeholder = foundPlaceholderKey;
-                }
+            } else if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder && TRANSLATIONS[el.placeholder]) {
+                el.placeholder = Object.keys(TRANSLATIONS).find(key => TRANSLATIONS[key] === el.placeholder) || el.placeholder;
             } else if (el.tagName === 'BUTTON' && el.getAttribute('data-lt')) {
                 el.textContent = el.getAttribute('data-original-text');
             } else if (el.tagName === 'SELECT' && el.options) {
@@ -151,10 +139,8 @@ function switchLanguage() {
                         option.textContent = foundOptionKey;
                     }
                 });
-            } else {
-                el.textContent = originalText;
             }
-        } else {
+        } else { // Lotin
             if (TRANSLATIONS[originalText]) {
                 el.textContent = TRANSLATIONS[originalText];
             } else if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder && TRANSLATIONS[el.placeholder]) {
@@ -167,13 +153,10 @@ function switchLanguage() {
                         option.textContent = TRANSLATIONS[option.textContent.trim()];
                     }
                 });
-            } else {
-                el.textContent = originalText;
             }
         }
     });
-    
-    // Refresh books to update titles/descriptions if they are in the opposite alphabet
+
     filterBooks();
 }
 
@@ -237,7 +220,7 @@ function filterBooks() {
 // Category click
 categoryButtons.forEach(btn => {
   btn.addEventListener('click', (e) => {
-    const cat = e.target.dataset.category;
+    const cat = e.target.closest('.category-btn').dataset.category;
     if (activeCategory === cat) { 
       activeCategory = ""; 
     } else { 
