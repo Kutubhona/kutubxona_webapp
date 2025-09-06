@@ -17,37 +17,39 @@
   </div>
 
   <header>
-    <h1>Кутубхонага Хуш келибсиз!</h1>
-    <p class="subtitle">Сизга китоб тавсия қиламиз!</p>
-    <div class="header-actions">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Қайси китобни қидиряпсиз?"
-        aria-label="Китоб қидириш"
-      />
-      <button id="toggleTheme" class="btn btn-ghost" aria-label="Мавзуни алмаштириш">
-        <i class="fas fa-moon"></i> Қоронғу режим
-      </button>
-      <button id="toggleLang" class="btn btn-ghost" aria-label="Тилни алмаштириш">
-        <i class="fas fa-language"></i> Тил
-      </button>
+    <div class="header-content">
+      <h1>Премиум Кутубхона</h1>
+      <p class="subtitle">Сизга китоб тавсия қиламиз!</p>
+      <div class="header-actions">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Қайси китобни қидиряпсиз?"
+          aria-label="Китоб қидириш"
+        />
+        <div class="header-buttons">
+          <button id="toggleLang" class="btn btn-ghost" data-lt="Til"><i class="fas fa-language"></i> Тил</button>
+          <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">
+            <i class="fas fa-moon"></i> Қоронғу режим
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
   <nav class="categories-row">
-    <button class="category-btn btn" data-category="Қуръони Карим" data-lt="Qur’oni Karim"><i class="fas fa-book-quran"></i> Қуръони Карим</button>
-    <button class="category-btn btn" data-category="Тафсир китоблари" data-lt="Tafsir kitoblari"><i class="fas fa-book"></i> Тафсир китоблари</button>
-    <button class="category-btn btn" data-category="Ҳадис китоблари" data-lt="Hadis kitoblari"><i class="fas fa-quote-right"></i> Ҳадис китоблари</button>
-    <button class="category-btn btn" data-category="Фиқҳий китоблари" data-lt="Fiqhiy kitoblari"><i class="fas fa-balance-scale"></i> Фиқҳий китоблари</button>
-    <button class="category-btn btn" data-category="Ақида китоблари" data-lt="Aqida kitoblari"><i class="fas fa-brain"></i> Ақида китоблари</button>
-    <button class="category-btn btn" data-category="Тарих китоблари" data-lt="Tarix kitoblari"><i class="fas fa-landmark"></i> Тарих китоблари</button>
-    <button class="category-btn btn" data-category="Сийрат китоблари" data-lt="Siyrat kitoblari"><i class="fas fa-road"></i> Сийрат китоблари</button>
-    <button class="category-btn btn" data-category="Саҳобалар ҳаёти" data-lt="Sahobalar hayoti"><i class="fas fa-users"></i> Саҳобалар ҳаёти</button>
-    <button class="category-btn btn" data-category="Ахлоқ ва тарбия" data-lt="Axloq va tarbiya"><i class="fas fa-seedling"></i> Ахлоқ ва тарбия</button>
-    <button class="category-btn btn" data-category="Дуо ва зикрлар" data-lt="Duo va zikrlar"><i class="fas fa-hands-praying"></i> Дуо ва зикрлар</button>
-    <button class="category-btn btn" data-category="Ал-Ваъй журнали" data-lt="Al-Va'y jurnali"><i class="fas fa-journal-whills"></i> Ал-Ваъй журнали</button>
-    <button class="category-btn btn" data-category="Ҳизб китоблари" data-lt="Hizb kitoblari"><i class="fas fa-book-reader"></i> Ҳизб китоблари</button>
+    <button class="category-btn btn" data-category="Қуръони Карим" data-original-text="Қуръони Карим"><i class="fas fa-book-quran"></i> Қуръони Карим</button>
+    <button class="category-btn btn" data-category="Тафсир китоблари" data-original-text="Тафсир китоблари"><i class="fas fa-book"></i> Тафсир китоблари</button>
+    <button class="category-btn btn" data-category="Ҳадис китоблари" data-original-text="Ҳадис китоблари"><i class="fas fa-quote-right"></i> Ҳадис китоблари</button>
+    <button class="category-btn btn" data-category="Фиқҳий китоблари" data-original-text="Фиқҳий китоблари"><i class="fas fa-balance-scale"></i> Фиқҳий китоблари</button>
+    <button class="category-btn btn" data-category="Ақида китоблари" data-original-text="Ақида китоблари"><i class="fas fa-brain"></i> Ақида китоблари</button>
+    <button class="category-btn btn" data-category="Тарих китоблари" data-original-text="Тарих китоблари"><i class="fas fa-landmark"></i> Тарих китоблари</button>
+    <button class="category-btn btn" data-category="Сийрат китоблари" data-original-text="Сийрат китоблари"><i class="fas fa-road"></i> Сийрат китоблари</button>
+    <button class="category-btn btn" data-category="Саҳобалар ҳаёти" data-original-text="Саҳобалар ҳаёти"><i class="fas fa-users"></i> Саҳобалар ҳаёти</button>
+    <button class="category-btn btn" data-category="Ахлоқ ва тарбия" data-original-text="Ахлоқ ва тарбия"><i class="fas fa-seedling"></i> Ахлоқ ва тарбия</button>
+    <button class="category-btn btn" data-category="Дуо ва зикрлар" data-original-text="Дуо ва зикрлар"><i class="fas fa-hands-praying"></i> Дуо ва зикрлар</button>
+    <button class="category-btn btn" data-category="Ал-Ваъй журнали" data-original-text="Ал-Ваъй журнали"><i class="fas fa-file-alt"></i> Ал-Ваъй журнали</button>
+    <button class="category-btn btn" data-category="Ҳизб китоблари" data-original-text="Ҳизб китоблари"><i class="fas fa-book-open"></i> Ҳизб китоблари</button>
   </nav>
 
   <main>
