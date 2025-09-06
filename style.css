@@ -1,38 +1,619 @@
-/* ==========================
-   0) Root & Reset
-   ========================== */
-:root{
-  --primary:#6C63FF;           /* Asosiy rang */
-  --primary-dark:#5651e9;
-  --accent:#00C9A7;            /* Ikkinchi rang (accent) */
-  --accent-dark:#00b896;
-  --bg-light:#F8F9FA;
-  --bg-dark:#121212;
-  --text-light:#2A2A2A;
-  --text-dark:#EDEDED;
-  --card-light:#FFFFFF;
-  --card-dark:#1E1E2F;
-  --radius:16px;
-  --shadow-soft:0 4px 20px rgba(0,0,0,.08);
-  --shadow-strong:0 10px 30px rgba(0,0,0,.15);
-  --tr:.3s ease;
-  --header-h:280px;
+:root {
+  --primary: #6C63FF;
+  --primary-dark: #5651e9;
+  --accent: #00C9A7;
+  --accent-dark: #00b896;
+  --background-light: #F8F9FA;
+  --background-dark: #121212;
+  --text-light: #2A2A2A;
+  --text-dark: #EDEDED;
+  --card-light: #FFFFFF;
+  --card-dark: #1E1E2F;
+  --radius: 16px;
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-strong: 0 10px 30px rgba(0,0,0,0.15);
+  --transition: 0.3s ease;
+  --header-height: 280px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  font-family:'Poppins','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
-  background:var(--bg-light);
-  color:var(--text-light);
-  line-height:1.6;
-  transition:background var(--tr),color var(--tr);
-  overflow-x:hidden;
-}
-body.dark{background:var(--bg-dark);color:var(--text-dark)}
 
-/* ==========================
-   1) Endless Animated Background (NEW)
-   ========================== */
+/* Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: var(--background-light);
+  color: var(--text-light);
+  transition: background var(--transition), color var(--transition);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+body.dark {
+  background: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Animatsiyalangan orqa fon */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #6C63FF, #00C9A7, #6C63FF);
+  background-size: 400% 400%;
+  animation: gradientBackground 15s ease infinite;
+  opacity: 0.03;
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+body.dark::before {
+  opacity: 0.05;
+}
+
+@keyframes gradientBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Splash Screen */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#splashTitle {
+  font-size: 3.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: splashTitleAnimation 1.2s ease-out forwards;
+}
+#splashSubtitle {
+  font-size: 1.5rem;
+  color: #fff;
+  opacity: 0.9;
+  animation: splashSubtitleAnimation 1.2s ease-out 0.3s forwards;
+}
+@keyframes splashTitleAnimation {
+  from { transform: translateY(-50px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes splashSubtitleAnimation {
+  from { transform: translateY(50px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.splash-fade-out {
+  animation: splashFadeOut 0.8s forwards;
+}
+@keyframes splashFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  min-height: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: headerSlideDown 1s ease-out;
+}
+@keyframes headerSlideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, var(--background-light));
+  z-index: 1;
+}
+body.dark header::after {
+  background: linear-gradient(to bottom, transparent, var(--background-dark));
+}
+header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+header .subtitle {
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.header-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+.header-actions input {
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius);
+  border: none;
+  width: 320px;
+  font-size: 1rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition);
+}
+.header-actions input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+/* Qorong'u rejim uchun input sozlamalari */
+body.dark .header-actions input {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark .header-actions input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark .header-actions input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  padding: 0.9rem 1.8rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+.btn:hover::after {
+  animation: ripple 1s ease-out;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-strong);
+}
+.btn:active {
+  transform: translateY(0);
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(30, 30);
+    opacity: 0;
+  }
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+.btn-danger {
+  background: #ff6b6b;
+  color: #fff;
+}
+.btn-danger:hover {
+  background: #ff5252;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+body.light .btn-ghost {
+  background: rgba(0,0,0,0.05);
+  color: var(--text-light);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Qorong'u rejim uchun tugma sozlamalari */
+body.dark .btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark .btn-primary {
+  background: var(--primary-dark);
+}
+
+body.dark .btn-primary:hover {
+  background: var(--primary);
+}
+
+body.dark .btn-danger {
+  background: #e53935;
+}
+
+body.dark .btn-danger:hover {
+  background: #d32f2f;
+}
+
+/* Categories */
+.categories-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  padding: 1.8rem 1rem;
+  background: rgba(108, 99, 255, 0.03);
+  position: relative;
+  z-index: 2;
+}
+body.dark .categories-row {
+  background: rgba(255, 255, 255, 0.03);
+}
+.category-btn {
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border-radius: var(--radius);
+  flex: 1;
+  min-width: 160px;
+  max-width: 200px;
+  text-align: center;
+  justify-content: center;
+}
+.category-btn.active {
+  box-shadow: 0 0 0 3px var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Grid / Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-light);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.card:hover::before {
+  transform: scaleX(1);
+}
+body.dark .card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+}
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-strong);
+}
+.book-title {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--primary);
+  line-height: 1.4;
+}
+body.dark .book-title {
+  color: var(--accent);
+}
+.book-desc {
+  opacity: 0.8;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+.book-category {
+  display: inline-block;
+  background: rgba(108, 99, 255, 0.1);
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+body.dark .book-category {
+  background: rgba(0, 201, 167, 0.15);
+  color: var(--accent);
+}
+.card-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+/* Centered Admin Button */
+.center {
+  text-align: center;
+  margin: 2.5rem 0;
+}
+
+/* Upload Section */
+#uploadSection {
+  max-width: 650px;
+  margin: 0 auto 3.5rem;
+  padding: 2.5rem;
+  background: var(--card-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s ease;
+}
+body.dark #uploadSection {
+  background: #1e1e1e;
+  border: 1px solid #333;
+}
+#uploadSection h2 {
+  margin-bottom: 1.8rem;
+  text-align: center;
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+body.dark #uploadSection h2 {
+  color: var(--accent);
+}
+#uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+#uploadForm input,
+#uploadForm select {
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+body.dark #uploadForm input,
+body.dark #uploadForm select {
+  background: #2d2d2d;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+#uploadForm input:focus,
+#uploadForm select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+#progressWrap {
+  margin-top: 1rem;
+  background: #f0f0f0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 24px;
+}
+body.dark #progressWrap {
+  background: #2d2d2d;
+}
+#progressBar {
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  height: 100%;
+  width: 0%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: width 0.3s ease;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+  z-index: 1000;
+  padding: 1rem;
+}
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  position: relative;
+  background: var(--card-light);
+  color: var(--text-light);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius);
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+  transform: translateY(30px) scale(0.95);
+  transition: transform var(--transition);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+}
+body.dark .modal-content {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--transition);
+}
+.modal-close:hover {
+  opacity: 1;
+}
+.modal-content h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+.modal-content .btn {
+  margin: 0.5rem;
+  min-width: 180px;
+  justify-content: center;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: var(--primary);
+  color: #fff;
+  margin-top: 3rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 320px;
+  }
+  
+  header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+  }
+  
+  .header-actions input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+  
+  .categories-row {
+    padding: 1.2rem 0.5rem;
+  }
+  
+  .category-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    min-width: 140px;
+  }
+  
+  #uploadSection {
+    padding: 1.5rem;
+    margin: 0 1rem 2rem;
+  }
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+.loading {
+  animation: pulse 1.5s infinite;
+}
+
+
+
+/* =========================
+   Qo'shimcha: Orqa fon animatsiyasi (yorug' va qorong'u rejim)
+   ========================= */
 body::before{
   content:'';
   position:fixed;inset:0;
@@ -54,224 +635,9 @@ body.dark::before{opacity:.09}
 }
 @keyframes floatBlobs{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
 
-/* ==========================
-   2) Splash
-   ========================== */
-#splash{
-  position:fixed;inset:0;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-}
-#splash h1{font-size:3.5rem;color:#fff;font-weight:700;margin-bottom:1rem;text-shadow:0 2px 10px rgba(0,0,0,.2);animation:splashIn .9s ease-out}
-#splash p{font-size:1.5rem;color:#fff;opacity:.9;animation:splashIn2 1.1s ease-out}
-.splash-hide{animation:splashOut .8s forwards}
-@keyframes splashIn{from{transform:translateY(-40px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes splashIn2{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes splashOut{0%{opacity:1}100%{opacity:0;visibility:hidden}}
-
-/* ==========================
-   3) Header
-   ========================== */
-header{
-  text-align:center;padding:2.5rem 1rem;min-height:var(--header-h);
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:#fff;box-shadow:var(--shadow-soft);position:relative;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  animation:headerDrop 1s ease;
-}
-@keyframes headerDrop{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-header::after{
-  content:'';position:absolute;left:0;right:0;bottom:0;height:30px;z-index:1;
-  background:linear-gradient(to bottom,transparent,var(--bg-light));
-}
-body.dark header::after{background:linear-gradient(to bottom,transparent,var(--bg-dark))}
-header h1{font-size:2.8rem;margin-bottom:.5rem;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,.2)}
-header .subtitle{opacity:.95;margin-top:.5rem;font-size:1.2rem;max-width:700px}
-
-/* ==========================
-   4) Header Actions
-   ========================== */
-.header-actions{margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;align-items:center;z-index:2;position:relative}
-.header-actions input{
-  width:320px;padding:.9rem 1.2rem;border-radius:var(--radius);border:1px solid rgba(0,0,0,.08);
-  box-shadow:var(--shadow-soft);transition:all var(--tr);font-size:1rem;background:#fff;
-}
-.header-actions input:focus{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.35);transform:translateY(-2px)}
-body.dark .header-actions input{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
-body.dark .header-actions input::placeholder{color:rgba(255,255,255,.6)}
-body.dark .header-actions input:focus{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
-
-/* ==========================
-   5) Buttons
-   ========================== */
-.btn{
-  cursor:pointer;display:inline-flex;align-items:center;gap:.6rem;
-  padding:.9rem 1.8rem;border:none;border-radius:var(--radius);font-weight:600;
-  transition:all var(--tr);box-shadow:var(--shadow-soft);position:relative;overflow:hidden
-}
-.btn::after{
-  content:'';position:absolute;top:50%;left:50%;width:6px;height:6px;background:rgba(255,255,255,.5);
-  border-radius:50%;opacity:0;transform:scale(1) translate(-50%,-50%)
-}
-.btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-strong)}
-.btn:hover::after{animation:ripple 1s ease-out}
-@keyframes ripple{0%{transform:scale(0) translate(-50%,-50%);opacity:.6}100%{transform:scale(28) translate(-50%,-50%);opacity:0}}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-dark)}
-.btn-danger{background:#ff6b6b;color:#fff}
-.btn-danger:hover{background:#ff5252}
-.btn-ghost{background:rgba(0,0,0,.05);color:var(--text-light);border:1px solid rgba(0,0,0,.1)}
-body.dark .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
-body.dark .btn-primary{background:var(--primary-dark)}
-body.dark .btn-primary:hover{background:var(--primary)}
-body.dark .btn-danger{background:#e53935}
-body.dark .btn-danger:hover{background:#d32f2f}
-
-/* ==========================
-   6) Categories
-   ========================== */
-.categories-row{
-  display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;align-items:center;
-  padding:1.8rem 1rem;background:rgba(108,99,255,.04);position:relative;z-index:2
-}
-body.dark .categories-row{background:rgba(255,255,255,.04)}
-.category-btn{
-  background:linear-gradient(45deg,var(--primary),var(--accent));color:#fff;border:none;
-  padding:.7rem 1.2rem;font-size:.95rem;border-radius:var(--radius);
-  flex:1;min-width:160px;max-width:200px;text-align:center;justify-content:center;transition:all .3s ease
-}
-.category-btn.active{box-shadow:0 0 0 3px var(--accent);transform:translateY(-2px)}
-
-/* ==========================
-   7) Grid & Cards
-   ========================== */
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:2rem;padding:3rem 1.5rem;max-width:1500px;margin:0 auto
-}
-.card{
-  background:var(--card-light);border-radius:var(--radius);padding:1.8rem;
-  box-shadow:var(--shadow-soft);transition:all var(--tr);display:flex;flex-direction:column;height:100%;position:relative;overflow:hidden
-}
-.card::before{
-  content:'';position:absolute;top:0;left:0;width:100%;height:5px;
-  background:linear-gradient(to right,var(--primary),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .5s ease
-}
-.card:hover::before{transform:scaleX(1)}
-.card:hover{transform:translateY(-8px);box-shadow:var(--shadow-strong)}
+/* =========================
+   Qo'shimcha: Dark rejim uchun umumiy o'zgarishlar
+   ========================= */
 body.dark .card{background:#1e1e1e;border:1px solid #333}
-.book-category{
-  display:inline-block;background:rgba(108,99,255,.12);padding:.4rem .9rem;border-radius:20px;
-  font-size:.85rem;margin-bottom:1.2rem;color:var(--primary);font-weight:600
-}
-body.dark .book-category{background:rgba(0,201,167,.15);color:var(--accent)}
-.book-title{font-weight:700;margin-bottom:.8rem;font-size:1.3rem;color:var(--primary);line-height:1.4}
-body.dark .book-title{color:var(--accent)}
-.book-desc{opacity:.9;font-size:.95rem;margin-bottom:1.5rem;flex-grow:1;line-height:1.7}
-.card-actions{display:flex;gap:.8rem;justify-content:flex-end;margin-top:auto}
-.no-books-message{opacity:.75;text-align:center;font-weight:600}
-
-/* ==========================
-   8) Admin & Upload
-   ========================== */
-.center{text-align:center;margin:2.5rem 0}
-#uploadSection{
-  max-width:650px;margin:0 auto 3.5rem;padding:2.5rem;background:var(--card-light);
-  border-radius:var(--radius);box-shadow:var(--shadow-soft);transition:all .4s ease
-}
-body.dark #uploadSection{background:#1e1e1e;border:1px solid #333}
-#uploadSection h2{margin-bottom:1.8rem;text-align:center;color:var(--primary);font-size:1.8rem}
-body.dark #uploadSection h2{color:var(--accent)}
-#uploadForm{display:flex;flex-direction:column;gap:1.2rem}
-#uploadForm input,#uploadForm select{
-  padding:1rem 1.2rem;border-radius:var(--radius);border:1px solid #ddd;font-size:1rem;transition:all var(--tr);background:#fff;color:var(--text-light)
-}
-body.dark #uploadForm input,body.dark #uploadForm select{background:#2d2d2d;color:#e0e0e0;border:1px solid #444}
-#uploadForm input:focus,#uploadForm select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,99,255,.2)}
-#progressWrap{margin-top:1rem;background:#f0f0f0;border-radius:var(--radius);overflow:hidden;height:24px}
-body.dark #progressWrap{background:#2d2d2d}
-#progressBar{
-  background:linear-gradient(to right,var(--primary),var(--accent));
-  height:100%;width:0%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:width .3s ease
-}
-
-/* ==========================
-   9) Modal
-   ========================== */
-.modal{
-  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.7);opacity:0;visibility:hidden;transition:opacity var(--tr),visibility var(--tr);
-  z-index:1000;padding:1rem
-}
-.modal.show{opacity:1;visibility:visible}
-.modal-content{
-  position:relative;background:var(--card-light);color:var(--text-light);
-  padding:2.5rem 2rem;border-radius:var(--radius);max-width:450px;width:100%;text-align:center;
-  transform:translateY(30px) scale(.95);transition:transform var(--tr);box-shadow:0 20px 40px rgba(0,0,0,.2)
-}
-.modal.show .modal-content{transform:translateY(0) scale(1)}
-body.dark .modal-content{background:#1e1e1e;color:#e0e0e0;border:1px solid #333}
-.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:1.8rem;cursor:pointer;opacity:.75;transition:opacity var(--tr)}
-.modal-close:hover{opacity:1}
-.modal-content h3{margin-bottom:1.2rem;font-size:1.4rem}
-.modal-content .btn{margin:.4rem;min-width:180px;justify-content:center}
-
-/* ==========================
-   10) Footer
-   ========================== */
-footer{
-  text-align:center;padding:2rem;background:var(--primary);color:#fff;margin-top:3rem;border-radius:var(--radius) var(--radius) 0 0;
-}
-
-/* ==========================
-   11) Utilities / Animations
-   ========================== */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
-.reveal.show{opacity:1;transform:translateY(0)}
-.loading{animation:pulse 1.5s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
-
-/* ==========================
-   12) Responsive
-   ========================== */
-@media (max-width:1024px){
-  header h1{font-size:2.4rem}
-}
-@media (max-width:768px){
-  :root{--header-h:320px}
-  header h1{font-size:2.2rem}
-  .header-actions{flex-direction:column}
-  .header-actions input{width:100%;max-width:300px}
-  .grid{grid-template-columns:1fr;padding:2rem 1rem;gap:1.5rem}
-  .categories-row{padding:1.2rem .5rem}
-  .category-btn{padding:.6rem 1rem;font-size:.9rem;min-width:140px}
-  #uploadSection{padding:1.5rem;margin:0 1rem 2rem}
-}
-
-/* ==========================
-   13) Reserved blocks (sizdagi uzunlikni saqlash uchun strukturali kommentlar)
-   — bu bo‘limlar real loyihangizda komponentlar bo‘limlariga mos
-   ========================== */
-/* 13.1 Cards variants */
-/* 13.2 Typography helpers */
-/* 13.3 Forms extended */
-/* 13.4 Tables (agar bo‘lsa) */
-/* 13.5 Badges */
-/* 13.6 Chips */
-/* 13.7 Toasts */
-/* 13.8 Tooltips */
-/* 13.9 Tabs */
-/* 13.10 Accordions */
-/* 13.11 Progress extra */
-/* 13.12 Avatars */
-/* 13.13 Shadows */
-/* 13.14 Z-index map */
-/* 13.15 Print */
-/* 13.16 Grid helpers */
-/* 13.17 Spacing helpers */
-/* 13.18 Color helpers */
-/* 13.19 Animations extra */
-/* 13.20 Accessibility focus states */
-
-/* (Qo‘shimcha bo‘sh bloklar — qator sonini siznikiga mos saqlash uchun) */
-/* --- */
+body.dark .categories-row{background:rgba(255,255,255,.04)}
+body.dark .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
