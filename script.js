@@ -88,7 +88,7 @@ function setupListeners() {
     const section = document.getElementById("uploadSection");
     if (section.hidden) {
       const pwd = prompt("Admin parolni kiriting:");
-      if (pwd === "admin123") section.hidden = false;
+      if (pwd === "ibr2010071717.se") section.hidden = false;
       else alert("Noto‘g‘ri parol");
     } else {
       section.hidden = true;
