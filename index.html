@@ -3,24 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kutubxona</title>
+  <title>Premium Kutubxona</title>
   <link rel="stylesheet" href="style.css" />
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-      authDomain: "kutubxona-79dd3.firebaseapp.com",
-      projectId: "kutubxona-79dd3",
-      storageBucket: "kutubxona-79dd3.firebasestorage.app",
-      messagingSenderId: "593289819612",
-      appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-      measurementId: "G-Z0Z4FWPWP8"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
 </head>
 <body class="light">
   <!-- Splash Screen -->
@@ -30,25 +18,32 @@
   </div>
 
   <header>
-    <h1>Kutubxonaga Xush kelibsiz</h1>
+    <h1>Premium Kutubxonaga Xush kelibsiz</h1>
     <p class="subtitle">Sizga kitobni tavsiya qilamiz!</p>
     <div class="header-actions">
-      <input type="text" id="searchInput" placeholder="Qaysi kitobni qidiryapsiz?" aria-label="Kitob qidirish" />
-      <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">🌙 Qorong'u</button>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Qaysi kitobni qidiryapsiz?"
+        aria-label="Kitob qidirish"
+      />
+      <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">
+        🌙 Qorong'u
+      </button>
     </div>
   </header>
 
   <nav class="categories-row">
     <button class="category-btn btn" data-category="Қуръони Карим">📘 Қуръони Карим</button>
     <button class="category-btn btn" data-category="Тафсир китоблар">📖 Тафсир китоблар</button>
-    <button class="category-btn btn" data-category="Ҳадис китоблар">📜 Ҳадис китобlar</button>
-    <button class="category-btn btn" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китобlar</button>
+    <button class="category-btn btn" data-category="Ҳадис китоблар">📜 Ҳадис китоблар</button>
+    <button class="category-btn btn" data-category="Фиқҳий китоблар">⚖️ Фиқҳий китоблар</button>
     <button class="category-btn btn" data-category="Ақида китоблари">🧠 Ақида китоблари</button>
-    <button class="category-btn btn" data-category="Тарих китоблари">🏛️ Тарих китобlari</button>
-    <button class="category-btn btn" data-category="Сийрат китоблари">👣 Сийrat китобlari</button>
+    <button class="category-btn btn" data-category="Тарих китоблари">🏛️ Тарих китоблари</button>
+    <button class="category-btn btn" data-category="Сийрат китоблари">👣 Сийрат китоблари</button>
     <button class="category-btn btn" data-category="Саҳобалар ҳаёти">👤 Саҳобалар ҳаёти</button>
-    <button class="category-btn btn" data-category="Ахлоқ ва тарбия">🌱 Ахloқ ва тарбия</button>
-    <button class="category-btn btn" data-category="Дуо ва зикрлар">🙏 Дуо ва зикрlar</button>
+    <button class="category-btn btn" data-category="Ахлоқ ва тарбия">🌱 Ахлоқ ва тарбия</button>
+    <button class="category-btn btn" data-category="Дуо ва зикрлар">🙏 Дуо ва зикрлар</button>
   </nav>
 
   <main>
@@ -56,7 +51,7 @@
   </main>
 
   <div class="center">
-    <button id="showUploadBtn" class="btn btn-primary">🔑 Admin Rejim</button>
+    <button id="adminToggle" class="btn btn-primary">🔑 Admin Rejim</button>
   </div>
 
   <section id="uploadSection" hidden>
@@ -67,15 +62,15 @@
       <select id="bookCategory" required>
         <option value="">Kategoriya tanlang</option>
         <option value="Қуръони Карим">Қуръони Карим</option>
-        <option value="Тафсир китоблар">Тафсир китобlar</option>
-        <option value="Ҳадис китоблар">Ҳадис китобlar</option>
-        <option value="Фиқҳий китоблар">Фиқҳий китобlar</option>
-        <option value="Ақида китоблари">Ақida китобlari</option>
-        <option value="Тарих китоблари">Тарих китобlari</option>
-        <option value="Сийрат китоблари">Сийrat китобlari</option>
-        <option value="Саҳобалар ҳаёти">Саҳobalar ҳаёти</option>
-        <option value="Ахлоқ ва тарбия">Ахloқ ва тарбия</option>
-        <option value="Дуо ва зикрлар">Дуо ва зикrlar</option>
+        <option value="Тафсир китоблар">Тафсир китоблар</option>
+        <option value="Ҳадис китоблар">Ҳадис китоблар</option>
+        <option value="Фиқҳий китоблар">Фиқҳий китоблар</option>
+        <option value="Ақида китоблари">Ақида китоблари</option>
+        <option value="Тарих китоблари">Тарих китоблари</option>
+        <option value="Сийрат китоблари">Сийрат китоблари</option>
+        <option value="Саҳобалар ҳаёти">Саҳобалар ҳаёти</option>
+        <option value="Ахлоқ ва тарбия">Ахлоқ ва тарбия</option>
+        <option value="Дуо ва зикрлар">Дуо ва зикрлар</option>
       </select>
       <input type="file" id="bookFile" accept="application/pdf" required />
       <button type="submit" class="btn btn-primary">Qo‘shish</button>
@@ -86,20 +81,24 @@
     </form>
   </section>
 
-  <section id="pdfOptions" hidden>
-    <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
-    <button id="openPDFBtn" class="btn btn-ghost">📖 Brauzerda ochish</button>
-    <button id="downloadPDFBtn" class="btn btn-danger">⬇️ Yuklab olish</button>
-    <div id="downloadNotice" hidden>
-      <p class="success-text">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
-      <a id="openDownloaded" href="" target="_blank" class="open-pdf-link btn btn-primary">📂 Yuklangan PDF ni ochish</a>
+  <!-- PDF Modal -->
+  <div id="pdfModal" class="modal" hidden>
+    <div class="modal-content">
+      <span id="modalClose" class="modal-close">&times;</span>
+      <h3>📚 PDF bilan nima qilmoqchisiz?</h3>
+      <button id="openPDFBtn" class="btn btn-ghost">📖 Brauzerda ochish</button>
+      <button id="downloadPDFBtn" class="btn btn-danger">⬇️ Yuklab olish</button>
+      <div id="downloadNotice" hidden>
+        <p class="success-text">✅ PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
+        <a id="openDownloaded" href="" target="_blank" class="btn btn-primary">📂 Yuklangan PDF ni ochish</a>
+      </div>
     </div>
-  </section>
+  </div>
 
   <footer>
-    <p>&copy; 2025 Kutubxona</p>
+    <p>&copy; 2025 Premium Kutubxona</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
