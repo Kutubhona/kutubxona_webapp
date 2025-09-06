@@ -41,21 +41,11 @@ let currentPDF = "";
 
 // =================== THEME ===================
 function setTheme(theme) {
-  // Orqa fon animatsiyasini yangilash
-  document.body.style.transition = 'background 0.5s ease, color 0.5s ease';
-  
   html.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
-  
-  // Tugma matnini yangilash
   toggleThemeBtn.innerHTML = theme === 'dark' 
     ? '<i class="fas fa-sun"></i> Yorug\' rejim' 
     : '<i class="fas fa-moon"></i> Qorong\'u rejim';
-    
-  // Kechiktrilgan animatsiya
-  setTimeout(() => {
-    document.body.style.transition = '';
-  }, 500);
 }
 
 function loadTheme() {
@@ -254,4 +244,60 @@ uploadForm.addEventListener('submit', async (e) => {
         
         alert('✅ Kitob muvaffaqiyatli qo\'shildi!');
         progressWrap.hidden = true;
-        uploadForm.reset
+        uploadForm.reset();
+        uploadSection.hidden = true;
+      }
+    );
+  } catch(err) {
+    console.error('❌ Xatolik:', err);
+    alert('❌ Xatolik: ' + err.message);
+    progressWrap.hidden = true;
+  }
+});
+
+// =================== DELETE ===================
+async function deleteBook(bookId, fileURL) {
+  if (!isAdmin) { 
+    alert('❌ Sizda o\'chirish huquqi yo\'q!'); 
+    return; 
+  }
+  
+  if (!confirm('Haqiqatan ham bu kitobni o\'chirmoqchimisiz?')) return;
+  
+  try {
+    await firebase.firestore().collection('books').doc(bookId).delete();
+    const ref = firebase.storage().refFromURL(fileURL);
+    await ref.delete();
+    alert('✅ Kitob muvaffaqiyatli o\'chirildi!');
+  } catch(err) {
+    console.error('❌ O\'chirish xatolik:', err);
+    alert('❌ O\'chirishda xatolik: ' + err.message);
+  }
+}
+
+// =================== FIRESTORE SYNC ===================
+function loadBooks() {
+  firebase.firestore().collection('books').onSnapshot(snap => {
+    allBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    filterBooks();
+  }, err => console.error('❌ Firestore xatolik:', err));
+}
+
+// =================== REVEAL ON SCROLL ===================
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) { 
+    if (e.isIntersecting) { 
+      e.target.classList.add('show'); 
+      io.unobserve(e.target); 
+    } 
+  }
+}, { threshold: 0.1 });
+
+function revealAll() {
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
+
+// =================== INIT ===================
+loadTheme();
+runSplash();
+loadBooks();
