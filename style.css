@@ -30,32 +30,60 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
 }
-body.dark {
+
+body[data-theme="dark"] {
   background: var(--background-dark);
   color: var(--text-dark);
 }
 
 /* Animatsiyalangan orqa fon */
-body::before {
+.background-animation-light {
   content: '';
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, #6C63FF, #00C9A7, #6C63FF);
+  background: linear-gradient(45deg, #a7bfe8, #6190e8, #a7bfe8);
   background-size: 400% 400%;
-  animation: gradientBackground 15s ease infinite;
-  opacity: 0.03;
+  animation: gradientBackgroundLight 18s ease infinite;
+  opacity: 0.1;
   z-index: -1;
   transition: opacity 0.5s ease;
 }
 
-body.dark::before {
-  opacity: 0.05;
+.background-animation-dark {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #1c1c2e, #2d2d4d, #1c1c2e);
+  background-size: 400% 400%;
+  animation: gradientBackgroundDark 20s ease infinite;
+  opacity: 0.2;
+  z-index: -1;
+  transition: opacity 0.5s ease;
 }
 
-@keyframes gradientBackground {
+body[data-theme="light"]::before {
+  content: '';
+  @extend .background-animation-light;
+}
+
+body[data-theme="dark"]::before {
+  content: '';
+  @extend .background-animation-dark;
+}
+
+@keyframes gradientBackgroundLight {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientBackgroundDark {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
@@ -130,7 +158,7 @@ header::after {
   background: linear-gradient(to bottom, transparent, var(--background-light));
   z-index: 1;
 }
-body.dark header::after {
+[data-theme="dark"] header::after {
   background: linear-gradient(to bottom, transparent, var(--background-dark));
 }
 header h1 {
@@ -173,17 +201,17 @@ header .subtitle {
 }
 
 /* Qorong'u rejim uchun input sozlamalari */
-body.dark .header-actions input {
+[data-theme="dark"] .header-actions input {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-body.dark .header-actions input::placeholder {
+[data-theme="dark"] .header-actions input::placeholder {
   color: rgba(255, 255, 255, 0.6);
 }
 
-body.dark .header-actions input:focus {
+[data-theme="dark"] .header-actions input:focus {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
@@ -256,32 +284,32 @@ body.dark .header-actions input:focus {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.2);
 }
-body.light .btn-ghost {
+[data-theme="light"] .btn-ghost {
   background: rgba(0,0,0,0.05);
   color: var(--text-light);
   border: 1px solid rgba(0,0,0,0.1);
 }
 
 /* Qorong'u rejim uchun tugma sozlamalari */
-body.dark .btn-ghost {
+[data-theme="dark"] .btn-ghost {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-body.dark .btn-primary {
+[data-theme="dark"] .btn-primary {
   background: var(--primary-dark);
 }
 
-body.dark .btn-primary:hover {
+[data-theme="dark"] .btn-primary:hover {
   background: var(--primary);
 }
 
-body.dark .btn-danger {
+[data-theme="dark"] .btn-danger {
   background: #e53935;
 }
 
-body.dark .btn-danger:hover {
+[data-theme="dark"] .btn-danger:hover {
   background: #d32f2f;
 }
 
@@ -296,7 +324,7 @@ body.dark .btn-danger:hover {
   position: relative;
   z-index: 2;
 }
-body.dark .categories-row {
+[data-theme="dark"] .categories-row {
   background: rgba(255, 255, 255, 0.03);
 }
 .category-btn {
@@ -354,7 +382,7 @@ body.dark .categories-row {
 .card:hover::before {
   transform: scaleX(1);
 }
-body.dark .card {
+[data-theme="dark"] .card {
   background: #1e1e1e;
   border: 1px solid #333;
 }
@@ -369,7 +397,7 @@ body.dark .card {
   color: var(--primary);
   line-height: 1.4;
 }
-body.dark .book-title {
+[data-theme="dark"] .book-title {
   color: var(--accent);
 }
 .book-desc {
@@ -389,7 +417,7 @@ body.dark .book-title {
   color: var(--primary);
   font-weight: 500;
 }
-body.dark .book-category {
+[data-theme="dark"] .book-category {
   background: rgba(0, 201, 167, 0.15);
   color: var(--accent);
 }
@@ -416,7 +444,7 @@ body.dark .book-category {
   box-shadow: var(--shadow-soft);
   transition: all 0.4s ease;
 }
-body.dark #uploadSection {
+[data-theme="dark"] #uploadSection {
   background: #1e1e1e;
   border: 1px solid #333;
 }
@@ -426,7 +454,7 @@ body.dark #uploadSection {
   color: var(--primary);
   font-size: 1.8rem;
 }
-body.dark #uploadSection h2 {
+[data-theme="dark"] #uploadSection h2 {
   color: var(--accent);
 }
 #uploadForm {
@@ -435,24 +463,21 @@ body.dark #uploadSection h2 {
   gap: 1.2rem;
 }
 #uploadForm input,
-#uploadForm select,
-#uploadForm textarea {
+#uploadForm select {
   padding: 1rem 1.2rem;
   border-radius: var(--radius);
   border: 1px solid #ddd;
   font-size: 1rem;
   transition: all var(--transition);
 }
-body.dark #uploadForm input,
-body.dark #uploadForm select,
-body.dark #uploadForm textarea {
+[data-theme="dark"] #uploadForm input,
+[data-theme="dark"] #uploadForm select {
   background: #2d2d2d;
   color: #e0e0e0;
   border: 1px solid #444;
 }
 #uploadForm input:focus,
-#uploadForm select:focus,
-#uploadForm textarea:focus {
+#uploadForm select:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
@@ -464,7 +489,7 @@ body.dark #uploadForm textarea {
   overflow: hidden;
   height: 24px;
 }
-body.dark #progressWrap {
+[data-theme="dark"] #progressWrap {
   background: #2d2d2d;
 }
 #progressBar {
@@ -513,7 +538,7 @@ body.dark #progressWrap {
 .modal.show .modal-content {
   transform: translateY(0) scale(1);
 }
-body.dark .modal-content {
+[data-theme="dark"] .modal-content {
   background: #1e1e1e;
   color: #e0e0e0;
   border: 1px solid #333;
@@ -611,34 +636,3 @@ footer {
 .loading {
   animation: pulse 1.5s infinite;
 }
-
-/* =========================
-   Qo'shimcha: Orqa fon animatsiyasi (yorug' va qorong'u rejim)
-   ========================= */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background:
-    radial-gradient(1200px 600px at 10% 10%, rgba(108,99,255,.25), transparent 60%),
-    radial-gradient(1000px 500px at 90% 20%, rgba(0,201,167,.25), transparent 60%),
-    linear-gradient(45deg,#6C63FF,#00C9A7,#6C63FF);
-  background-size:120% 120%,120% 120%,400% 400%;
-  animation:floatBlobs 18s ease-in-out infinite alternate,
-           gradientShift 15s ease infinite;
-  opacity:.06;z-index:-1;
-  transition:opacity .5s ease;
-}
-body.dark::before{opacity:.09}
-@keyframes gradientShift{
-  0%{background-position:0% 50%,0% 50%,0% 50%}
-  50%{background-position:100% 50%,100% 50%,100% 50%}
-  100%{background-position:0% 50%,0% 50%,0% 50%}
-}
-@keyframes floatBlobs{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
-
-/* =========================
-   Qo'shimcha: Dark rejim uchun umumiy o'zgarishlar
-   ========================= */
-body.dark .card{background:#1e1e1e;border:1px solid #333}
-body.dark .categories-row{background:rgba(255,255,255,.04)}
-body.dark .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
