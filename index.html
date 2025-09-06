@@ -1,105 +1,536 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Premium Kutubxona</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-</head>
-<body class="light">
-  <!-- Splash Screen -->
-  <div id="splash">
-    <h1 id="splashTitle">Premium Kutubxona</h1>
-    <p id="splashSubtitle">Donishmandlik sari yo'l</p>
-  </div>
+:root {
+  --primary: #6C63FF;
+  --primary-dark: #5651e9;
+  --accent: #00C9A7;
+  --accent-dark: #00b896;
+  --background-light: #F8F9FA;
+  --background-dark: #121212;
+  --text-light: #2A2A2A;
+  --text-dark: #EDEDED;
+  --card-light: #FFFFFF;
+  --card-dark: #1E1E2F;
+  --radius: 16px;
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-strong: 0 10px 30px rgba(0,0,0,0.15);
+  --transition: 0.3s ease;
+  --header-height: 280px;
+}
 
-  <header>
-    <h1>Kutubxonaga Xush kelibsiz</h1>
-    <p class="subtitle">Sizga kitobni tavsiya qilamiz!</p>
-    <div class="header-actions">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Qaysi kitobni qidiryapsiz?"
-        aria-label="Kitob qidirish"
-      />
-      <button id="toggleTheme" class="btn btn-ghost" aria-label="Mavzuni almashtirish">
-        <i class="fas fa-moon"></i> Qorong'u rejim
-      </button>
-    </div>
-  </header>
+/* Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: var(--background-light);
+  color: var(--text-light);
+  transition: background var(--transition), color var(--transition);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+body.dark {
+  background: var(--background-dark);
+  color: var(--text-dark);
+}
 
-  <nav class="categories-row">
-    <button class="category-btn btn" data-category="Қуръони Карим"><i class="fas fa-book-quran"></i> Қуръони Карим</button>
-    <button class="category-btn btn" data-category="Тафсир китоблар"><i class="fas fa-book"></i> Тафсир китоблар</button>
-    <button class="category-btn btn" data-category="Ҳадис китоблар"><i class="fas fa-quote-right"></i> Ҳадис китоблар</button>
-    <button class="category-btn btn" data-category="Фиқҳий китоблар"><i class="fas fa-balance-scale"></i> Фиқҳий китоблар</button>
-    <button class="category-btn btn" data-category="Ақида китоблари"><i class="fas fa-brain"></i> Ақида китоблари</button>
-    <button class="category-btn btn" data-category="Тарих китоблари"><i class="fas fa-landmark"></i> Тарих китоблари</button>
-    <button class="category-btn btn" data-category="Сийрат китоблари"><i class="fas fa-road"></i> Сийрат китоблари</button>
-    <button class="category-btn btn" data-category="Саҳобалар ҳаёти"><i class="fas fa-users"></i> Саҳобалар ҳаёти</button>
-    <button class="category-btn btn" data-category="Ахлоқ ва тарбия"><i class="fas fa-seedling"></i> Ахлоқ va тарбиya</button>
-    <button class="category-btn btn" data-category="Дуо ва зикрлар"><i class="fas fa-hands-praying"></i> Дуо va зикрlar</button>
-  </nav>
+/* Splash Screen */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#splashTitle {
+  font-size: 3.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: splashTitleAnimation 1.2s ease-out forwards;
+}
+#splashSubtitle {
+  font-size: 1.5rem;
+  color: #fff;
+  opacity: 0.9;
+  animation: splashSubtitleAnimation 1.2s ease-out 0.3s forwards;
+}
+@keyframes splashTitleAnimation {
+  from { transform: translateY(-50px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes splashSubtitleAnimation {
+  from { transform: translateY(50px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.splash-fade-out {
+  animation: splashFadeOut 0.8s forwards;
+}
+@keyframes splashFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
 
-  <main>
-    <div id="booksContainer" class="grid"></div>
-  </main>
+/* Header */
+header {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  min-height: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: headerSlideDown 1s ease-out;
+}
+@keyframes headerSlideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, var(--background-light));
+  z-index: 1;
+}
+body.dark header::after {
+  background: linear-gradient(to bottom, transparent, var(--background-dark));
+}
+header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+header .subtitle {
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.header-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+.header-actions input {
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius);
+  border: none;
+  width: 320px;
+  font-size: 1rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition);
+}
+.header-actions input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
 
-  <div class="center">
-    <button id="adminToggle" class="btn btn-primary"><i class="fas fa-key"></i> Admin Rejim</button>
-  </div>
+/* Buttons */
+.btn {
+  cursor: pointer;
+  padding: 0.9rem 1.8rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+.btn:hover::after {
+  animation: ripple 1s ease-out;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-strong);
+}
+.btn:active {
+  transform: translateY(0);
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(30, 30);
+    opacity: 0;
+  }
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+.btn-danger {
+  background: #ff6b6b;
+  color: #fff;
+}
+.btn-danger:hover {
+  background: #ff5252;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+body.light .btn-ghost {
+  background: rgba(0,0,0,0.05);
+  color: var(--text-light);
+  border: 1px solid rgba(0,0,0,0.1);
+}
 
-  <section id="uploadSection" hidden>
-    <h2><i class="fas fa-plus-circle"></i> Yangi kitob qo'shish</h2>
-    <form id="uploadForm">
-      <input type="text" id="bookTitle" placeholder="Kitob nomi" required />
-      <input type="text" id="bookDescription" placeholder="Tavsif" required />
-      <select id="bookCategory" required>
-        <option value="">Kategoriya tanlang</option>
-        <option value="Қуръони Карим">Қуръони Карим</option>
-        <option value="Тафсир китоблар">Тафсир китoblar</option>
-        <option value="Ҳадис китоблар">Ҳадис китoblar</option>
-        <option value="Фиқҳий китоблар">Фиқҳий китoblar</option>
-        <option value="Ақида китоблари">Ақида китoblari</option>
-        <option value="Тарих китоблари">Тарих китoblari</option>
-        <option value="Сийрат китоблари">Сийрат китoblari</option>
-        <option value="Саҳобалар ҳаёти">Саҳобалар ҳayoti</option>
-        <option value="Ахлоқ ва тарбия">Ахлоқ va тарбиya</option>
-        <option value="Дуо ва зикрлар">Дуо va зикрlar</option>
-      </select>
-      <input type="file" id="bookFile" accept="application/pdf" required />
-      <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Kitob qo'shish</button>
+/* Categories */
+.categories-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  padding: 1.8rem 1rem;
+  background: rgba(108, 99, 255, 0.03);
+  position: relative;
+  z-index: 2;
+}
+body.dark .categories-row {
+  background: rgba(255, 255, 255, 0.03);
+}
+.category-btn {
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+.category-btn.active {
+  box-shadow: 0 0 0 3px var(--accent);
+  transform: translateY(-2px);
+}
 
-      <div id="progressWrap" hidden>
-        <div id="progressBar">0%</div>
-      </div>
-    </form>
-  </section>
+/* Grid / Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-light);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.card:hover::before {
+  transform: scaleX(1);
+}
+body.dark .card {
+  background: var(--card-dark);
+}
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-strong);
+}
+.book-title {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--primary);
+  line-height: 1.4;
+}
+body.dark .book-title {
+  color: var(--accent);
+}
+.book-desc {
+  opacity: 0.8;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+.book-category {
+  display: inline-block;
+  background: rgba(108, 99, 255, 0.1);
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+body.dark .book-category {
+  background: rgba(0, 201, 167, 0.15);
+  color: var(--accent);
+}
+.card-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  margin-top: auto;
+}
 
-  <!-- PDF Modal -->
-  <div id="pdfModal" class="modal" hidden>
-    <div class="modal-content">
-      <span class="modal-close">&times;</span>
-      <h3><i class="fas fa-file-pdf"></i> PDF bilan nima qilmoqchisiz?</h3>
-      <button id="openPDFBtn" class="btn btn-ghost"><i class="fas fa-eye"></i> Brauzerda ochish</button>
-      <button id="downloadPDFBtn" class="btn btn-danger"><i class="fas fa-download"></i> Yuklab olish</button>
-      <div id="downloadNotice" hidden>
-        <p class="success-text"><i class="fas fa-check-circle"></i> PDF qurilmangizga muvaffaqiyatli yuklandi!</p>
-        <a id="openDownloaded" href="" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Yuklangan PDF ni ochish</a>
-      </div>
-    </div>
-  </div>
+/* Centered Admin Button */
+.center {
+  text-align: center;
+  margin: 2.5rem 0;
+}
 
-  <footer>
-    <p>&copy; 2025 Premium Kutubxona. Barcha huquqlar himoyalangan.</p>
-  </footer>
+/* Upload Section */
+#uploadSection {
+  max-width: 650px;
+  margin: 0 auto 3.5rem;
+  padding: 2.5rem;
+  background: var(--card-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s ease;
+}
+body.dark #uploadSection {
+  background: var(--card-dark);
+}
+#uploadSection h2 {
+  margin-bottom: 1.8rem;
+  text-align: center;
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+body.dark #uploadSection h2 {
+  color: var(--accent);
+}
+#uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+#uploadForm input,
+#uploadForm select {
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+body.dark #uploadForm input,
+body.dark #uploadForm select {
+  border: 1px solid #444;
+  background: rgba(30, 30, 30, 0.5);
+  color: #fff;
+}
+#uploadForm input:focus,
+#uploadForm select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+#progressWrap {
+  margin-top: 1rem;
+  background: #f0f0f0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 24px;
+}
+body.dark #progressWrap {
+  background: #2a2a2a;
+}
+#progressBar {
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  height: 100%;
+  width: 0%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: width 0.3s ease;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+  z-index: 1000;
+  padding: 1rem;
+}
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  position: relative;
+  background: var(--card-light);
+  color: var(--text-light);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius);
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+  transform: translateY(30px) scale(0.95);
+  transition: transform var(--transition);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+}
+body.dark .modal-content {
+  background: var(--card-dark);
+  color: var(--text-dark);
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--transition);
+}
+.modal-close:hover {
+  opacity: 1;
+}
+.modal-content h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+.modal-content .btn {
+  margin: 0.5rem;
+  min-width: 180px;
+  justify-content: center;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: var(--primary);
+  color: #fff;
+  margin-top: 3rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 320px;
+  }
+  
+  header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+  }
+  
+  .header-actions input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+  
+  .categories-row {
+    padding: 1.2rem 0.5rem;
+  }
+  
+  .category-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  #uploadSection {
+    padding: 1.5rem;
+    margin: 0 1rem 2rem;
+  }
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+.loading {
+  animation: pulse 1.5s infinite;
+}
