@@ -143,4 +143,23 @@ uploadForm.addEventListener("submit", e => {
 // Delete
 async function deleteBook(bookId, fileURL) {
   if (!isAdmin) return alert("❌ Sizda huquq yo‘q!");
-  if (!confirm
+  if (!confirm("Haqiqatan ham o‘chirishni xohlaysizmi?")) return;
+
+  try {
+    await firebase.firestore().collection("books").doc(bookId).delete();
+    const fileRef = firebase.storage().refFromURL(fileURL);
+    await fileRef.delete();
+    alert("✅ Kitob o‘chirildi!");
+  } catch(err) {
+    alert("❌ O‘chirishda xatolik: "+err.message);
+  }
+}
+
+// Listen firestore
+firebase.firestore().collection("books").onSnapshot(snap => {
+  allBooks = snap.docs.map(doc => ({id:doc.id, ...doc.data()}));
+  filterBooks();
+});
+
+// Init
+window.addEventListener("DOMContentLoaded", loadTheme);
