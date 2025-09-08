@@ -121,29 +121,40 @@ let isKirill = true;
 
 function switchLanguage() {
     isKirill = !isKirill;
-    const elements = document.querySelectorAll('[data-original-text], h1, h2, p, button, input, option, .book-title, .book-desc, .book-category');
-
+    
+    // Barcha elementlarni tanlash
+    const elements = document.querySelectorAll('h1, h2, h3, p, button, input, option, .book-title, .book-desc, .book-category, span, div');
+    
     elements.forEach(el => {
-        const originalText = el.getAttribute('data-original-text') || el.textContent.trim();
-        
-        if (!el.hasAttribute('data-original-text') && el.tagName !== 'I' && el.tagName !== 'SPAN' && !el.classList.contains('fa-key')) {
-            el.setAttribute('data-original-text', originalText);
-        }
-        
-        const key = el.getAttribute('data-original-text');
-        
-        if (isKirill) {
-            el.textContent = key;
-        } else { // Lotin
-            if (TRANSLATIONS[key]) {
-                el.textContent = TRANSLATIONS[key];
+        // Agar elementda data-original-text atributi bo'lsa, undan foydalaning
+        if (el.hasAttribute('data-original-text')) {
+            const key = el.getAttribute('data-original-text');
+            el.textContent = isKirill ? key : (TRANSLATIONS[key] || key);
+        } 
+        // Agar data-original-text yo'q bo'lsa, lekin matn mavjud bo'lsa
+        else if (el.textContent.trim() && !el.querySelector('i') && !el.closest('nav')) {
+            const originalText = el.textContent.trim();
+            
+            // Nav elementlarini alohida ko'rib chiqamiz
+            if (!el.closest('.categories-row')) {
+                el.setAttribute('data-original-text', originalText);
+                
+                if (TRANSLATIONS[originalText]) {
+                    el.textContent = isKirill ? originalText : TRANSLATIONS[originalText];
+                }
             }
         }
 
-        if (el.tagName === 'INPUT' && el.type === 'text' && el.placeholder) {
-            el.placeholder = isKirill ? Object.keys(TRANSLATIONS).find(k => TRANSLATIONS[k] === el.placeholder) || el.placeholder : TRANSLATIONS[el.placeholder] || el.placeholder;
+        // Input placeholderlar uchun
+        if (el.tagName === 'INPUT' && el.placeholder) {
+            const placeholderKey = el.getAttribute('data-original-placeholder') || el.placeholder;
+            if (!el.hasAttribute('data-original-placeholder')) {
+                el.setAttribute('data-original-placeholder', placeholderKey);
+            }
+            el.placeholder = isKirill ? placeholderKey : (TRANSLATIONS[placeholderKey] || placeholderKey);
         }
 
+        // Select optionlar uchun
         if (el.tagName === 'SELECT' && el.options) {
             Array.from(el.options).forEach(option => {
                 const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
@@ -151,17 +162,21 @@ function switchLanguage() {
                     option.setAttribute('data-original-text', originalOptionText);
                 }
                 const optionKey = option.getAttribute('data-original-text');
-
-                if (isKirill) {
-                    option.textContent = optionKey;
-                } else {
-                    if (TRANSLATIONS[optionKey]) {
-                        option.textContent = TRANSLATIONS[optionKey];
-                    }
-                }
+                option.textContent = isKirill ? optionKey : (TRANSLATIONS[optionKey] || optionKey);
             });
         }
     });
+
+    // Header matnini alohida ko'rib chiqamiz
+    const headerTitle = document.querySelector('header h1');
+    if (headerTitle && !headerTitle.hasAttribute('data-original-text')) {
+        headerTitle.setAttribute('data-original-text', 'Кутубхонага Хуш келибсиз!');
+    }
+    
+    const headerSubtitle = document.querySelector('header .subtitle');
+    if (headerSubtitle && !headerSubtitle.hasAttribute('data-original-text')) {
+        headerSubtitle.setAttribute('data-original-text', 'Сизга китоб тавсия қиламиз!');
+    }
 
     // Icons qayta tiklash
     document.querySelectorAll('.category-btn').forEach(btn => {
@@ -177,7 +192,7 @@ function switchLanguage() {
 
     // Admin tugmasini yangilash
     const adminIcon = adminToggleBtn.querySelector('i');
-    const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim'; // Bu text o'zgarmaydi
+    const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim';
     adminToggleBtn.innerHTML = `${adminIcon.outerHTML} ${adminText}`;
     
     // Upload tugmasini yangilash
@@ -192,7 +207,6 @@ function switchLanguage() {
 }
 
 toggleLangBtn.addEventListener('click', switchLanguage);
-
 
 // =================== SPLASH SEQUENCE ===================
 function runSplash() {
