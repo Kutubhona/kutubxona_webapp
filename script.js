@@ -31,6 +31,12 @@ const downloadNotice = document.getElementById('downloadNotice');
 const openDownloaded = document.getElementById('openDownloaded');
 const modalClose = document.querySelector('.modal-close');
 
+// Category Overlay elements
+const overlay = document.getElementById('categoryOverlay');
+const overlayClose = document.getElementById('overlayClose');
+const overlayBooks = document.getElementById('overlayBooks');
+const overlayTitle = document.getElementById('overlayTitle');
+
 // Splash elements
 const splash = document.getElementById('splash');
 
@@ -243,26 +249,40 @@ function filterBooks() {
   renderBooks(filtered);
 }
 
-// Category click
+// Search input
+searchInput.addEventListener('input', filterBooks);
+
+// =================== CATEGORY OVERLAY ===================
+function openOverlay(category) {
+    activeCategory = category;
+    overlayTitle.textContent = category;
+    categoryButtons.forEach(b =>
+      b.classList.toggle('active', b.dataset.category === activeCategory)
+    );
+    // faqat shu kategoriyadan kitoblarni chiqaramiz
+    const filtered = allBooks.filter(b => b.category === activeCategory);
+    overlayBooks.innerHTML = filtered.length
+      ? filtered.map(bookCardTemplate).join('')
+      : `<p class="no-books-message">${isKirill ? 'Ҳозирча бу ерда китоб йўқ...' : 'Hozircha bu yerda kitob yo‘q...'}</p>`;
+    revealAll();
+    overlay.hidden = false;
+    setTimeout(() => overlay.classList.add('show'), 10);
+  }
+
+function closeOverlay() {
+    overlay.classList.remove('show');
+    setTimeout(() => { overlay.hidden = true; }, 400);
+}
+
+overlayClose.addEventListener('click', closeOverlay);
+
+// category tugmalarini yangilash
 categoryButtons.forEach(btn => {
   btn.addEventListener('click', (e) => {
     const cat = e.target.closest('.category-btn').dataset.category;
-    if (activeCategory === cat) { 
-      activeCategory = ""; 
-    } else { 
-      activeCategory = cat; 
-    }
-    
-    categoryButtons.forEach(b => 
-      b.classList.toggle('active', b.dataset.category === activeCategory)
-    );
-    
-    filterBooks();
+    openOverlay(cat);
   });
 });
-
-// Search input
-searchInput.addEventListener('input', filterBooks);
 
 // =================== PDF MODAL ===================
 function showPDFOptions(pdfURL) {
