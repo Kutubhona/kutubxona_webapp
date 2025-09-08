@@ -433,7 +433,7 @@ async function deleteBook(bookId, fileURL) {
 function loadBooks() {
   firebase.firestore().collection('books').onSnapshot(snap => {
     allBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    filterBooks();
+    booksContainer.innerHTML = ""; // 🔥 asosiy sahifada kitoblar ko‘rinmasligi uchun
   }, err => console.error('❌ Firestore xatolik:', err));
 }
 
