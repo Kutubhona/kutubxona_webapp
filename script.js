@@ -178,11 +178,15 @@ function switchLanguage() {
         headerSubtitle.setAttribute('data-original-text', 'Сизга китоб тавсия қиламиз!');
     }
 
-    // Icons qayta tiklash
+    // Icons qayta tiklash - XATO TUZATILGAN QISM
     document.querySelectorAll('.category-btn').forEach(btn => {
         const icon = btn.querySelector('i');
         const originalText = btn.getAttribute('data-original-text');
-        btn.innerHTML = `${icon.outerHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
+        
+        // Agar icon mavjud bo'lsa, uning HTML kodini olish, aks holda bo'sh string
+        const iconHTML = icon ? icon.outerHTML : '';
+        
+        btn.innerHTML = `${iconHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
     });
     
     // Theme tugmasini yangilash
