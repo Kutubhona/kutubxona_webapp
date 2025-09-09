@@ -1,15 +1,3 @@
-You provided a CSS file and a request in Uzbek. Here's a breakdown of the changes you're asking for and the updated CSS code:
-
-You want to:
-
-  * Increase the height of the category buttons (`.category-btn`) by 1.5 times.
-  * Increase the font size of the text inside the category buttons by 1.5 times.
-  * Make sure these changes apply to both desktop and mobile views.
-  * Decrease the height of the book cards (`.card`) by 2 times, while leaving all other styles the same.
-
-Here's the updated CSS code that incorporates your requested changes:
-
-```css
 :root {
   --primary: #6C63FF;
   --primary-dark: #5651e9;
@@ -332,8 +320,8 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 2.1rem 1.8rem; /* Balandligi 1.5 barobar kattaroq */
-  font-size: 1.425rem; /* Font o'lchami 1.5 barobar kattaroq */
+  padding: 2.8rem 1.2rem; /* Balandligi 2 barobar kattaroq */
+  font-size: 0.95rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
@@ -355,7 +343,7 @@ header .subtitle {
 /* Grid / Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
   gap: 2rem;
   padding: 3rem 1.5rem;
   max-width: 1500px;
@@ -368,18 +356,17 @@ header .subtitle {
   transition: all var(--transition);
   display: flex;
   flex-direction: column;
-  height: auto; /* Avtomatik balandlik */
-  min-height: 200px; /* Minimal balandlik berildi, bo'yi uzayib ketmasligi uchun */
-  max-height: 220px;
+  height: 100%;
   position: relative;
   overflow: hidden;
-  cursor: pointer; /* Bosiladigan bo'lgani uchun kursor ko'rsatiladi */
+  cursor: pointer;
+  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
 }
 [data-theme="light"] .card {
-  background: var(--card-light);
+  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
 }
 [data-theme="dark"] .card {
-  background: var(--card-dark);
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark)); /* Orqa fonni gradientga o'zgartirish */
   border: 1px solid #333;
 }
 .card::before {
@@ -409,12 +396,13 @@ header .subtitle {
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
   line-height: 1.4;
+  color: #fff; /* Matn rangini oq qilish */
 }
 [data-theme="light"] .book-title {
-  color: var(--primary);
+  color: #fff; /* Matn rangini oq qilish */
 }
 [data-theme="dark"] .book-title {
-  color: var(--accent);
+  color: #fff; /* Matn rangini oq qilish */
 }
 .book-desc {
   opacity: 0.8;
@@ -422,6 +410,7 @@ header .subtitle {
   margin-bottom: 1.5rem;
   flex-grow: 1;
   line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9); /* Tavsif matnini yorqinroq oq qilish */
 }
 .book-category {
   display: none; /* Kategoriya nomi yashirildi */
@@ -637,8 +626,8 @@ footer {
   }
   
   .category-btn {
-    padding: 1.35rem 1rem; /* Balandlikni 1.5 barobarga oshirish */
-    font-size: 1.275rem; /* Font o'lchamini 1.5 barobarga oshirish */
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
     min-width: 140px;
   }
   
@@ -688,4 +677,3 @@ footer {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-```
