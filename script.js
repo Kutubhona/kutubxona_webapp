@@ -114,7 +114,8 @@ const TRANSLATIONS = {
     'Сизда ўчириш ҳуқуқи йўқ!': 'Sizda o‘chirish huquqi yo‘q!',
     'Ҳақиқатан ҳам бу китобни ўчирмоқчимисиз?': 'Haqiqatan ham bu kitobni o‘chirmoqchimisiz?',
     'Китоб муваффақиятли ўчирилди!': 'Kitob muvaffaqiyatli o‘chirildi!',
-    'Ўчиришда хатолик: ': 'O‘chirishda xatolik: '
+    'Ўчиришда хатолик: ': 'O‘chirishda xatolik: ',
+    'Ҳозир эмас': 'Hozir emas' // Yangi matn qo'shildi
 };
 
 let isKirill = true;
@@ -230,20 +231,16 @@ function bookCardTemplate(book) {
   const category = isKirill ? book.category : TRANSLATIONS[book.category] || book.category;
   
   return `
-    <article class="card reveal" data-id="${book.id}">
-      <span class="book-category">${category || 'Умумий'}</span>
+    <article class="card reveal" data-id="${book.id}" data-link="${book.link}">
       <div class="book-title">${title || 'Номсиз китоб'}</div>
       <div class="book-desc">${description || ''}</div>
-      <div class="card-actions">
-        <button class="btn" data-action="pdf" data-link="${book.link}">
-          <i class="fas fa-file-pdf"></i> ${isKirill ? 'PDF' : 'PDF'}
-        </button>
-        ${isAdmin ? `
+      ${isAdmin ? `
+        <div class="card-actions">
           <button class="btn btn-danger" data-action="delete" data-id="${book.id}" data-link="${book.link}">
             <i class="fas fa-trash"></i> ${isKirill ? 'Ўчириш' : 'O‘chirish'}
           </button>
-        ` : ''}
-      </div>
+        </div>
+      ` : ''}
     </article>
   `;
 }
@@ -285,7 +282,12 @@ function openOverlay(category) {
     revealAll();
     overlay.hidden = false;
     setTimeout(() => overlay.classList.add('show'), 10);
-  }
+    
+    // Mobil orqaga qaytish tugmasini eshitish
+    if (window.history.pushState) {
+        history.pushState({ overlay: 'open' }, '', '#overlay-open');
+    }
+}
 
 function closeOverlay() {
     overlay.classList.remove('show');
@@ -293,6 +295,13 @@ function closeOverlay() {
 }
 
 overlayClose.addEventListener('click', closeOverlay);
+
+// mobil orqaga qaytish
+window.addEventListener('popstate', (event) => {
+    if (overlay.classList.contains('show')) {
+        closeOverlay();
+    }
+});
 
 // category tugmalarini yangilash
 categoryButtons.forEach(btn => {
@@ -310,8 +319,15 @@ function showPDFOptions(pdfURL) {
   setTimeout(() => pdfModal.classList.add('show'), 10);
 }
 
+// PDF Modalni yopish funksiyasi
+function closePDFModal() {
+    pdfModal.classList.remove('show');
+    setTimeout(() => { pdfModal.hidden = true; }, 300);
+}
+
 openPDFBtn.addEventListener('click', () => { 
-  if (currentPDF) window.open(currentPDF, '_blank'); 
+  if (currentPDF) window.open(currentPDF, '_blank');
+  closePDFModal();
 });
 
 downloadPDFBtn.addEventListener('click', () => {
@@ -322,8 +338,26 @@ downloadPDFBtn.addEventListener('click', () => {
   document.body.appendChild(a); 
   a.click(); 
   a.remove();
-  openDownloaded.href = currentPDF; 
+  
+  // Yuklab olish tugmasi o'rniga yangi tugmalarni ko'rsatish
   downloadNotice.hidden = false;
+  openPDFBtn.hidden = true;
+  downloadPDFBtn.hidden = true;
+
+  // "Yuklangan PDF'ni ochish" tugmasiga havola berish
+  openDownloaded.href = currentPDF;
+
+  // "Hozir emas" tugmasini qo'shish
+  const notNowBtn = document.createElement('button');
+  notNowBtn.textContent = isKirill ? 'Ҳозир эмас' : 'Hozir emas';
+  notNowBtn.classList.add('btn', 'btn-ghost');
+  notNowBtn.addEventListener('click', () => {
+      closePDFModal();
+      openPDFBtn.hidden = false;
+      downloadPDFBtn.hidden = false;
+      notNowBtn.remove();
+  });
+  downloadNotice.appendChild(notNowBtn);
 });
 
 modalClose.addEventListener('click', () => {
@@ -339,11 +373,11 @@ pdfModal.addEventListener('click', (e) => {
 });
 
 // Delegate actions on cards
-booksContainer.addEventListener('click', (e) => {
-  const pdfBtn = e.target.closest('[data-action="pdf"]');
-  if (pdfBtn) { 
-    showPDFOptions(pdfBtn.dataset.link); 
-    return; 
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.card');
+  if (card && card.dataset.link) {
+    showPDFOptions(card.dataset.link);
+    return;
   }
   
   const delBtn = e.target.closest('[data-action="delete"]');
