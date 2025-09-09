@@ -321,7 +321,7 @@ header .subtitle {
   color: #fff;
   border: none;
   padding: 2.8rem 1.2rem; /* Balandligi 2 barobar kattaroq */
-  font-size: 0.95rem;
+  font-size: 2.0rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
