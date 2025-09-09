@@ -301,12 +301,14 @@ header .subtitle {
 /* Categories */
 .categories-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
+  flex-direction: column; /* Vertikal joylashuv */
+  flex-wrap: nowrap; /* Bitta ustun */
+  gap: 1.2rem;
   justify-content: center;
   padding: 1.8rem 1rem;
   position: relative;
   z-index: 2;
+  align-items: center; /* Markazga joylashish */
 }
 [data-theme="light"] .categories-row {
   background: rgba(108, 99, 255, 0.03);
@@ -318,13 +320,15 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 0.7rem 1.2rem;
+  padding: 1.4rem 1.2rem; /* Balandligi 2 barobar kattaroq */
   font-size: 0.95rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
   min-width: 160px;
   max-width: 200px;
+  width: 90%; /* Uzunligi deyarli to'liq kenglikda bo'ladi */
+  max-width: 500px;
   text-align: center;
   justify-content: center;
 }
@@ -339,7 +343,7 @@ header .subtitle {
 /* Grid / Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
   gap: 2rem;
   padding: 3rem 1.5rem;
   max-width: 1500px;
@@ -355,6 +359,7 @@ header .subtitle {
   height: 100%;
   position: relative;
   overflow: hidden;
+  cursor: pointer; /* Bosiladigan bo'lgani uchun kursor ko'rsatiladi */
 }
 [data-theme="light"] .card {
   background: var(--card-light);
@@ -405,26 +410,10 @@ header .subtitle {
   line-height: 1.6;
 }
 .book-category {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  margin-bottom: 1.2rem;
-  font-weight: 500;
-}
-[data-theme="light"] .book-category {
-  background: rgba(108, 99, 255, 0.1);
-  color: var(--primary);
-}
-[data-theme="dark"] .book-category {
-  background: rgba(0, 201, 167, 0.15);
-  color: var(--accent);
+  display: none; /* Kategoriya nomi yashirildi */
 }
 .card-actions {
-  display: flex;
-  gap: 0.8rem;
-  justify-content: flex-end;
-  margin-top: auto;
+  display: none; /* tugma yashirildi */
 }
 
 /* Centered Admin Button */
