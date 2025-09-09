@@ -301,14 +301,12 @@ header .subtitle {
 /* Categories */
 .categories-row {
   display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  gap: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
   justify-content: center;
   padding: 1.8rem 1rem;
   position: relative;
   z-index: 2;
-  align-items: center;
 }
 [data-theme="light"] .categories-row {
   background: rgba(108, 99, 255, 0.03);
@@ -320,15 +318,13 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 2.8rem 1.2rem;
+  padding: 0.7rem 1.2rem;
   font-size: 0.95rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
   min-width: 160px;
   max-width: 200px;
-  width: 90%;
-  max-width: 500px;
   text-align: center;
   justify-content: center;
 }
@@ -343,7 +339,7 @@ header .subtitle {
 /* Grid / Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
   padding: 3rem 1.5rem;
   max-width: 1500px;
@@ -359,13 +355,12 @@ header .subtitle {
   height: 100%;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
 }
 [data-theme="light"] .card {
-  background: linear-gradient(45deg, var(--primary), var(--accent));
+  background: var(--card-light);
 }
 [data-theme="dark"] .card {
-  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+  background: var(--card-dark);
   border: 1px solid #333;
 }
 .card::before {
@@ -395,13 +390,12 @@ header .subtitle {
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
   line-height: 1.4;
-  color: #fff;
 }
 [data-theme="light"] .book-title {
-  color: #fff;
+  color: var(--primary);
 }
 [data-theme="dark"] .book-title {
-  color: #fff;
+  color: var(--accent);
 }
 .book-desc {
   opacity: 0.8;
@@ -409,13 +403,28 @@ header .subtitle {
   margin-bottom: 1.5rem;
   flex-grow: 1;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
 }
 .book-category {
-  display: none;
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+}
+[data-theme="light"] .book-category {
+  background: rgba(108, 99, 255, 0.1);
+  color: var(--primary);
+}
+[data-theme="dark"] .book-category {
+  background: rgba(0, 201, 167, 0.15);
+  color: var(--accent);
 }
 .card-actions {
-  display: none;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  margin-top: auto;
 }
 
 /* Centered Admin Button */
@@ -519,7 +528,7 @@ header .subtitle {
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition), visibility var(--transition);
-  z-index: 2001;
+  z-index: 1000;
   padding: 1rem;
 }
 .modal.show {
@@ -595,10 +604,10 @@ footer {
   transform: translateY(0);
 }
 
-/* Responsive Design (Mobile first approach) */
+/* Responsive Design */
 @media (max-width: 768px) {
   :root {
-    --header-height: 280px;
+    --header-height: 320px;
   }
   
   header h1 {
@@ -625,10 +634,9 @@ footer {
   }
   
   .category-btn {
-    padding: 1.5rem 1rem;
-    font-size: 0.95rem;
-    width: 100%;
-    max-width: 500px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    min-width: 140px;
   }
   
   #uploadSection {
