@@ -14,6 +14,9 @@
   --shadow-strong: 0 10px 30px rgba(0,0,0,0.15);
   --transition: 0.3s ease;
   --header-height: 280px;
+
+  /* overlay active category background (set dynamically from JS) */
+  --active-cat-bg: linear-gradient(45deg, var(--primary), var(--accent));
 }
 
 /* Base */
@@ -315,16 +318,18 @@ header .subtitle {
   background: rgba(255, 255, 255, 0.03);
 }
 .category-btn {
+  /* UPDATED: semizroq va kattaroq hamma qurilmalarda */
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 0.7rem 1.2rem;
-  font-size: 0.95rem;
+  padding: 1rem 1.5rem;   /* kattaroq padding */
+  font-size: 1.15rem;     /* kattaroq matn */
+  font-weight: 700;       /* qalinroq */
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
   min-width: 160px;
-  max-width: 200px;
+  max-width: 220px;
   text-align: center;
   justify-content: center;
 }
@@ -355,12 +360,12 @@ header .subtitle {
   height: 100%;
   position: relative;
   overflow: hidden;
-}
-[data-theme="light"] .card {
   background: var(--card-light);
+  color: var(--text-light);
 }
 [data-theme="dark"] .card {
   background: var(--card-dark);
+  color: var(--text-dark);
   border: 1px solid #333;
 }
 .card::before {
@@ -389,7 +394,7 @@ header .subtitle {
   font-weight: 700;
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
-  line-height: 1.4;
+  line-height: 1.2;
 }
 [data-theme="light"] .book-title {
   color: var(--primary);
@@ -605,6 +610,10 @@ footer {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .category-btn { min-width: 140px; max-width: 200px; font-size: 1.05rem; padding: 0.95rem 1.2rem; }
+}
+
 @media (max-width: 768px) {
   :root {
     --header-height: 320px;
@@ -623,25 +632,47 @@ footer {
     max-width: 300px;
   }
   
+  /* GRID: mobil uchun ikki ustunli format — kartochkalar yupqaroq bo'lishi uchun */
   .grid {
-    grid-template-columns: 1fr;
-    padding: 2rem 1rem;
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    padding: 1.5rem;
+    gap: 1rem;
   }
   
   .categories-row {
     padding: 1.2rem 0.5rem;
   }
   
+  /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
   .category-btn {
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-    min-width: 140px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    min-width: 120px;
+    max-width: 180px;
   }
   
   #uploadSection {
     padding: 1.5rem;
     margin: 0 1rem 2rem;
+  }
+
+  /* CARD: mobilda 2x ga yaqin yupqaroq qilish */
+  .card {
+    padding: 0.65rem;         /* yupqaroq padding */
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    min-height: 80px;
+  }
+
+  .book-title { font-size: 1rem; margin-bottom: 0.4rem; }
+  .book-desc  { font-size: 0.78rem; margin-bottom: 0.6rem; opacity: 0.85; line-height: 1.3; }
+
+  .card-actions { gap: 0.4rem; }
+
+  /* Overlay ichidagi grid mobil uchun yana bitta ustun bo'lishi mumkin */
+  #categoryOverlay .grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 0.8rem;
   }
 }
 
@@ -668,6 +699,8 @@ footer {
   max-width: 1200px;
   width: 100%;
   animation: slideUp 0.5s ease forwards;
+  /* allow overlay cards to use this variable */
+  --active-cat-bg: var(--active-cat-bg);
 }
 @keyframes slideUp {
   from { transform: translateY(40px); opacity: 0; }
@@ -681,6 +714,17 @@ footer {
 #overlayBooks .card {
   animation: fadeIn 0.6s ease;
 }
+
+/* IMPORTANT: overlay ichidagi kartochkalarga kategoriya tugmasi fonini qo'llash */
+.overlay .card {
+  /* default fallback still uses card color; JS will set --active-cat-bg to match category button */
+  background: var(--active-cat-bg);
+  color: #fff;
+  border: none;
+}
+.overlay .card .book-title { color: #fff; }
+.overlay .card .book-desc { color: rgba(255,255,255,0.9); opacity: 0.95; }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
