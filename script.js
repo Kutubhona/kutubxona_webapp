@@ -36,6 +36,7 @@ const overlay = document.getElementById('categoryOverlay');
 const overlayClose = document.getElementById('overlayClose');
 const overlayBooks = document.getElementById('overlayBooks');
 const overlayTitle = document.getElementById('overlayTitle');
+const overlayContent = document.querySelector('.overlay-content');
 
 // Splash elements
 const splash = document.getElementById('splash');
@@ -45,6 +46,7 @@ let activeCategory = "";
 let allBooks = [];
 let isAdmin = false;
 let currentPDF = "";
+let isKirill = true; // language state
 
 // =================== THEME ===================
 function setTheme(theme) {
@@ -117,35 +119,25 @@ const TRANSLATIONS = {
     'Ўчиришда хатолик: ': 'O‘chirishda xatolik: '
 };
 
-let isKirill = true;
-
 function switchLanguage() {
     isKirill = !isKirill;
     
-    // Barcha elementlarni tanlash
     const elements = document.querySelectorAll('h1, h2, h3, p, button, input, option, .book-title, .book-desc, .book-category, span, div');
     
     elements.forEach(el => {
-        // Agar elementda data-original-text atributi bo'lsa, undan foydalaning
         if (el.hasAttribute('data-original-text')) {
             const key = el.getAttribute('data-original-text');
             el.textContent = isKirill ? key : (TRANSLATIONS[key] || key);
-        } 
-        // Agar data-original-text yo'q bo'lsa, lekin matn mavjud bo'lsa
-        else if (el.textContent.trim() && !el.querySelector('i') && !el.closest('nav')) {
+        } else if (el.textContent.trim() && !el.querySelector('i') && !el.closest('nav')) {
             const originalText = el.textContent.trim();
-            
-            // Nav elementlarini alohida ko'rib chiqamiz
             if (!el.closest('.categories-row')) {
                 el.setAttribute('data-original-text', originalText);
-                
                 if (TRANSLATIONS[originalText]) {
                     el.textContent = isKirill ? originalText : TRANSLATIONS[originalText];
                 }
             }
         }
 
-        // Input placeholderlar uchun
         if (el.tagName === 'INPUT' && el.placeholder) {
             const placeholderKey = el.getAttribute('data-original-placeholder') || el.placeholder;
             if (!el.hasAttribute('data-original-placeholder')) {
@@ -154,7 +146,6 @@ function switchLanguage() {
             el.placeholder = isKirill ? placeholderKey : (TRANSLATIONS[placeholderKey] || placeholderKey);
         }
 
-        // Select optionlar uchun
         if (el.tagName === 'SELECT' && el.options) {
             Array.from(el.options).forEach(option => {
                 const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
@@ -167,25 +158,11 @@ function switchLanguage() {
         }
     });
 
-    // Header matnini alohida ko'rib chiqamiz
-    const headerTitle = document.querySelector('header h1');
-    if (headerTitle && !headerTitle.hasAttribute('data-original-text')) {
-        headerTitle.setAttribute('data-original-text', 'Кутубхонага Хуш келибсиз!');
-    }
-    
-    const headerSubtitle = document.querySelector('header .subtitle');
-    if (headerSubtitle && !headerSubtitle.hasAttribute('data-original-text')) {
-        headerSubtitle.setAttribute('data-original-text', 'Сизга китоб тавсия қиламиз!');
-    }
-
-    // Icons qayta tiklash - XATO TUZATILGAN QISM
+    // Update category buttons text while preserving icons
     document.querySelectorAll('.category-btn').forEach(btn => {
         const icon = btn.querySelector('i');
         const originalText = btn.getAttribute('data-original-text');
-        
-        // Agar icon mavjud bo'lsa, uning HTML kodini olish, aks holda bo'sh string
         const iconHTML = icon ? icon.outerHTML : '';
-        
         btn.innerHTML = `${iconHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
     });
     
@@ -194,12 +171,12 @@ function switchLanguage() {
     const themeText = isKirill ? 'Қоронғу режим' : 'Qorong‘u rejim';
     toggleThemeBtn.innerHTML = `${themeIcon.outerHTML} ${themeText}`;
 
-    // Admin tugmasini yangilash
+    // Admin tugbasini yangilash
     const adminIcon = adminToggleBtn.querySelector('i');
     const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim';
     adminToggleBtn.innerHTML = `${adminIcon.outerHTML} ${adminText}`;
-    
-    // Upload tugmasini yangilash
+
+    // Upload button
     const uploadBtn = document.querySelector('#uploadForm .btn-primary');
     if (uploadBtn) {
         const uploadIcon = uploadBtn.querySelector('i');
@@ -223,21 +200,18 @@ function runSplash() {
   }, 2800);
 }
 
-// =================== RENDER BOOKS ===================
+// =================== BOOK CARD TEMPLATE ===================
 function bookCardTemplate(book) {
   const title = isKirill ? book.title : TRANSLATIONS[book.title] || book.title;
   const description = isKirill ? book.description : TRANSLATIONS[book.description] || book.description;
   const category = isKirill ? book.category : TRANSLATIONS[book.category] || book.category;
   
+  // NOTE: Removed the inline PDF button as requested; card itself will open PDF.
   return `
-    <article class="card reveal" data-id="${book.id}">
-      <span class="book-category">${category || 'Умумий'}</span>
+    <article class="card reveal" data-id="${book.id}" data-link="${book.link}" data-category="${book.category}">
       <div class="book-title">${title || 'Номсиз китоб'}</div>
       <div class="book-desc">${description || ''}</div>
       <div class="card-actions">
-        <button class="btn" data-action="pdf" data-link="${book.link}">
-          <i class="fas fa-file-pdf"></i> ${isKirill ? 'PDF' : 'PDF'}
-        </button>
         ${isAdmin ? `
           <button class="btn btn-danger" data-action="delete" data-id="${book.id}" data-link="${book.link}">
             <i class="fas fa-trash"></i> ${isKirill ? 'Ўчириш' : 'O‘chirish'}
@@ -267,42 +241,80 @@ function filterBooks() {
   renderBooks(filtered);
 }
 
-// Search input
 searchInput.addEventListener('input', filterBooks);
 
-// =================== CATEGORY OVERLAY ===================
-function openOverlay(category) {
+// =================== CATEGORY OVERLAY (history + overlay background sync) ===================
+function openOverlay(category, pushHistory = true) {
     activeCategory = category;
     overlayTitle.textContent = category;
     categoryButtons.forEach(b =>
       b.classList.toggle('active', b.dataset.category === activeCategory)
     );
+
     // faqat shu kategoriyadan kitoblarni chiqaramiz
     const filtered = allBooks.filter(b => b.category === activeCategory);
     overlayBooks.innerHTML = filtered.length
       ? filtered.map(bookCardTemplate).join('')
       : `<p class="no-books-message">${isKirill ? 'Ҳозирча бу ерда китоб йўқ...' : 'Hozircha bu yerda kitob yo‘q...'}</p>`;
+
+    // overlay kartochkalar fonini tanlangan kategoriya tugmasiga moslab o'zgartirish
+    const btn = document.querySelector(`.category-btn[data-category="${category}"]`);
+    if (btn) {
+      const computed = getComputedStyle(btn);
+      // background could be gradient - copy as is
+      const bg = computed.backgroundImage || computed.background;
+      // set CSS var to overlay content and to root for usage
+      overlayContent.style.setProperty('--active-cat-bg', bg);
+      document.documentElement.style.setProperty('--active-cat-bg', bg);
+    }
+
     revealAll();
     overlay.hidden = false;
     setTimeout(() => overlay.classList.add('show'), 10);
-  }
 
-function closeOverlay() {
-    overlay.classList.remove('show');
-    setTimeout(() => { overlay.hidden = true; }, 400);
+    if (pushHistory) {
+      // push an entry to history so phone back button can close overlay
+      const slug = category.replace(/\s+/g, '-').toLowerCase();
+      history.pushState({ overlayOpen: true, category }, "", `#category-${slug}`);
+    }
 }
 
-overlayClose.addEventListener('click', closeOverlay);
+function closeOverlay(skipHistory = false) {
+    overlay.classList.remove('show');
+    setTimeout(() => { overlay.hidden = true; }, 400);
+    // remove active class on categories
+    categoryButtons.forEach(b => b.classList.remove('active'));
+    activeCategory = "";
+
+    // If we didn't come from popstate, move history back so popstate handler won't be confused
+    if (!skipHistory && history.state && history.state.overlayOpen) {
+      // go back to previous state (this will trigger popstate)
+      history.back();
+    }
+}
+
+overlayClose.addEventListener('click', () => closeOverlay(false));
 
 // category tugmalarini yangilash
 categoryButtons.forEach(btn => {
   btn.addEventListener('click', (e) => {
-    const cat = e.target.closest('.category-btn').dataset.category;
-    openOverlay(cat);
+    const cat = e.currentTarget.dataset.category;
+    openOverlay(cat, true);
   });
 });
 
-// =================== PDF MODAL ===================
+// Listen to popstate to handle hardware back button / browser back
+window.addEventListener('popstate', (e) => {
+  // if the new state is overlayOpen, open it (useful if user used back/forward)
+  if (e.state && e.state.overlayOpen) {
+    openOverlay(e.state.category, false);
+  } else {
+    // no overlayOpen in state => close overlay (skipHistory true so we don't call history.back() again)
+    if (!overlay.hidden) closeOverlay(true);
+  }
+});
+
+// =================== PDF MODAL (kept for download/open functionality) ===================
 function showPDFOptions(pdfURL) {
   currentPDF = pdfURL; 
   downloadNotice.hidden = true;
@@ -338,17 +350,32 @@ pdfModal.addEventListener('click', (e) => {
   }
 });
 
-// Delegate actions on cards
+// =================== Delegate actions on main page cards ===================
+// clicking anywhere on a card opens its PDF (unless clicking delete)
 booksContainer.addEventListener('click', (e) => {
-  const pdfBtn = e.target.closest('[data-action="pdf"]');
-  if (pdfBtn) { 
-    showPDFOptions(pdfBtn.dataset.link); 
-    return; 
-  }
-  
   const delBtn = e.target.closest('[data-action="delete"]');
   if (delBtn) { 
     deleteBook(delBtn.dataset.id, delBtn.dataset.link); 
+    return;
+  }
+
+  const card = e.target.closest('.card');
+  if (card && card.dataset.link) {
+    // open directly (no pdf modal) — if you want modal, replace with showPDFOptions(card.dataset.link)
+    window.open(card.dataset.link, '_blank');
+  }
+});
+
+// same for overlayBooks (cards inside overlay)
+overlayBooks.addEventListener('click', (e) => {
+  const delBtn = e.target.closest('[data-action="delete"]');
+  if (delBtn) {
+    deleteBook(delBtn.dataset.id, delBtn.dataset.link);
+    return;
+  }
+  const card = e.target.closest('.card');
+  if (card && card.dataset.link) {
+    window.open(card.dataset.link, '_blank');
   }
 });
 
@@ -451,6 +478,7 @@ async function deleteBook(bookId, fileURL) {
 function loadBooks() {
   firebase.firestore().collection('books').onSnapshot(snap => {
     allBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // As original: asosiy sahifada kitoblar ko'rinmasligi uchun boshqatdan filtrlash/chiqarish qoladi
     booksContainer.innerHTML = ""; // 🔥 asosiy sahifada kitoblar ko‘rinmasligi uchun
   }, err => console.error('❌ Firestore xatolik:', err));
 }
