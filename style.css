@@ -301,14 +301,14 @@ header .subtitle {
 /* Categories */
 .categories-row {
   display: flex;
-  flex-direction: column; /* Vertikal joylashuv */
-  flex-wrap: nowrap; /* Bitta ustun */
+  flex-direction: column;
+  flex-wrap: nowrap;
   gap: 1.2rem;
   justify-content: center;
   padding: 1.8rem 1rem;
   position: relative;
   z-index: 2;
-  align-items: center; /* Markazga joylashish */
+  align-items: center;
 }
 [data-theme="light"] .categories-row {
   background: rgba(108, 99, 255, 0.03);
@@ -320,14 +320,14 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 2.8rem 1.2rem; /* Balandligi 2 barobar kattaroq */
+  padding: 2.8rem 1.2rem;
   font-size: 0.95rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
   min-width: 160px;
   max-width: 200px;
-  width: 90%; /* Uzunligi deyarli to'liq kenglikda bo'ladi */
+  width: 90%;
   max-width: 500px;
   text-align: center;
   justify-content: center;
@@ -343,7 +343,7 @@ header .subtitle {
 /* Grid / Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 2rem;
   padding: 3rem 1.5rem;
   max-width: 1500px;
@@ -360,13 +360,12 @@ header .subtitle {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
 }
 [data-theme="light"] .card {
-  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
+  background: linear-gradient(45deg, var(--primary), var(--accent));
 }
 [data-theme="dark"] .card {
-  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark)); /* Orqa fonni gradientga o'zgartirish */
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
   border: 1px solid #333;
 }
 .card::before {
@@ -396,13 +395,13 @@ header .subtitle {
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
   line-height: 1.4;
-  color: #fff; /* Matn rangini oq qilish */
+  color: #fff;
 }
 [data-theme="light"] .book-title {
-  color: #fff; /* Matn rangini oq qilish */
+  color: #fff;
 }
 [data-theme="dark"] .book-title {
-  color: #fff; /* Matn rangini oq qilish */
+  color: #fff;
 }
 .book-desc {
   opacity: 0.8;
@@ -410,13 +409,13 @@ header .subtitle {
   margin-bottom: 1.5rem;
   flex-grow: 1;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9); /* Tavsif matnini yorqinroq oq qilish */
+  color: rgba(255, 255, 255, 0.9);
 }
 .book-category {
-  display: none; /* Kategoriya nomi yashirildi */
+  display: none;
 }
 .card-actions {
-  display: none; /* tugma yashirildi */
+  display: none;
 }
 
 /* Centered Admin Button */
@@ -596,10 +595,10 @@ footer {
   transform: translateY(0);
 }
 
-/* Responsive Design */
+/* Responsive Design (Mobile first approach) */
 @media (max-width: 768px) {
   :root {
-    --header-height: 320px;
+    --header-height: 280px;
   }
   
   header h1 {
@@ -626,9 +625,10 @@ footer {
   }
   
   .category-btn {
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-    min-width: 140px;
+    padding: 1.5rem 1rem;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 500px;
   }
   
   #uploadSection {
