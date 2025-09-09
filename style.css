@@ -320,14 +320,14 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 1.4rem 2.8rem; /* Balandligi 2 barobar kattaroq */
+  padding: 2.8rem 1.4rem; /* Yangi padding qiymati */
   font-size: 0.95rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
   flex: 1;
   min-width: 160px;
   max-width: 200px;
-  width: 90%; /* Uzunligi deyarli to'liq kenglikda bo'ladi */
+  width: 90%;
   max-width: 500px;
   text-align: center;
   justify-content: center;
@@ -343,7 +343,7 @@ header .subtitle {
 /* Grid / Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Yangi eni */
   gap: 2rem;
   padding: 3rem 1.5rem;
   max-width: 1500px;
@@ -363,10 +363,10 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
 }
 [data-theme="light"] .card {
-  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
+  background: linear-gradient(45deg, var(--primary), var(--accent));
 }
 [data-theme="dark"] .card {
-  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark)); /* Orqa fonni gradientga o'zgartirish */
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
   border: 1px solid #333;
 }
 .card::before {
@@ -399,10 +399,10 @@ header .subtitle {
   color: #fff; /* Matn rangini oq qilish */
 }
 [data-theme="light"] .book-title {
-  color: #fff; /* Matn rangini oq qilish */
+  color: #fff;
 }
 [data-theme="dark"] .book-title {
-  color: #fff; /* Matn rangini oq qilish */
+  color: #fff;
 }
 .book-desc {
   opacity: 0.8;
