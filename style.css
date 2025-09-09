@@ -320,7 +320,7 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 1.4rem 1.2rem; /* Balandligi 2 barobar kattaroq */
+  padding: 1.4rem 2.8rem; /* Balandligi 2 barobar kattaroq */
   font-size: 0.95rem;
   transition: all 0.3s ease;
   border-radius: var(--radius);
@@ -343,7 +343,7 @@ header .subtitle {
 /* Grid / Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Kartochaning eni 2 barobar kichiklashtirildi */
   gap: 2rem;
   padding: 3rem 1.5rem;
   max-width: 1500px;
@@ -359,13 +359,14 @@ header .subtitle {
   height: 100%;
   position: relative;
   overflow: hidden;
-  cursor: pointer; /* Bosiladigan bo'lgani uchun kursor ko'rsatiladi */
+  cursor: pointer;
+  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
 }
 [data-theme="light"] .card {
-  background: var(--card-light);
+  background: linear-gradient(45deg, var(--primary), var(--accent)); /* Orqa fonni gradientga o'zgartirish */
 }
 [data-theme="dark"] .card {
-  background: var(--card-dark);
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark)); /* Orqa fonni gradientga o'zgartirish */
   border: 1px solid #333;
 }
 .card::before {
@@ -395,12 +396,13 @@ header .subtitle {
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
   line-height: 1.4;
+  color: #fff; /* Matn rangini oq qilish */
 }
 [data-theme="light"] .book-title {
-  color: var(--primary);
+  color: #fff; /* Matn rangini oq qilish */
 }
 [data-theme="dark"] .book-title {
-  color: var(--accent);
+  color: #fff; /* Matn rangini oq qilish */
 }
 .book-desc {
   opacity: 0.8;
@@ -408,6 +410,7 @@ header .subtitle {
   margin-bottom: 1.5rem;
   flex-grow: 1;
   line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9); /* Tavsif matnini yorqinroq oq qilish */
 }
 .book-category {
   display: none; /* Kategoriya nomi yashirildi */
