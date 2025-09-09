@@ -627,8 +627,9 @@ footer {
   
   .category-btn {
     padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-    min-width: 140px;
+    font-size: 2.40rem;
+    min-width: 280px;
+    font-weight: 700;
   }
   
   #uploadSection {
