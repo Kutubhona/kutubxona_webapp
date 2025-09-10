@@ -362,6 +362,7 @@ header .subtitle {
   overflow: hidden;
   background: var(--card-light);
   color: var(--text-light);
+  cursor: pointer;
 }
 [data-theme="dark"] .card {
   background: var(--card-dark);
@@ -580,6 +581,15 @@ header .subtitle {
 .modal-content .btn {
   margin: 0.5rem;
   justify-content: center;
+}
+.modal-content .success-text {
+  color: var(--accent);
+  margin-top: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 /* Footer */
