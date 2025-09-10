@@ -107,11 +107,11 @@ body::before {
 }
 @keyframes splashTitleAnimation {
   from { transform: translateY(-50px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
+  to    { transform: translateY(0); opacity: 1; }
 }
 @keyframes splashSubtitleAnimation {
   from { transform: translateY(50px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
+  to    { transform: translateY(0); opacity: 1; }
 }
 .splash-fade-out {
   animation: splashFadeOut 0.8s forwards;
@@ -324,11 +324,11 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 1rem 1.5rem;   /* kattaroq padding */
+  padding: 1rem 1.5rem;    /* kattaroq padding */
   width: 90%;
   max-width: 400px;
-  font-size: 2.1rem;     /* kattaroq matn */
-  font-weight: 700;       /* qalinroq */
+  font-size: 2.3rem;       /* Matn o'lchamini 2 barobar kattaroq qildik */
+  font-weight: 700;        /* qalinroq */
   transition: all 0.3s ease;
   border-radius: var(--radius);
   text-align: center;
@@ -644,8 +644,8 @@ footer {
   /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
   .category-btn {
     padding: 0.75rem 1rem;
-  width: 90%;
-  max-width: 400px;
+    width: 90%;
+    max-width: 400px;
     font-size: 1rem;
   }
   
@@ -656,7 +656,7 @@ footer {
 
   /* CARD: mobilda 2x ga yaqin yupqaroq qilish */
   .card {
-    padding: 0.65rem;         /* yupqaroq padding */
+    padding: 0.65rem;           /* yupqaroq padding */
     border-radius: 12px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.06);
     min-height: 80px;
@@ -718,9 +718,9 @@ footer {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 1rem 1.5rem;   /* Kategoriya tugmasi paddingi */
-  font-size: 1.15rem;     /* Kategoriya tugmasi matn o'lchami */
-  font-weight: 700;       /* Qalinroq */
+  padding: 1rem 1.5rem;    /* Kategoriya tugmasi paddingi */
+  font-size: 1.15rem;      /* Kategoriya tugmasi matn o'lchami */
+  font-weight: 700;        /* Qalinroq */
   text-align: center;
   justify-content: center;
 }
