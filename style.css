@@ -533,7 +533,7 @@ header .subtitle {
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition), visibility var(--transition);
-  z-index: 1000;
+  z-index: 2001;
   padding: 1rem;
 }
 .modal.show {
