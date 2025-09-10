@@ -347,19 +347,7 @@ pdfModal.addEventListener('click', (e) => {
 });
 
 // =================== Delegate actions on main page cards ===================
-// clicking anywhere on a card opens its PDF modal (unless clicking delete)
-booksContainer.addEventListener('click', (e) => {
-  const delBtn = e.target.closest('[data-action="delete"]');
-  if (delBtn) { 
-    deleteBook(delBtn.dataset.id, delBtn.dataset.link); 
-    return;
-  }
-
-  const card = e.target.closest('.card');
-  if (card && card.dataset.link) {
-    showPDFOptions(card.dataset.link);
-  }
-});
+// Asosiy sahifada kitoblar bo'lmaydi, shuning uchun bu funksiya o'chirib tashlandi.
 
 // same for overlayBooks (cards inside overlay)
 overlayBooks.addEventListener('click', (e) => {
