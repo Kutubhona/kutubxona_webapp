@@ -122,68 +122,54 @@ const TRANSLATIONS = {
 function switchLanguage() {
     isKirill = !isKirill;
     
-    const elements = document.querySelectorAll('h1, h2, h3, p, button, input, option, .book-title, .book-desc, .book-category, span, div');
-    
-    elements.forEach(el => {
-        if (el.hasAttribute('data-original-text')) {
-            const key = el.getAttribute('data-original-text');
-            el.textContent = isKirill ? key : (TRANSLATIONS[key] || key);
-        } else if (el.textContent.trim() && !el.querySelector('i') && !el.closest('nav')) {
-            const originalText = el.textContent.trim();
-            if (!el.closest('.categories-row')) {
-                el.setAttribute('data-original-text', originalText);
-                if (TRANSLATIONS[originalText]) {
-                    el.textContent = isKirill ? originalText : TRANSLATIONS[originalText];
-                }
-            }
-        }
-
-        if (el.tagName === 'INPUT' && el.placeholder) {
-            const placeholderKey = el.getAttribute('data-original-placeholder') || el.placeholder;
-            if (!el.hasAttribute('data-original-placeholder')) {
-                el.setAttribute('data-original-placeholder', placeholderKey);
-            }
-            el.placeholder = isKirill ? placeholderKey : (TRANSLATIONS[placeholderKey] || placeholderKey);
-        }
-
-        if (el.tagName === 'SELECT' && el.options) {
-            Array.from(el.options).forEach(option => {
-                const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
-                if (!option.hasAttribute('data-original-text')) {
-                    option.setAttribute('data-original-text', originalOptionText);
-                }
-                const optionKey = option.getAttribute('data-original-text');
-                option.textContent = isKirill ? optionKey : (TRANSLATIONS[optionKey] || optionKey);
-            });
-        }
+    // Matnli elementlarni yangilash
+    document.querySelectorAll('[data-original-text]').forEach(el => {
+        const key = el.getAttribute('data-original-text');
+        el.textContent = isKirill ? key : (TRANSLATIONS[key] || key);
     });
 
-    // Update category buttons text while preserving icons
+    // Input placeholderlarini yangilash
+    document.querySelectorAll('input[data-original-placeholder]').forEach(input => {
+        const placeholderKey = input.getAttribute('data-original-placeholder');
+        input.placeholder = isKirill ? placeholderKey : (TRANSLATIONS[placeholderKey] || placeholderKey);
+    });
+
+    // Select optionlarini yangilash
+    document.querySelectorAll('select option').forEach(option => {
+        const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
+        if (!option.hasAttribute('data-original-text')) {
+            option.setAttribute('data-original-text', originalOptionText);
+        }
+        const optionKey = option.getAttribute('data-original-text');
+        option.textContent = isKirill ? optionKey : (TRANSLATIONS[optionKey] || optionKey);
+    });
+    
+    // Maxsus tugmalarni yangilash (iconlari bor)
+    const updateButtonText = (btn, textKey) => {
+        const icon = btn.querySelector('i');
+        const translatedText = isKirill ? textKey : TRANSLATIONS[textKey] || textKey;
+        btn.innerHTML = `${icon ? icon.outerHTML : ''} ${translatedText}`;
+    };
+
+    updateButtonText(toggleLangBtn, 'Тил');
+    updateButtonText(toggleThemeBtn, 'Қоронғу режим');
+    updateButtonText(adminToggleBtn, 'Admin Rejim');
+    const uploadBtn = document.querySelector('#uploadForm .btn-primary');
+    if (uploadBtn) updateButtonText(uploadBtn, 'Китоб қўшиш');
+    
+    // Kategoriyalar matnini yangilash (iconlari bilan)
     document.querySelectorAll('.category-btn').forEach(btn => {
         const icon = btn.querySelector('i');
         const originalText = btn.getAttribute('data-original-text');
         const iconHTML = icon ? icon.outerHTML : '';
         btn.innerHTML = `${iconHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
     });
-    
-    // Theme tugmasini yangilash
-    const themeIcon = toggleThemeBtn.querySelector('i');
-    const themeText = isKirill ? 'Қоронғу режим' : 'Qorong‘u rejim';
-    toggleThemeBtn.innerHTML = `${themeIcon.outerHTML} ${themeText}`;
 
-    // Admin tugbasini yangilash
-    const adminIcon = adminToggleBtn.querySelector('i');
-    const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim';
-    adminToggleBtn.innerHTML = `${adminIcon.outerHTML} ${adminText}`;
-
-    // Upload button
-    const uploadBtn = document.querySelector('#uploadForm .btn-primary');
-    if (uploadBtn) {
-        const uploadIcon = uploadBtn.querySelector('i');
-        const uploadText = isKirill ? 'Китоб қўшиш' : 'Kitob qo‘shish';
-        uploadBtn.innerHTML = `${uploadIcon.outerHTML} ${uploadText}`;
+    // overlay matnini yangilash
+    if (activeCategory) {
+        overlayTitle.textContent = isKirill ? activeCategory : (TRANSLATIONS[activeCategory] || activeCategory);
     }
-
+    
     filterBooks();
 }
 
@@ -206,7 +192,7 @@ function bookCardTemplate(book) {
   const description = isKirill ? book.description : TRANSLATIONS[book.description] || book.description;
   const category = isKirill ? book.category : TRANSLATIONS[book.category] || book.category;
   
-  // NOTE: Removed the inline PDF button as requested; card itself will open PDF.
+  // Card itself will open PDF modal.
   return `
     <article class="card reveal" data-id="${book.id}" data-link="${book.link}" data-category="${book.category}">
       <div class="book-title">${title || 'Номсиз китоб'}</div>
@@ -222,9 +208,9 @@ function bookCardTemplate(book) {
   `;
 }
 
-function renderBooks(list) {
+function renderBooks(list, container) {
   const noBooksMessage = isKirill ? `Ҳозирча бу ерда китоб йўқ...` : `Hozircha bu yerda kitob yo‘q...`;
-  booksContainer.innerHTML = list.length 
+  container.innerHTML = list.length 
     ? list.map(bookCardTemplate).join('') 
     : `<p class="no-books-message">${noBooksMessage}</p>`;
   revealAll();
@@ -232,30 +218,39 @@ function renderBooks(list) {
 
 // =================== FILTERING ===================
 function filterBooks() {
-  const q = (searchInput.value || '').toLowerCase();
-  const filtered = allBooks.filter(b => 
-    (!activeCategory || b.category === activeCategory) && 
-    (!q || (b.title && b.title.toLowerCase().includes(q)) || 
-           (b.description && b.description.toLowerCase().includes(q)))
-  );
-  renderBooks(filtered);
+  // Asosiy sahifada kitoblar bo‘lmasligi uchun bu funksiya faqat overlayBooks uchun ishlaydi
+  if (activeCategory) {
+    const q = (searchInput.value || '').toLowerCase();
+    const filtered = allBooks.filter(b => 
+      b.category === activeCategory && 
+      (!q || (b.title && b.title.toLowerCase().includes(q)) || 
+             (b.description && b.description.toLowerCase().includes(q)))
+    );
+    renderBooks(filtered, overlayBooks);
+  } else {
+    // Asosiy sahifa bo‘sh bo‘ladi
+    booksContainer.innerHTML = '';
+  }
 }
 
-searchInput.addEventListener('input', filterBooks);
+searchInput.addEventListener('input', () => {
+    // Agar overlay ochiq bo'lsa, faqat overlay ichini filtrlash
+    if (activeCategory) {
+        filterBooks();
+    }
+});
 
 // =================== CATEGORY OVERLAY (history + overlay background sync) ===================
 function openOverlay(category, pushHistory = true) {
     activeCategory = category;
-    overlayTitle.textContent = category;
+    overlayTitle.textContent = isKirill ? category : (TRANSLATIONS[category] || category);
     categoryButtons.forEach(b =>
       b.classList.toggle('active', b.dataset.category === activeCategory)
     );
 
     // faqat shu kategoriyadan kitoblarni chiqaramiz
     const filtered = allBooks.filter(b => b.category === activeCategory);
-    overlayBooks.innerHTML = filtered.length
-      ? filtered.map(bookCardTemplate).join('')
-      : `<p class="no-books-message">${isKirill ? 'Ҳозирча бу ерда китоб йўқ...' : 'Hozircha bu yerda kitob yo‘q...'}</p>`;
+    renderBooks(filtered, overlayBooks);
 
     // overlay kartochkalar fonini tanlangan kategoriya tugmasiga moslab o'zgartirish
     const btn = document.querySelector(`.category-btn[data-category="${category}"]`);
@@ -285,6 +280,7 @@ function closeOverlay(skipHistory = false) {
     // remove active class on categories
     categoryButtons.forEach(b => b.classList.remove('active'));
     activeCategory = "";
+    booksContainer.innerHTML = ''; // Asosiy sahifani tozalash
 
     // If we didn't come from popstate, move history back so popstate handler won't be confused
     if (!skipHistory && history.state && history.state.overlayOpen) {
@@ -314,7 +310,7 @@ window.addEventListener('popstate', (e) => {
   }
 });
 
-// =================== PDF MODAL (kept for download/open functionality) ===================
+// =================== PDF MODAL ===================
 function showPDFOptions(pdfURL) {
   currentPDF = pdfURL; 
   downloadNotice.hidden = true;
@@ -351,7 +347,7 @@ pdfModal.addEventListener('click', (e) => {
 });
 
 // =================== Delegate actions on main page cards ===================
-// clicking anywhere on a card opens its PDF (unless clicking delete)
+// clicking anywhere on a card opens its PDF modal (unless clicking delete)
 booksContainer.addEventListener('click', (e) => {
   const delBtn = e.target.closest('[data-action="delete"]');
   if (delBtn) { 
@@ -361,8 +357,7 @@ booksContainer.addEventListener('click', (e) => {
 
   const card = e.target.closest('.card');
   if (card && card.dataset.link) {
-    // open directly (no pdf modal) — if you want modal, replace with showPDFOptions(card.dataset.link)
-    window.open(card.dataset.link, '_blank');
+    showPDFOptions(card.dataset.link);
   }
 });
 
@@ -375,7 +370,7 @@ overlayBooks.addEventListener('click', (e) => {
   }
   const card = e.target.closest('.card');
   if (card && card.dataset.link) {
-    window.open(card.dataset.link, '_blank');
+    showPDFOptions(card.dataset.link);
   }
 });
 
@@ -478,8 +473,7 @@ async function deleteBook(bookId, fileURL) {
 function loadBooks() {
   firebase.firestore().collection('books').onSnapshot(snap => {
     allBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    // As original: asosiy sahifada kitoblar ko'rinmasligi uchun boshqatdan filtrlash/chiqarish qoladi
-    booksContainer.innerHTML = ""; // 🔥 asosiy sahifada kitoblar ko‘rinmasligi uchun
+    booksContainer.innerHTML = ""; // Asosiy sahifadagi kitoblarni doimiy bo'sh qoldirish
   }, err => console.error('❌ Firestore xatolik:', err));
 }
 
