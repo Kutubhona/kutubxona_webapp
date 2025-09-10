@@ -107,11 +107,11 @@ body::before {
 }
 @keyframes splashTitleAnimation {
   from { transform: translateY(-50px); opacity: 0; }
-  to    { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 @keyframes splashSubtitleAnimation {
   from { transform: translateY(50px); opacity: 0; }
-  to    { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 .splash-fade-out {
   animation: splashFadeOut 0.8s forwards;
@@ -324,11 +324,11 @@ header .subtitle {
   background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
-  padding: 1rem 1.5rem;    /* kattaroq padding */
+  padding: 1rem 1.5rem;   /* kattaroq padding */
   width: 90%;
   max-width: 400px;
-  font-size: 1.4rem;       /* Matn o'lchamini 2 barobar kattaroq qildik */
-  font-weight: 700;        /* qalinroq */
+  font-size: 1.15rem;     /* kattaroq matn */
+  font-weight: 700;       /* qalinroq */
   transition: all 0.3s ease;
   border-radius: var(--radius);
   text-align: center;
@@ -644,8 +644,8 @@ footer {
   /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
   .category-btn {
     padding: 0.75rem 1rem;
-    width: 90%;
-    max-width: 400px;
+  width: 90%;
+  max-width: 400px;
     font-size: 1rem;
   }
   
@@ -656,7 +656,7 @@ footer {
 
   /* CARD: mobilda 2x ga yaqin yupqaroq qilish */
   .card {
-    padding: 0.65rem;           /* yupqaroq padding */
+    padding: 0.65rem;         /* yupqaroq padding */
     border-radius: 12px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.06);
     min-height: 80px;
@@ -669,8 +669,11 @@ footer {
 
   /* Overlay ichidagi grid mobil uchun yana bitta ustun bo'lishi mumkin */
   #categoryOverlay .grid {
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    /* BU YERDA O'ZGARTIRING: ikkita ustun o'rniga bitta ustun */
+    grid-template-columns: 1fr;
     gap: 0.8rem;
+    max-width: 400px; /* Asosiy sahifadagi kategoriyalar kabi uzunroq bo'lishi uchun */
+    margin: 0 auto;
   }
 }
 
@@ -714,24 +717,13 @@ footer {
 
 /* IMPORTANT: overlay ichidagi kartochkalarga kategoriya tugmasi fonini qo'llash */
 .overlay .card {
-  /* Kategoriya tugmasiga o'xshash ko'rinish */
-  background: linear-gradient(45deg, var(--primary), var(--accent));
+  /* default fallback still uses card color; JS will set --active-cat-bg to match category button */
+  background: var(--active-cat-bg);
   color: #fff;
   border: none;
-  padding: 1rem 1.5rem;    /* Kategoriya tugmasi paddingi */
-  font-size: 1.15rem;      /* Kategoriya tugmasi matn o'lchami */
-  font-weight: 700;        /* Qalinroq */
-  text-align: center;
-  justify-content: center;
 }
-.overlay .card .book-title { 
-  color: #fff; 
-  /* Bu qismni qoldiramiz, chunki siz uni kattalashtirmoqchi edingiz. */
-}
-.overlay .card .book-desc,
-.overlay .card .card-actions {
-  display: none; /* Tavsif va tugmalarni yashiradi */
-}
+.overlay .card .book-title { color: #fff; }
+.overlay .card .book-desc { color: rgba(255,255,255,0.9); opacity: 0.95; }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
