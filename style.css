@@ -627,14 +627,16 @@ footer {
     font-size: 1.05rem;
     padding: 0.95rem 1.2rem;
   }
+}
 
-media (max-width: 768px) {
+/* Mobil qurilmalar (768px dan kichik) uchun */
+@media (max-width: 768px) {
   .category-btn {
-    font-size: 1.3rem;
-    padding: 0.9rem 1.2rem;
-    width: 100%;
-    max-width: 100%;
-    white-space: nowrap;
+    font-size: 1.3rem;       /* mobil uchun biroz kichikroq */
+    padding: 0.9rem 1.2rem;  /* tugma balandligi ixchamroq */
+    width: 100%;             /* ekranni to‘liq qoplashi uchun */
+    max-width: 100%;         /* cheklovni olib tashlash */
+    white-space: nowrap;     /* matn bitta qatorda */
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -651,7 +653,6 @@ media (max-width: 768px) {
     width: 100%;
   }
   
-  /* GRID: mobil uchun ikki ustunli format — kartochkalar yupqaroq bo'lishi uchun */
   .grid {
     grid-template-columns: repeat(2, minmax(140px, 1fr));
     padding: 1.5rem;
@@ -662,22 +663,13 @@ media (max-width: 768px) {
     padding: 1.2rem 0.5rem;
   }
   
-  /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
-  .category-btn {
-    padding: 0.75rem 1rem;
-  width: 90%;
-  max-width: 400px;
-    font-size: 1rem;
-  }
-  
   #uploadSection {
     padding: 1.5rem;
     margin: 0 1rem 2rem;
   }
 
-  /* CARD: mobilda 2x ga yaqin yupqaroq qilish */
   .card {
-    padding: 0.65rem;         /* yupqaroq padding */
+    padding: 0.65rem;
     border-radius: 12px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.06);
     min-height: 80px;
@@ -688,12 +680,10 @@ media (max-width: 768px) {
 
   .card-actions { gap: 0.4rem; }
 
-  /* Overlay ichidagi grid mobil uchun yana bitta ustun bo'lishi mumkin */
   #categoryOverlay .grid {
-    /* BU YERDA O'ZGARTIRING: ikkita ustun o'rniga bitta ustun */
     grid-template-columns: 1fr;
     gap: 0.8rem;
-    max-width: 400px; /* Asosiy sahifadagi kategoriyalar kabi uzunroq bo'lishi uchun */
+    max-width: 400px;
     margin: 0 auto;
   }
 }
