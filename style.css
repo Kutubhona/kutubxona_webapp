@@ -162,7 +162,6 @@ header .subtitle {
   opacity: 0.9;
   margin-top: 0.5rem;
   font-size: 1.2rem;
-  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -304,6 +303,9 @@ header .subtitle {
 /* Categories */
 .categories-row {
   display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.8rem;
   justify-content: center;
@@ -323,13 +325,12 @@ header .subtitle {
   color: #fff;
   border: none;
   padding: 1rem 1.5rem;   /* kattaroq padding */
+  width: 100%;
+  max-width: 400px;
   font-size: 1.15rem;     /* kattaroq matn */
   font-weight: 700;       /* qalinroq */
   transition: all 0.3s ease;
   border-radius: var(--radius);
-  flex: 1;
-  min-width: 160px;
-  max-width: 220px;
   text-align: center;
   justify-content: center;
 }
@@ -347,7 +348,6 @@ header .subtitle {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
   padding: 3rem 1.5rem;
-  max-width: 1500px;
   margin: 0 auto;
 }
 .card {
@@ -440,7 +440,6 @@ header .subtitle {
 
 /* Upload Section */
 #uploadSection {
-  max-width: 650px;
   margin: 0 auto 3.5rem;
   padding: 2.5rem;
   border-radius: var(--radius);
@@ -544,7 +543,6 @@ header .subtitle {
   position: relative;
   padding: 2.5rem 2rem;
   border-radius: var(--radius);
-  max-width: 450px;
   width: 100%;
   text-align: center;
   transform: translateY(30px) scale(0.95);
@@ -581,7 +579,6 @@ header .subtitle {
 }
 .modal-content .btn {
   margin: 0.5rem;
-  min-width: 180px;
   justify-content: center;
 }
 
@@ -612,6 +609,8 @@ footer {
 /* Responsive Design */
 @media (max-width: 1024px) {
   .category-btn { min-width: 140px; max-width: 200px; font-size: 1.05rem; padding: 0.95rem 1.2rem; }
+  width: 100%;
+  max-width: 400px;
 }
 
 @media (max-width: 768px) {
@@ -629,7 +628,6 @@ footer {
   
   .header-actions input {
     width: 100%;
-    max-width: 300px;
   }
   
   /* GRID: mobil uchun ikki ustunli format — kartochkalar yupqaroq bo'lishi uchun */
@@ -646,9 +644,9 @@ footer {
   /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
   .category-btn {
     padding: 0.75rem 1rem;
+  width: 100%;
+  max-width: 400px;
     font-size: 1rem;
-    min-width: 120px;
-    max-width: 180px;
   }
   
   #uploadSection {
@@ -696,7 +694,6 @@ footer {
   visibility: visible;
 }
 .overlay-content {
-  max-width: 1200px;
   width: 100%;
   animation: slideUp 0.5s ease forwards;
   /* allow overlay cards to use this variable */
