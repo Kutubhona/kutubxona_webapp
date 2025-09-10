@@ -325,9 +325,9 @@ header .subtitle {
   color: #fff;
   border: none;
   padding: 1rem 1.5rem;   /* kattaroq padding */
-  width: 100%;
+  width: 90%;
   max-width: 400px;
-  font-size: 1.15rem;     /* kattaroq matn */
+  font-size: 2.1rem;     /* kattaroq matn */
   font-weight: 700;       /* qalinroq */
   transition: all 0.3s ease;
   border-radius: var(--radius);
@@ -609,7 +609,7 @@ footer {
 /* Responsive Design */
 @media (max-width: 1024px) {
   .category-btn { min-width: 140px; max-width: 200px; font-size: 1.05rem; padding: 0.95rem 1.2rem; }
-  width: 100%;
+  width: 90%;
   max-width: 400px;
 }
 
@@ -644,7 +644,7 @@ footer {
   /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
   .category-btn {
     padding: 0.75rem 1rem;
-  width: 100%;
+  width: 90%;
   max-width: 400px;
     font-size: 1rem;
   }
@@ -714,13 +714,24 @@ footer {
 
 /* IMPORTANT: overlay ichidagi kartochkalarga kategoriya tugmasi fonini qo'llash */
 .overlay .card {
-  /* default fallback still uses card color; JS will set --active-cat-bg to match category button */
-  background: var(--active-cat-bg);
+  /* Kategoriya tugmasiga o'xshash ko'rinish */
+  background: linear-gradient(45deg, var(--primary), var(--accent));
   color: #fff;
   border: none;
+  padding: 1rem 1.5rem;   /* Kategoriya tugmasi paddingi */
+  font-size: 1.15rem;     /* Kategoriya tugmasi matn o'lchami */
+  font-weight: 700;       /* Qalinroq */
+  text-align: center;
+  justify-content: center;
 }
-.overlay .card .book-title { color: #fff; }
-.overlay .card .book-desc { color: rgba(255,255,255,0.9); opacity: 0.95; }
+.overlay .card .book-title { 
+  color: #fff; 
+  /* Bu qismni qoldiramiz, chunki siz uni kattalashtirmoqchi edingiz. */
+}
+.overlay .card .book-desc,
+.overlay .card .card-actions {
+  display: none; /* Tavsif va tugmalarni yashiradi */
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
