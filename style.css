@@ -327,7 +327,7 @@ header .subtitle {
   padding: 1rem 1.5rem;    /* kattaroq padding */
   width: 90%;
   max-width: 400px;
-  font-size: 2.3rem;       /* Matn o'lchamini 2 barobar kattaroq qildik */
+  font-size: 1.4rem;       /* Matn o'lchamini 2 barobar kattaroq qildik */
   font-weight: 700;        /* qalinroq */
   transition: all 0.3s ease;
   border-radius: var(--radius);
