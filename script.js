@@ -121,9 +121,9 @@ const TRANSLATIONS = {
 
 function switchLanguage() {
     isKirill = !isKirill;
-
-    // Umumiy elementlarni tarjima qilish
+    
     const elements = document.querySelectorAll('h1, h2, h3, p, button, input, option, .book-title, .book-desc, .book-category, span, div');
+    
     elements.forEach(el => {
         if (el.hasAttribute('data-original-text')) {
             const key = el.getAttribute('data-original-text');
@@ -138,7 +138,6 @@ function switchLanguage() {
             }
         }
 
-        // Input placeholder
         if (el.tagName === 'INPUT' && el.placeholder) {
             const placeholderKey = el.getAttribute('data-original-placeholder') || el.placeholder;
             if (!el.hasAttribute('data-original-placeholder')) {
@@ -147,7 +146,6 @@ function switchLanguage() {
             el.placeholder = isKirill ? placeholderKey : (TRANSLATIONS[placeholderKey] || placeholderKey);
         }
 
-        // Select optionlar
         if (el.tagName === 'SELECT' && el.options) {
             Array.from(el.options).forEach(option => {
                 const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
@@ -160,43 +158,25 @@ function switchLanguage() {
         }
     });
 
-    // Header
-    const headerTitle = document.querySelector('header h1');
-    if (headerTitle && !headerTitle.hasAttribute('data-original-text')) {
-        headerTitle.setAttribute('data-original-text', 'Кутубхонага Хуш келибсиз!');
-    }
-    const headerSubtitle = document.querySelector('header .subtitle');
-    if (headerSubtitle && !headerSubtitle.hasAttribute('data-original-text')) {
-        headerSubtitle.setAttribute('data-original-text', 'Сизга китоб тавсия қиламиз!');
-    }
-
-    // ✅ Category tugmalari (iconlar saqlanadi, faqat matn o‘zgaradi)
+    // Update category buttons text while preserving icons
     document.querySelectorAll('.category-btn').forEach(btn => {
+        const icon = btn.querySelector('i');
         const originalText = btn.getAttribute('data-original-text');
-        const translated = isKirill ? originalText : (TRANSLATIONS[originalText] || originalText);
-
-        let textSpan = btn.querySelector('.btn-text');
-        if (!textSpan) {
-            textSpan = document.createElement('span');
-            textSpan.classList.add('btn-text');
-            textSpan.textContent = translated;
-            btn.appendChild(textSpan);
-        } else {
-            textSpan.textContent = translated;
-        }
+        const iconHTML = icon ? icon.outerHTML : '';
+        btn.innerHTML = `${iconHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
     });
-
-    // Theme tugmasi
+    
+    // Theme tugmasini yangilash
     const themeIcon = toggleThemeBtn.querySelector('i');
     const themeText = isKirill ? 'Қоронғу режим' : 'Qorong‘u rejim';
     toggleThemeBtn.innerHTML = `${themeIcon.outerHTML} ${themeText}`;
 
-    // Admin tugmasi
+    // Admin tugbasini yangilash
     const adminIcon = adminToggleBtn.querySelector('i');
     const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim';
     adminToggleBtn.innerHTML = `${adminIcon.outerHTML} ${adminText}`;
 
-    // Upload tugmasi
+    // Upload button
     const uploadBtn = document.querySelector('#uploadForm .btn-primary');
     if (uploadBtn) {
         const uploadIcon = uploadBtn.querySelector('i');
