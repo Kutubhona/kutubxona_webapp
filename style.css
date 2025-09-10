@@ -1,503 +1,731 @@
-// =================== FIREBASE INIT ===================
-const firebaseConfig = {
-  apiKey: "AIzaSyDuk-PhyFg5j7JkVnvfcYfBKGMoNZtT02s",
-  authDomain: "kutubxona-79dd3.firebaseapp.com",
-  projectId: "kutubxona-79dd3",
-  storageBucket: "kutubxona-79dd3.firebasestorage.app",
-  messagingSenderId: "593289819612",
-  appId: "1:593289819612:web:89b9a8dd933f945eb78b19",
-  measurementId: "G-Z0Z4FWPWP8"
-};
-firebase.initializeApp(firebaseConfig);
+:root {
+  --primary: #6C63FF;
+  --primary-dark: #5651e9;
+  --accent: #00C9A7;
+  --accent-dark: #00b896;
+  --background-light: #F8F9FA;
+  --background-dark: #121212;
+  --text-light: #2A2A2A;
+  --text-dark: #EDEDED;
+  --card-light: #FFFFFF;
+  --card-dark: #1E1E2F;
+  --radius: 16px;
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-strong: 0 10px 30px rgba(0,0,0,0.15);
+  --transition: 0.3s ease;
+  --header-height: 280px;
 
-// =================== ELEMENTS ===================
-const html = document.documentElement;
-const booksContainer = document.getElementById('booksContainer');
-const searchInput = document.getElementById('searchInput');
-const categoryButtons = document.querySelectorAll('.category-btn');
-const toggleThemeBtn = document.getElementById('toggleTheme');
-const toggleLangBtn = document.getElementById('toggleLang');
-const uploadSection = document.getElementById('uploadSection');
-const adminToggleBtn = document.getElementById('adminToggle');
-const uploadForm = document.getElementById('uploadForm');
-const progressWrap = document.getElementById('progressWrap');
-const progressBar = document.getElementById('progressBar');
-
-// Modal elements
-const pdfModal = document.getElementById('pdfModal');
-const openPDFBtn = document.getElementById('openPDFBtn');
-const downloadPDFBtn = document.getElementById('downloadPDFBtn');
-const downloadNotice = document.getElementById('downloadNotice');
-const openDownloaded = document.getElementById('openDownloaded');
-const modalClose = document.querySelector('.modal-close');
-
-// Category Overlay elements
-const overlay = document.getElementById('categoryOverlay');
-const overlayClose = document.getElementById('overlayClose');
-const overlayBooks = document.getElementById('overlayBooks');
-const overlayTitle = document.getElementById('overlayTitle');
-const overlayContent = document.querySelector('.overlay-content');
-
-// Splash elements
-const splash = document.getElementById('splash');
-
-// State
-let activeCategory = "";
-let allBooks = [];
-let isAdmin = false;
-let currentPDF = "";
-let isKirill = true; // language state
-
-// =================== THEME ===================
-function setTheme(theme) {
-  html.setAttribute('data-theme', theme);
-  localStorage.setItem('theme', theme);
-  const themeText = {
-    'light': '<i class="fas fa-moon"></i> Қоронғу режим',
-    'dark': '<i class="fas fa-sun"></i> Ёруғ режим'
-  };
-  toggleThemeBtn.innerHTML = themeText[theme];
+  /* overlay active category background (set dynamically from JS) */
+  --active-cat-bg: linear-gradient(45deg, var(--primary), var(--accent));
 }
 
-function loadTheme() {
-  const saved = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  setTheme(saved);
+/* Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  transition: background var(--transition), color var(--transition);
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
-toggleThemeBtn.addEventListener('click', () => {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.body.animate([{ filter:'brightness(1.0)' },{ filter:'brightness(1.06)' },{ filter:'brightness(1.0)'}], { duration: 320 });
-  setTheme(next);
-});
-
-// =================== LANGUAGE ===================
-const TRANSLATIONS = {
-    'Кутубхонага': 'Kutubxonaga',
-    'Хуш келибсиз!': 'Xush kelibsiz!',
-    'Премиум Кутубхона': 'Premium Kutubxona',
-    'Сизга китоб тавсия қиламиз!': 'Sizga kitob tavsiya qilamiz!',
-    'Қайси китобни қидиряпсиз?': 'Qaysi kitobni qidiryapsiz?',
-    'Қоронғу режим': 'Qorong‘u rejim',
-    'Ёруғ режим': 'Yorug‘ rejim',
-    'Тил': 'Til',
-    'Қуръони Карим': 'Qur’oni Karim',
-    'Тафсир китоблари': 'Tafsir kitoblari',
-    'Ҳадис китоблари': 'Hadis kitoblari',
-    'Фиқҳий китоблари': 'Fiqhiy kitoblari',
-    'Ақида китоблари': 'Aqida kitoblari',
-    'Тарих китоблари': 'Tarix kitoblari',
-    'Сийрат китоблари': 'Siyrat kitoblari',
-    'Саҳобалар ҳаёти': 'Sahobalar hayoti',
-    'Ахлоқ ва тарбия': 'Axloq va tarbiya',
-    'Дуо ва зикрлар': 'Duo va zikrlar',
-    'Ал-Ваъй журнали': 'Al-Va’y jurnali',
-    'Ҳизб китоблари': 'Hizb kitoblari',
-    'Admin Rejim': 'Admin Rejim',
-    'Янги китоб қўшиш': 'Yangi kitob qo‘shish',
-    'Китоб номи': 'Kitob nomi',
-    'Тавсиф': 'Tavsif',
-    'Категория танланг': 'Kategoriya tanlang',
-    'Китоб қўшиш': 'Kitob qo‘shish',
-    'PDF билан нима қилмоқчисиз?': 'PDF bilan nima qilmoqchisiz?',
-    'Браузерда очиш': 'Brauzerda ochish',
-    'Юклаб олиш': 'Yuklab olish',
-    'PDF қурилмангизга муваффақиятли юкланди!': 'PDF qurilmangizga muvaffaqiyatli yuklandi!',
-    'Юкланган PDF\'ни очиш': 'Yuklangan PDF\'ni ochish',
-    'Ҳозирча бу ерда китоб йўқ...': 'Hozircha bu yerda kitob yo‘q...',
-    'PDF': 'PDF',
-    'Ўчириш': 'O‘chirish',
-    'Китоб қўшиш ва ўчириш учун паролни киритинг:': 'Kitob qo‘shish va o‘chirish uchun parolni kiriting:',
-    'Админ режимига муваффақиятли кирдингиз!': 'Admin rejimiga muvaffaqiyatli kirdingiz!',
-    'Нотўғри парол!': 'Noto‘g‘ri parol!',
-    'PDF файл танланмаган!': 'PDF fayl tanlanmagan!',
-    'Юклашда хатолик: ': 'Yuklashda xatolik: ',
-    'Китоб муваффақиятли қўшилди!': 'Kitob muvaffaqiyatli qo‘shildi!',
-    'Хатолик: ': 'Xatolik: ',
-    'Сизда ўчириш ҳуқуқи йўқ!': 'Sizda o‘chirish huquqi yo‘q!',
-    'Ҳақиқатан ҳам бу китобни ўчирмоқчимисиз?': 'Haqiqatan ham bu kitobni o‘chirmoqchimisiz?',
-    'Китоб муваффақиятли ўчирилди!': 'Kitob muvaffaqiyatli o‘chirildi!',
-    'Ўчиришда хатолик: ': 'O‘chirishda xatolik: '
-};
-
-function switchLanguage() {
-    isKirill = !isKirill;
-    
-    const elements = document.querySelectorAll('h1, h2, h3, p, button, input, option, .book-title, .book-desc, .book-category, span, div');
-    
-    elements.forEach(el => {
-        if (el.hasAttribute('data-original-text')) {
-            const key = el.getAttribute('data-original-text');
-            el.textContent = isKirill ? key : (TRANSLATIONS[key] || key);
-        } else if (el.textContent.trim() && !el.querySelector('i') && !el.closest('nav')) {
-            const originalText = el.textContent.trim();
-            if (!el.closest('.categories-row')) {
-                el.setAttribute('data-original-text', originalText);
-                if (TRANSLATIONS[originalText]) {
-                    el.textContent = isKirill ? originalText : TRANSLATIONS[originalText];
-                }
-            }
-        }
-
-        if (el.tagName === 'INPUT' && el.placeholder) {
-            const placeholderKey = el.getAttribute('data-original-placeholder') || el.placeholder;
-            if (!el.hasAttribute('data-original-placeholder')) {
-                el.setAttribute('data-original-placeholder', placeholderKey);
-            }
-            el.placeholder = isKirill ? placeholderKey : (TRANSLATIONS[placeholderKey] || placeholderKey);
-        }
-
-        if (el.tagName === 'SELECT' && el.options) {
-            Array.from(el.options).forEach(option => {
-                const originalOptionText = option.getAttribute('data-original-text') || option.textContent.trim();
-                if (!option.hasAttribute('data-original-text')) {
-                    option.setAttribute('data-original-text', originalOptionText);
-                }
-                const optionKey = option.getAttribute('data-original-text');
-                option.textContent = isKirill ? optionKey : (TRANSLATIONS[optionKey] || optionKey);
-            });
-        }
-    });
-
-    // Update category buttons text while preserving icons
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        const icon = btn.querySelector('i');
-        const originalText = btn.getAttribute('data-original-text');
-        const iconHTML = icon ? icon.outerHTML : '';
-        btn.innerHTML = `${iconHTML} ${isKirill ? originalText : TRANSLATIONS[originalText] || originalText}`;
-    });
-    
-    // Theme tugmasini yangilash
-    const themeIcon = toggleThemeBtn.querySelector('i');
-    const themeText = isKirill ? 'Қоронғу режим' : 'Qorong‘u rejim';
-    toggleThemeBtn.innerHTML = `${themeIcon.outerHTML} ${themeText}`;
-
-    // Admin tugbasini yangilash
-    const adminIcon = adminToggleBtn.querySelector('i');
-    const adminText = isKirill ? 'Admin Rejim' : 'Admin Rejim';
-    adminToggleBtn.innerHTML = `${adminIcon.outerHTML} ${adminText}`;
-
-    // Upload button
-    const uploadBtn = document.querySelector('#uploadForm .btn-primary');
-    if (uploadBtn) {
-        const uploadIcon = uploadBtn.querySelector('i');
-        const uploadText = isKirill ? 'Китоб қўшиш' : 'Kitob qo‘shish';
-        uploadBtn.innerHTML = `${uploadIcon.outerHTML} ${uploadText}`;
-    }
-
-    filterBooks();
+/* Theme-specific styles using data-theme attribute */
+[data-theme="light"] {
+  background-color: var(--background-light);
+  color: var(--text-light);
 }
 
-toggleLangBtn.addEventListener('click', switchLanguage);
-
-// =================== SPLASH SEQUENCE ===================
-function runSplash() {
-  setTimeout(() => {
-    splash.classList.add('splash-fade-out');
-    setTimeout(() => {
-      if (splash && splash.parentNode) splash.remove();
-      revealAll();
-    }, 800);
-  }, 2800);
+[data-theme="dark"] {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
 }
 
-// =================== BOOK CARD TEMPLATE ===================
-function bookCardTemplate(book) {
-  const title = isKirill ? book.title : TRANSLATIONS[book.title] || book.title;
-  const description = isKirill ? book.description : TRANSLATIONS[book.description] || book.description;
-  const category = isKirill ? book.category : TRANSLATIONS[book.category] || book.category;
+/* Animatsiyalangan orqa fon */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 400% 400%;
+  animation: gradientBackground 15s ease infinite;
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+[data-theme="light"] body::before {
+  background: linear-gradient(45deg, #6C63FF, #00C9A7, #6C63FF);
+  opacity: 0.03;
+}
+
+[data-theme="dark"] body::before {
+  background: linear-gradient(45deg, #1c1c2e, #2d2d4d, #1c1c2e);
+  animation: gradientBackgroundDark 20s ease infinite;
+  opacity: 0.2;
+}
+
+@keyframes gradientBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientBackgroundDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Splash Screen */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#splashTitle {
+  font-size: 3.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: splashTitleAnimation 1.2s ease-out forwards;
+}
+#splashSubtitle {
+  font-size: 1.5rem;
+  color: #fff;
+  opacity: 0.9;
+  animation: splashSubtitleAnimation 1.2s ease-out 0.3s forwards;
+}
+@keyframes splashTitleAnimation {
+  from { transform: translateY(-50px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes splashSubtitleAnimation {
+  from { transform: translateY(50px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.splash-fade-out {
+  animation: splashFadeOut 0.8s forwards;
+}
+@keyframes splashFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  min-height: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: headerSlideDown 1s ease-out;
+}
+@keyframes headerSlideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, var(--background-light));
+  z-index: 1;
+}
+[data-theme="dark"] header::after {
+  background: linear-gradient(to bottom, transparent, var(--background-dark));
+}
+header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+header .subtitle {
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.header-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+.header-actions input {
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius);
+  border: none;
+  width: 320px;
+  font-size: 1rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition);
+}
+[data-theme="light"] .header-actions input {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text-light);
+}
+[data-theme="dark"] .header-actions input {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.header-actions input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+[data-theme="dark"] .header-actions input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+[data-theme="light"] .header-actions input::placeholder {
+  color: var(--text-light);
+}
+[data-theme="dark"] .header-actions input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  padding: 0.9rem 1.8rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+.btn:hover::after {
+  animation: ripple 1s ease-out;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-strong);
+}
+.btn:active {
+  transform: translateY(0);
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(30, 30);
+    opacity: 0;
+  }
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+.btn-danger {
+  background: #ff6b6b;
+  color: #fff;
+}
+.btn-danger:hover {
+  background: #ff5252;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+[data-theme="light"] .btn-ghost {
+  background: rgba(0,0,0,0.05);
+  color: var(--text-light);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+[data-theme="dark"] .btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+[data-theme="dark"] .btn-primary {
+  background: var(--primary-dark);
+}
+[data-theme="dark"] .btn-primary:hover {
+  background: var(--primary);
+}
+[data-theme="dark"] .btn-danger {
+  background: #e53935;
+}
+[data-theme="dark"] .btn-danger:hover {
+  background: #d32f2f;
+}
+
+/* Categories */
+.categories-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  padding: 1.8rem 1rem;
+  position: relative;
+  z-index: 2;
+}
+[data-theme="light"] .categories-row {
+  background: rgba(108, 99, 255, 0.03);
+}
+[data-theme="dark"] .categories-row {
+  background: rgba(255, 255, 255, 0.03);
+}
+.category-btn {
+  /* UPDATED: semizroq va kattaroq hamma qurilmalarda */
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+  padding: 1rem 1.5rem;   /* kattaroq padding */
+  font-size: 1.15rem;     /* kattaroq matn */
+  font-weight: 700;       /* qalinroq */
+  transition: all 0.3s ease;
+  border-radius: var(--radius);
+  flex: 1;
+  min-width: 160px;
+  max-width: 220px;
+  text-align: center;
+  justify-content: center;
+}
+.category-btn.active {
+  box-shadow: 0 0 0 3px var(--accent);
+  transform: translateY(-2px);
+}
+[data-theme="dark"] .category-btn {
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+}
+
+/* Grid / Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.card {
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--card-light);
+  color: var(--text-light);
+}
+[data-theme="dark"] .card {
+  background: var(--card-dark);
+  color: var(--text-dark);
+  border: 1px solid #333;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+[data-theme="dark"] .card::before {
+  background: linear-gradient(to right, var(--primary-dark), var(--accent-dark));
+}
+.card:hover::before {
+  transform: scaleX(1);
+}
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-strong);
+}
+.book-title {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+[data-theme="light"] .book-title {
+  color: var(--primary);
+}
+[data-theme="dark"] .book-title {
+  color: var(--accent);
+}
+.book-desc {
+  opacity: 0.8;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+.book-category {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+}
+[data-theme="light"] .book-category {
+  background: rgba(108, 99, 255, 0.1);
+  color: var(--primary);
+}
+[data-theme="dark"] .book-category {
+  background: rgba(0, 201, 167, 0.15);
+  color: var(--accent);
+}
+.card-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+/* Centered Admin Button */
+.center {
+  text-align: center;
+  margin: 2.5rem 0;
+}
+
+/* Upload Section */
+#uploadSection {
+  max-width: 650px;
+  margin: 0 auto 3.5rem;
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s ease;
+}
+[data-theme="light"] #uploadSection {
+  background: var(--card-light);
+}
+[data-theme="dark"] #uploadSection {
+  background: var(--card-dark);
+  border: 1px solid #333;
+}
+#uploadSection h2 {
+  margin-bottom: 1.8rem;
+  text-align: center;
+  font-size: 1.8rem;
+}
+[data-theme="light"] #uploadSection h2 {
+  color: var(--primary);
+}
+[data-theme="dark"] #uploadSection h2 {
+  color: var(--accent);
+}
+#uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+#uploadForm input,
+#uploadForm select {
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+[data-theme="light"] #uploadForm input,
+[data-theme="light"] #uploadForm select {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: var(--text-light);
+}
+[data-theme="dark"] #uploadForm input,
+[data-theme="dark"] #uploadForm select {
+  background: #2d2d2d;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+#uploadForm input:focus,
+#uploadForm select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+#progressWrap {
+  margin-top: 1rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 24px;
+}
+[data-theme="light"] #progressWrap {
+  background: #f0f0f0;
+}
+[data-theme="dark"] #progressWrap {
+  background: #2d2d2d;
+}
+#progressBar {
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  height: 100%;
+  width: 0%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: width 0.3s ease;
+}
+[data-theme="dark"] #progressBar {
+  background: linear-gradient(to right, var(--primary-dark), var(--accent-dark));
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+  z-index: 1000;
+  padding: 1rem;
+}
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  position: relative;
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius);
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+  transform: translateY(30px) scale(0.95);
+  transition: transform var(--transition);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+[data-theme="light"] .modal-content {
+  background: var(--card-light);
+  color: var(--text-light);
+}
+[data-theme="dark"] .modal-content {
+  background: var(--card-dark);
+  color: var(--text-dark);
+  border: 1px solid #333;
+}
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--transition);
+}
+.modal-close:hover {
+  opacity: 1;
+}
+.modal-content h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+.modal-content .btn {
+  margin: 0.5rem;
+  min-width: 180px;
+  justify-content: center;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: var(--primary);
+  color: #fff;
+  margin-top: 3rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+[data-theme="dark"] footer {
+  background: var(--primary-dark);
+}
+
+/* Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .category-btn { min-width: 140px; max-width: 200px; font-size: 1.05rem; padding: 0.95rem 1.2rem; }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 320px;
+  }
   
-  // NOTE: Removed the inline PDF button as requested; card itself will open PDF.
-  return `
-    <article class="card reveal" data-id="${book.id}" data-link="${book.link}" data-category="${book.category}">
-      <div class="book-title">${title || 'Номсиз китоб'}</div>
-      <div class="book-desc">${description || ''}</div>
-      <div class="card-actions">
-        ${isAdmin ? `
-          <button class="btn btn-danger" data-action="delete" data-id="${book.id}" data-link="${book.link}">
-            <i class="fas fa-trash"></i> ${isKirill ? 'Ўчириш' : 'O‘chirish'}
-          </button>
-        ` : ''}
-      </div>
-    </article>
-  `;
-}
-
-function renderBooks(list) {
-  const noBooksMessage = isKirill ? `Ҳозирча бу ерда китоб йўқ...` : `Hozircha bu yerda kitob yo‘q...`;
-  booksContainer.innerHTML = list.length 
-    ? list.map(bookCardTemplate).join('') 
-    : `<p class="no-books-message">${noBooksMessage}</p>`;
-  revealAll();
-}
-
-// =================== FILTERING ===================
-function filterBooks() {
-  const q = (searchInput.value || '').toLowerCase();
-  const filtered = allBooks.filter(b => 
-    (!activeCategory || b.category === activeCategory) && 
-    (!q || (b.title && b.title.toLowerCase().includes(q)) || 
-           (b.description && b.description.toLowerCase().includes(q)))
-  );
-  renderBooks(filtered);
-}
-
-searchInput.addEventListener('input', filterBooks);
-
-// =================== CATEGORY OVERLAY (history + overlay background sync) ===================
-function openOverlay(category, pushHistory = true) {
-    activeCategory = category;
-    overlayTitle.textContent = category;
-    categoryButtons.forEach(b =>
-      b.classList.toggle('active', b.dataset.category === activeCategory)
-    );
-
-    // faqat shu kategoriyadan kitoblarni chiqaramiz
-    const filtered = allBooks.filter(b => b.category === activeCategory);
-    overlayBooks.innerHTML = filtered.length
-      ? filtered.map(bookCardTemplate).join('')
-      : `<p class="no-books-message">${isKirill ? 'Ҳозирча бу ерда китоб йўқ...' : 'Hozircha bu yerda kitob yo‘q...'}</p>`;
-
-    // overlay kartochkalar fonini tanlangan kategoriya tugmasiga moslab o'zgartirish
-    const btn = document.querySelector(`.category-btn[data-category="${category}"]`);
-    if (btn) {
-      const computed = getComputedStyle(btn);
-      // background could be gradient - copy as is
-      const bg = computed.backgroundImage || computed.background;
-      // set CSS var to overlay content and to root for usage
-      overlayContent.style.setProperty('--active-cat-bg', bg);
-      document.documentElement.style.setProperty('--active-cat-bg', bg);
-    }
-
-    revealAll();
-    overlay.hidden = false;
-    setTimeout(() => overlay.classList.add('show'), 10);
-
-    if (pushHistory) {
-      // push an entry to history so phone back button can close overlay
-      const slug = category.replace(/\s+/g, '-').toLowerCase();
-      history.pushState({ overlayOpen: true, category }, "", `#category-${slug}`);
-    }
-}
-
-function closeOverlay(skipHistory = false) {
-    overlay.classList.remove('show');
-    setTimeout(() => { overlay.hidden = true; }, 400);
-    // remove active class on categories
-    categoryButtons.forEach(b => b.classList.remove('active'));
-    activeCategory = "";
-
-    // If we didn't come from popstate, move history back so popstate handler won't be confused
-    if (!skipHistory && history.state && history.state.overlayOpen) {
-      // go back to previous state (this will trigger popstate)
-      history.back();
-    }
-}
-
-overlayClose.addEventListener('click', () => closeOverlay(false));
-
-// category tugmalarini yangilash
-categoryButtons.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    const cat = e.currentTarget.dataset.category;
-    openOverlay(cat, true);
-  });
-});
-
-// Listen to popstate to handle hardware back button / browser back
-window.addEventListener('popstate', (e) => {
-  // if the new state is overlayOpen, open it (useful if user used back/forward)
-  if (e.state && e.state.overlayOpen) {
-    openOverlay(e.state.category, false);
-  } else {
-    // no overlayOpen in state => close overlay (skipHistory true so we don't call history.back() again)
-    if (!overlay.hidden) closeOverlay(true);
-  }
-});
-
-// =================== PDF MODAL (kept for download/open functionality) ===================
-function showPDFOptions(pdfURL) {
-  currentPDF = pdfURL; 
-  downloadNotice.hidden = true;
-  pdfModal.hidden = false;
-  setTimeout(() => pdfModal.classList.add('show'), 10);
-}
-
-openPDFBtn.addEventListener('click', () => { 
-  if (currentPDF) window.open(currentPDF, '_blank'); 
-});
-
-downloadPDFBtn.addEventListener('click', () => {
-  if (!currentPDF) return; 
-  const a = document.createElement('a'); 
-  a.href = currentPDF; 
-  a.download = 'kitob.pdf'; 
-  document.body.appendChild(a); 
-  a.click(); 
-  a.remove();
-  openDownloaded.href = currentPDF; 
-  downloadNotice.hidden = false;
-});
-
-modalClose.addEventListener('click', () => {
-  pdfModal.classList.remove('show');
-  setTimeout(() => { pdfModal.hidden = true; }, 300);
-});
-
-pdfModal.addEventListener('click', (e) => { 
-  if (e.target === pdfModal) {
-    pdfModal.classList.remove('show');
-    setTimeout(() => { pdfModal.hidden = true; }, 300);
-  }
-});
-
-// =================== Delegate actions on main page cards ===================
-// clicking anywhere on a card opens its PDF (unless clicking delete)
-booksContainer.addEventListener('click', (e) => {
-  const delBtn = e.target.closest('[data-action="delete"]');
-  if (delBtn) { 
-    deleteBook(delBtn.dataset.id, delBtn.dataset.link); 
-    return;
-  }
-
-  const card = e.target.closest('.card');
-  if (card && card.dataset.link) {
-    // open directly (no pdf modal) — if you want modal, replace with showPDFOptions(card.dataset.link)
-    window.open(card.dataset.link, '_blank');
-  }
-});
-
-// same for overlayBooks (cards inside overlay)
-overlayBooks.addEventListener('click', (e) => {
-  const delBtn = e.target.closest('[data-action="delete"]');
-  if (delBtn) {
-    deleteBook(delBtn.dataset.id, delBtn.dataset.link);
-    return;
-  }
-  const card = e.target.closest('.card');
-  if (card && card.dataset.link) {
-    window.open(card.dataset.link, '_blank');
-  }
-});
-
-// =================== ADMIN ===================
-adminToggleBtn.addEventListener('click', () => {
-  const password = prompt(isKirill ? "Китоб қўшиш ва ўчириш учун паролни киритинг:" : "Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
-  if (password === "ibr2010071717.se") {
-    isAdmin = true; 
-    uploadSection.hidden = false;
-    uploadSection.classList.add('reveal');
-    setTimeout(() => uploadSection.classList.add('show'), 10);
-    filterBooks();
-    alert(isKirill ? "✅ Админ режимига муваффақиятли кирдингиз!" : "✅ Admin rejimiga muvaffaqiyatli kirdingiz!");
-  } else {
-    alert(isKirill ? "❌ Нотўғри парол!" : "❌ Noto‘g‘ri parol!");
-  }
-});
-
-// =================== UPLOAD ===================
-uploadForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const title = document.getElementById('bookTitle').value.trim();
-  const description = document.getElementById('bookDescription').value.trim();
-  const category = document.getElementById('bookCategory').value;
-  const file = document.getElementById('bookFile').files[0];
-  
-  if (!file) { 
-    alert(isKirill ? '❌ PDF файл танланмаган!' : '❌ PDF fayl tanlanmagan!'); 
-    return; 
+  header h1 {
+    font-size: 2.2rem;
   }
   
-  try {
-    const clean = file.name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_\-.]/g,'');
-    const unique = `${Date.now()}_${clean}`;
-    const storageRef = firebase.storage().ref(`books/${unique}`);
-    const uploadTask = storageRef.put(file, { 
-      customMetadata: { secret_code: 'ibr2010071717.se' } 
-    });
-    
-    progressWrap.hidden = false;
-    progressBar.style.width = '0%';
-    progressBar.textContent = '0%';
-    
-    uploadTask.on('state_changed', 
-      (snap) => {
-        const p = (snap.bytesTransferred / snap.totalBytes) * 100;
-        progressBar.style.width = `${p.toFixed(0)}%`;
-        progressBar.textContent = `${p.toFixed(0)}%`;
-      }, 
-      (err) => {
-        console.error('❌ Yuklash xatolik:', err);
-        progressWrap.hidden = true;
-        alert(isKirill ? '❌ Юклашда хатолик: ' + err.message : '❌ Yuklashda xatolik: ' + err.message);
-      }, 
-      async () => {
-        const url = await storageRef.getDownloadURL();
-        await firebase.firestore().collection('books').add({ 
-          title, 
-          description, 
-          category, 
-          link: url, 
-          secret_code: 'ibr2010071717.se',
-          created: new Date()
-        });
-        
-        alert(isKirill ? '✅ Китоб муваффақиятли қўшилди!' : '✅ Kitob muvaffaqiyatli qo‘shildi!');
-        progressWrap.hidden = true;
-        uploadForm.reset();
-        uploadSection.hidden = true;
-      }
-    );
-  } catch(err) {
-    console.error('❌ Xatolik:', err);
-    alert(isKirill ? '❌ Хатолик: ' + err.message : '❌ Xatolik: ' + err.message);
-    progressWrap.hidden = true;
-  }
-});
-
-// =================== DELETE ===================
-async function deleteBook(bookId, fileURL) {
-  if (!isAdmin) { 
-    alert(isKirill ? '❌ Сизда ўчириш ҳуқуқи йўқ!' : '❌ Sizda o‘chirish huquqi yo‘q!'); 
-    return; 
+  .header-actions {
+    flex-direction: column;
   }
   
-  if (!confirm(isKirill ? 'Ҳақиқатан ҳам бу китобни ўчирмоқчимисиз?' : 'Haqiqatan ham bu kitobni o‘chirmoqchimisiz?')) return;
+  .header-actions input {
+    width: 100%;
+    max-width: 300px;
+  }
   
-  try {
-    await firebase.firestore().collection('books').doc(bookId).delete();
-    const ref = firebase.storage().refFromURL(fileURL);
-    await ref.delete();
-    alert(isKirill ? '✅ Китоб муваффақиятли ўчирилди!' : '✅ Kitob muvaffaqiyatli o‘chirildi!');
-  } catch(err) {
-    console.error('❌ O‘chirish xatolik:', err);
-    alert(isKirill ? '❌ Ўчиришда хатолик: ' + err.message : '❌ O‘chirishda xatolik: ' + err.message);
+  /* GRID: mobil uchun ikki ustunli format — kartochkalar yupqaroq bo'lishi uchun */
+  .grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .categories-row {
+    padding: 1.2rem 0.5rem;
+  }
+  
+  /* CATEGORY BUTTONS mobil uchun ham biroz kichikroq, ammo qalin va o‘qilishi oson bo‘lsin */
+  .category-btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    min-width: 120px;
+    max-width: 180px;
+  }
+  
+  #uploadSection {
+    padding: 1.5rem;
+    margin: 0 1rem 2rem;
+  }
+
+  /* CARD: mobilda 2x ga yaqin yupqaroq qilish */
+  .card {
+    padding: 0.65rem;         /* yupqaroq padding */
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    min-height: 80px;
+  }
+
+  .book-title { font-size: 1rem; margin-bottom: 0.4rem; }
+  .book-desc  { font-size: 0.78rem; margin-bottom: 0.6rem; opacity: 0.85; line-height: 1.3; }
+
+  .card-actions { gap: 0.4rem; }
+
+  /* Overlay ichidagi grid mobil uchun yana bitta ustun bo'lishi mumkin */
+  #categoryOverlay .grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 0.8rem;
   }
 }
 
-// =================== FIRESTORE SYNC ===================
-function loadBooks() {
-  firebase.firestore().collection('books').onSnapshot(snap => {
-    allBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    // As original: asosiy sahifada kitoblar ko'rinmasligi uchun boshqatdan filtrlash/chiqarish qoladi
-    booksContainer.innerHTML = ""; // 🔥 asosiy sahifada kitoblar ko‘rinmasligi uchun
-  }, err => console.error('❌ Firestore xatolik:', err));
+/* Category Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 3rem 1rem;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+.overlay-content {
+  max-width: 1200px;
+  width: 100%;
+  animation: slideUp 0.5s ease forwards;
+  /* allow overlay cards to use this variable */
+  --active-cat-bg: var(--active-cat-bg);
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+#overlayTitle {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+#overlayBooks .card {
+  animation: fadeIn 0.6s ease;
 }
 
-// =================== REVEAL ON SCROLL ===================
-const io = new IntersectionObserver((entries) => {
-  for (const e of entries) { 
-    if (e.isIntersecting) { 
-      e.target.classList.add('show'); 
-      io.unobserve(e.target); 
-    } 
-  }
-}, { threshold: 0.1 });
-
-function revealAll() {
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+/* IMPORTANT: overlay ichidagi kartochkalarga kategoriya tugmasi fonini qo'llash */
+.overlay .card {
+  /* default fallback still uses card color; JS will set --active-cat-bg to match category button */
+  background: var(--active-cat-bg);
+  color: #fff;
+  border: none;
 }
+.overlay .card .book-title { color: #fff; }
+.overlay .card .book-desc { color: rgba(255,255,255,0.9); opacity: 0.95; }
 
-// =================== INIT ===================
-loadTheme();
-runSplash();
-loadBooks();
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
