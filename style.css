@@ -621,18 +621,19 @@ footer {
 
 @media (max-width: 1024px) {
   .category-btn {
-    min-width: 140px;
-    max-width: 200px;
-    font-size: 1.05rem;
-    padding: 0.95rem 1.2rem;
+    width: 90%;          /* har doim 90% */
+    padding: 0.95rem 1.2rem;  /* biroz kichikroq padding */
+    font-size: 1.05rem;  /* kichikroq matn */
   }
 }
 
-/* Mobil qurilmalar (768px dan kichik) uchun */
 @media (max-width: 768px) {
-  header h1 {
-    font-size: 2.2rem;
+  .category-btn {
+    width: 90%;          /* har doim 90% */
+    padding: 0.95rem 1.2rem;  /* mobil ekranlar uchun padding */
+    font-size: 1.05rem;  /* mobil ekranlar uchun font */
   }
+}
 
   .header-actions {
     flex-direction: column;
