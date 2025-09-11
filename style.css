@@ -783,5 +783,14 @@ footer {
   gap: 0.8rem;
   max-width: 400px;
   margin: 0 auto;
+  justify-items: center; /* markazga joylashish */
+}
+
+/* Telefonlarda tugma balandligiga moslashtirish */
+@media (max-width: 768px) {
+  .overlay .card {
+    padding: 0.9rem 1.2rem;
+    font-size: 1.1rem;
+  }
 }
 
