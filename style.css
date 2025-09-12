@@ -773,9 +773,10 @@ footer {
 
 /* Telefonlarda tugma balandligiga moslashtirish */
 @media (max-width: 768px) {
-  /* Overlay ichidagi kartochkalar endi kategoriya tugmasi kabi bo'ladi */
   .overlay .card {
     padding: 0.9rem 1.2rem;
     font-size: 1.3rem;
+    width: 100%; /* Bu qatorni qo'shing */
+    max-width: 100%; /* Bu qatorni ham qo'shing */
   }
 }
