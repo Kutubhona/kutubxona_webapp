@@ -789,8 +789,8 @@ footer {
 /* Telefonlarda tugma balandligiga moslashtirish */
 @media (max-width: 768px) {
   .overlay .card {
-    padding: 1.2rem 1.2rem;
-    font-size: 1.1rem;
+    padding: 0.9rem 1.2rem;
+    font-size: 1.3rem;
   }
 }
 
