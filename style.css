@@ -355,10 +355,8 @@ header .subtitle {
   margin: 0 auto;
 }
 
-/* BU YERDA KARTОCHKA STILLARI O'ZGARTIRILDI */
 .card {
   border-radius: var(--radius);
-  padding: 1.8rem;
   box-shadow: var(--shadow-soft);
   transition: all var(--transition);
   display: flex;
@@ -366,34 +364,18 @@ header .subtitle {
   height: 100%;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+}
+
+[data-theme="light"] .card {
   background: var(--card-light);
   color: var(--text-light);
-  cursor: pointer;
-
-  /* Kategoriya tugmasiga mos kelishi uchun o'zgarishlar */
-  background: linear-gradient(45deg, var(--primary), var(--accent));
-  color: #fff;
-  border: none;
-  padding: 1rem 1.5rem; /* Kategoriya tugmasiga mos padding */
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  justify-content: center;
 }
+
 [data-theme="dark"] .card {
-  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+  background: var(--card-dark);
   color: var(--text-dark);
   border: 1px solid #333;
-}
-
-/* Bular endi kerak emas, shuning uchun olib tashlandi */
-.card::before {
-  display: none;
-}
-.card:hover::before {
-  display: none;
 }
 
 .card:hover {
@@ -408,18 +390,18 @@ header .subtitle {
   line-height: 1.2;
 }
 
-/* BU YERDA HAM O'ZGARISHLAR BOR */
-.book-title {
-  color: #fff; /* Oq rang */
-  margin: 0;
-  font-size: 1.5rem; /* Kategoriya tugmasiga mos font-size */
+.book-desc {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  opacity: 0.85;
 }
 
-/* BU YERDA TA'RIF, KATEGORIYA VA TUGMALAR YASHIRILADI */
-.book-desc,
-.book-category,
 .card-actions {
-  display: none;
+  margin-top: auto;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
 }
 
 /* Centered Admin Button */
@@ -713,39 +695,22 @@ footer {
 
 /* IMPORTANT: overlay ichidagi kartochkalarga kategoriya tugmasi fonini qo'llash */
 .overlay .card {
-  /* default fallback still uses card color; JS will set --active-cat-bg to match category button */
   background: var(--active-cat-bg);
   color: #fff;
   border: none;
-}
-.overlay .card .book-title { color: #fff; }
-.overlay .card .book-desc { color: rgba(255,255,255,0.9); opacity: 0.95; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/* === Overlay ichidagi kitoblar kategoriya tugmalari kabi ko‘rinishi uchun === */
-.overlay .card {
-  background: var(--active-cat-bg);
-  color: #fff;
-  border: none;
-
+  /* Kategoriya tugmasiga mos kelishi uchun stillarni bitta joyga o'tkazdik */
   padding: 1rem 1.5rem;
   width: 90%;
   max-width: 400px;
-
-  font-size: 1.5rem; /* Kategoriya tugmasiga mos */
+  font-size: 1.5rem;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
   border-radius: var(--radius);
   text-align: center;
   justify-content: center;
   cursor: pointer;
-
   transition: all 0.3s ease;
   box-shadow: var(--shadow-soft);
 }
@@ -753,16 +718,24 @@ footer {
   transform: translateY(-3px);
   box-shadow: var(--shadow-strong);
 }
+
+.overlay .card .book-title {
+  color: #fff;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
 .overlay .card .book-desc,
 .overlay .card .book-category,
 .overlay .card .card-actions {
   display: none;
 }
-.overlay .card .book-title {
-  color: #fff;
-  margin: 0;
-  font-size: 1.5rem; /* Kategoriya tugmasiga mos */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+
 #categoryOverlay .grid {
   grid-template-columns: 1fr;
   gap: 0.8rem;
@@ -776,7 +749,7 @@ footer {
   .overlay .card {
     padding: 0.9rem 1.2rem;
     font-size: 1.3rem;
-    width: 100%; /* Bu qatorni qo'shing */
-    max-width: 100%; /* Bu qatorni ham qo'shing */
+    width: 100%;
+    max-width: 100%;
   }
 }
