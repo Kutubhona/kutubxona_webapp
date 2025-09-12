@@ -354,6 +354,8 @@ header .subtitle {
   padding: 3rem 1.5rem;
   margin: 0 auto;
 }
+
+/* BU YERDA KARTОCHKA STILLARI O'ZGARTIRILDI */
 .card {
   border-radius: var(--radius);
   padding: 1.8rem;
@@ -367,74 +369,57 @@ header .subtitle {
   background: var(--card-light);
   color: var(--text-light);
   cursor: pointer;
+
+  /* Kategoriya tugmasiga mos kelishi uchun o'zgarishlar */
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+  padding: 1rem 1.5rem; /* Kategoriya tugmasiga mos padding */
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  justify-content: center;
 }
 [data-theme="dark"] .card {
-  background: var(--card-dark);
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
   color: var(--text-dark);
   border: 1px solid #333;
 }
+
+/* Bular endi kerak emas, shuning uchun olib tashlandi */
 .card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: linear-gradient(to right, var(--primary), var(--accent));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.5s ease;
-}
-[data-theme="dark"] .card::before {
-  background: linear-gradient(to right, var(--primary-dark), var(--accent-dark));
+  display: none;
 }
 .card:hover::before {
-  transform: scaleX(1);
+  display: none;
 }
+
 .card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-strong);
 }
+
 .book-title {
   font-weight: 700;
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
   line-height: 1.2;
 }
-[data-theme="light"] .book-title {
-  color: var(--primary);
+
+/* BU YERDA HAM O'ZGARISHLAR BOR */
+.book-title {
+  color: #fff; /* Oq rang */
+  margin: 0;
+  font-size: 1.5rem; /* Kategoriya tugmasiga mos font-size */
 }
-[data-theme="dark"] .book-title {
-  color: var(--accent);
-}
-.book-desc {
-  opacity: 0.8;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
-  line-height: 1.6;
-}
-.book-category {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  margin-bottom: 1.2rem;
-  font-weight: 500;
-}
-[data-theme="light"] .book-category {
-  background: rgba(108, 99, 255, 0.1);
-  color: var(--primary);
-}
-[data-theme="dark"] .book-category {
-  background: rgba(0, 201, 167, 0.15);
-  color: var(--accent);
-}
+
+/* BU YERDA TA'RIF, KATEGORIYA VA TUGMALAR YASHIRILADI */
+.book-desc,
+.book-category,
 .card-actions {
-  display: flex;
-  gap: 0.8rem;
-  justify-content: flex-end;
-  margin-top: auto;
+  display: none;
 }
 
 /* Centered Admin Button */
@@ -750,7 +735,7 @@ footer {
   width: 90%;
   max-width: 400px;
 
-  font-size: 1.3rem;
+  font-size: 1.5rem; /* Kategoriya tugmasiga mos */
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
@@ -776,7 +761,7 @@ footer {
 .overlay .card .book-title {
   color: #fff;
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.5rem; /* Kategoriya tugmasiga mos */
 }
 #categoryOverlay .grid {
   grid-template-columns: 1fr;
@@ -788,9 +773,9 @@ footer {
 
 /* Telefonlarda tugma balandligiga moslashtirish */
 @media (max-width: 768px) {
+  /* Overlay ichidagi kartochkalar endi kategoriya tugmasi kabi bo'ladi */
   .overlay .card {
     padding: 0.9rem 1.2rem;
     font-size: 1.3rem;
   }
 }
-
