@@ -700,38 +700,38 @@ footer {
 
 
 /* Ranglar ketma-ketligi */
-/* 1–6 qizil / qora */
+/* 1–6 qizil / sariq */
 .card:nth-child(6n+1),
 .card:nth-child(6n+3),
 .card:nth-child(6n+5) {
-  background: linear-gradient(135deg, #ff4e50, #ff6b6b);
+  background: linear-gradient(135deg, #ff4e50, #ff6b6b); /* qizil */
 }
 .card:nth-child(6n+2),
 .card:nth-child(6n+4),
 .card:nth-child(6n+6) {
-  background: linear-gradient(135deg, #111, #333);
+  background: linear-gradient(135deg, #f9d423, #ffdd00); /* sariq */
 }
 
-/* 7–12 ko‘k / qora */
+/* 7–12 ko‘k / sariq */
 .card:nth-child(6n+7),
 .card:nth-child(6n+9),
 .card:nth-child(6n+11) {
-  background: linear-gradient(135deg, #2193b0, #6dd5ed);
+  background: linear-gradient(135deg, #2193b0, #6dd5ed); /* ko‘k */
 }
 .card:nth-child(6n+8),
 .card:nth-child(6n+10),
 .card:nth-child(6n+12) {
-  background: linear-gradient(135deg, #111, #333);
+  background: linear-gradient(135deg, #f9d423, #ffdd00); /* sariq */
 }
 
-/* 13–18 yashil / qora */
+/* 13–18 yashil / sariq */
 .card:nth-child(6n+13),
 .card:nth-child(6n+15),
 .card:nth-child(6n+17) {
-  background: linear-gradient(135deg, #11998e, #38ef7d);
+  background: linear-gradient(135deg, #11998e, #38ef7d); /* yashil */
 }
 .card:nth-child(6n+14),
 .card:nth-child(6n+16),
 .card:nth-child(6n+18) {
-  background: linear-gradient(135deg, #111, #333);
+  background: linear-gradient(135deg, #f9d423, #ffdd00); /* sariq */
 }
