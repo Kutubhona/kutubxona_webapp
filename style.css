@@ -566,7 +566,7 @@ footer {
     min-width: 140px;
     max-width: 200px;
     font-size: 1.05rem;
-    padding: 0.95rem 1.2rem;
+    padding: 0.95rem 1.5rem;
   }
 }
 
@@ -575,7 +575,7 @@ footer {
   .category-btn,
   .card {
     font-size: 1.3rem;
-    padding: 0.9rem 1.2rem;
+    padding: 0.8rem 1.5rem;
     width: 100%;
     max-width: 100%;
     white-space: nowrap;
