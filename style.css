@@ -371,10 +371,11 @@ header .subtitle {
 /* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: 1fr; /* faqat bitta ustun */
   gap: 2rem;
-  padding: 3rem 1.5rem;
-  margin: 0 auto;
+  padding: 2rem 0;           
+  margin: 0;                 
+  width: 100%;               
 }
 
 /* Centered Admin Button */
