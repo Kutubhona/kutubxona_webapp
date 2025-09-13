@@ -328,7 +328,7 @@ header .subtitle {
   border: none;
   padding: 1rem 1.5rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
   font-size: 1.5rem;
   font-weight: 700;
   white-space: nowrap;
