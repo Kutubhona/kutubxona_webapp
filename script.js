@@ -365,7 +365,7 @@ overlayBooks.addEventListener('click', (e) => {
 // =================== ADMIN ===================
 adminToggleBtn.addEventListener('click', () => {
     const password = prompt(isKirill ? "Китоб қўшиш ва ўчириш учун паролни киритинг:" : "Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
-    if (password === "ibr2010071717.se") {
+    if (password === "XoLiSaMaLqIlGuVcHiLaRdAnQiL.") {
         isAdmin = true;
         uploadSection.hidden = false;
         uploadSection.classList.add('reveal');
