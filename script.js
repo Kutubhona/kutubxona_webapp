@@ -364,17 +364,24 @@ overlayBooks.addEventListener('click', (e) => {
 
 // =================== ADMIN ===================
 adminToggleBtn.addEventListener('click', () => {
-  const password = prompt(isKirill ? "Китоб қўшиш ва ўчириш учун паролни киритинг:" : "Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
-  if (password === "ibr2010071717.se") {
-    isAdmin = true; 
-    uploadSection.hidden = false;
-    uploadSection.classList.add('reveal');
-    setTimeout(() => uploadSection.classList.add('show'), 10);
-    filterBooks();
-    alert(isKirill ? "✅ Админ режимига муваффақиятли кирдингиз!" : "✅ Admin rejimiga muvaffaqiyatli kirdingiz!");
-  } else {
-    alert(isKirill ? "❌ Нотўғри парол!" : "❌ Noto‘g‘ri parol!");
-  }
+    const password = prompt(isKirill ? "Китоб қўшиш ва ўчириш учун паролни киритинг:" : "Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
+    if (password === "ibr2010071717.se") {
+        isAdmin = true;
+        uploadSection.hidden = false;
+        uploadSection.classList.add('reveal');
+        setTimeout(() => uploadSection.classList.add('show'), 10);
+        
+        // --- BU YERDA O'ZGARISH ---
+        // Admin rejimga o'tgandan so'ng, agar overlay ochiq bo'lsa,
+        // kitoblar ro'yxatini qayta render qiling.
+        if (activeCategory) {
+            filterBooks();
+        }
+
+        alert(isKirill ? "✅ Админ режимига муваффақиятли кирдингиз!" : "✅ Admin rejimiga muvaffaqiyatli kirdingiz!");
+    } else {
+        alert(isKirill ? "❌ Нотўғри парол!" : "❌ Noto‘g‘ri parol!");
+    }
 });
 
 // =================== UPLOAD ===================
