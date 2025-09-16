@@ -725,9 +725,11 @@ footer {
   background: linear-gradient(135deg, #D9D2E9, #e8e2f1);
 }
 
-/* Hover effekti — biroz kattalashib, soya kuchayadi */
+/* Hover effekti — kattalashib, yorqinlashib va porlab turadi */
 .card:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25),
+              0 0 20px rgba(255, 255, 255, 0.4); /* tashqi porlash */
+  filter: brightness(1.1); /* ranglarni 10% yorqinroq qiladi */
   transition: all 0.3s ease;
 }
