@@ -405,7 +405,7 @@ uploadForm.addEventListener('submit', async (e) => {
     const unique = `${Date.now()}_${clean}`;
     const storageRef = firebase.storage().ref(`books/${unique}`);
     const uploadTask = storageRef.put(file, { 
-      customMetadata: { secret_code: 'ibr2010071717.se' } 
+      customMetadata: { secret_code: 'XoLiSaMaLqIlGuVcHiLaRdAnQiL.' } 
     });
     
     progressWrap.hidden = false;
