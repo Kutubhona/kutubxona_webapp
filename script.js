@@ -116,7 +116,7 @@ const TRANSLATIONS = {
     'Сизда ўчириш ҳуқуқи йўқ!': 'Sizda o‘chirish huquqi yo‘q!',
     'Ҳақиқатан ҳам бу китобни ўчирмоқчимисиз?': 'Haqiqatan ham bu kitobni o‘chirmoqchimisiz?',
     'Китоб муваффақиятли ўчирилди!': 'Kitob muvaffaqiyatli o‘chirildi!',
-    'Ўчиришда хатолик: ': 'O‘chirishda xatolik: '
+    'Ўчиришда хатолик: ': 'O‘chirishда хатолик: '
 };
 
 function switchLanguage() {
@@ -463,7 +463,7 @@ async function deleteBook(bookId, fileURL) {
     alert(isKirill ? '✅ Китоб муваффақиятли ўчирилди!' : '✅ Kitob muvaffaqiyatli o‘chirildi!');
   } catch(err) {
     console.error('❌ O‘chirish xatolik:', err);
-    alert(isKirill ? '❌ Ўчиришда хатолик: ' + err.message : '❌ O‘chirishda xatolik: ' + err.message);
+    alert(isKirill ? '❌ Ўчиришда хатолик: ' + err.message : '❌ O‘chirishда хатолик: ' + err.message);
   }
 }
 
