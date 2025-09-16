@@ -733,3 +733,10 @@ footer {
   filter: brightness(1.1); /* ranglarni 10% yorqinroq qiladi */
   transition: all 0.3s ease;
 }
+
+/* Book title rangini yaxshilash */
+.book-title {
+  color: #003366 !important;   /* qora rang – och fonlarda tiniq ko‘rinadi */
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6); /* fon och bo‘lsa ham tiniq ko‘rinadi */
+}
