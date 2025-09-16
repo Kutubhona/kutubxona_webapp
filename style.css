@@ -699,39 +699,35 @@ footer {
 
 
 
-/* Ranglar ketma-ketligi */
-/* 1–6 qizil / sariq */
-.card:nth-child(6n+1),
-.card:nth-child(6n+3),
-.card:nth-child(6n+5) {
-  background: linear-gradient(135deg, #ff4e50, #ff6b6b); /* qizil */
+/* Ranglar ketma-ketligi + gradient + hover effekti */
+
+/* 1–6: To‘q sariq (#F4B183) / Sariq (#FFE699) */
+.card:nth-child(12n+1),
+.card:nth-child(12n+3),
+.card:nth-child(12n+5) {
+  background: linear-gradient(135deg, #F4B183, #f7c9a3);
 }
-.card:nth-child(6n+2),
-.card:nth-child(6n+4),
-.card:nth-child(6n+6) {
-  background: linear-gradient(135deg, #f9d423, #ffdd00); /* sariq */
+.card:nth-child(12n+2),
+.card:nth-child(12n+4),
+.card:nth-child(12n+6) {
+  background: linear-gradient(135deg, #FFE699, #fff2b3);
 }
 
-/* 7–12 ko‘k / sariq */
-.card:nth-child(6n+7),
-.card:nth-child(6n+9),
-.card:nth-child(6n+11) {
-  background: linear-gradient(135deg, #2193b0, #6dd5ed); /* ko‘k */
+/* 7–12: Yashil (#C6E0B4) / Binafsha (#D9D2E9) */
+.card:nth-child(12n+7),
+.card:nth-child(12n+9),
+.card:nth-child(12n+11) {
+  background: linear-gradient(135deg, #C6E0B4, #d6edc6);
 }
-.card:nth-child(6n+8),
-.card:nth-child(6n+10),
-.card:nth-child(6n+12) {
-  background: linear-gradient(135deg, #f9d423, #ffdd00); /* sariq */
+.card:nth-child(12n+8),
+.card:nth-child(12n+10),
+.card:nth-child(12n+12) {
+  background: linear-gradient(135deg, #D9D2E9, #e8e2f1);
 }
 
-/* 13–18 yashil / sariq */
-.card:nth-child(6n+13),
-.card:nth-child(6n+15),
-.card:nth-child(6n+17) {
-  background: linear-gradient(135deg, #11998e, #38ef7d); /* yashil */
-}
-.card:nth-child(6n+14),
-.card:nth-child(6n+16),
-.card:nth-child(6n+18) {
-  background: linear-gradient(135deg, #f9d423, #ffdd00); /* sariq */
+/* Hover effekti — biroz kattalashib, soya kuchayadi */
+.card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
