@@ -368,7 +368,7 @@ header .subtitle {
   display: none;
 }
 
-/* 👇 Admin rejimda card-actions ko‘rinishi uchun qo‘shimcha */
+/* ✅ Admin rejimda ko‘rsatish */
 body.admin-mode .card-actions {
   display: block;
   margin-top: 1rem;
