@@ -364,27 +364,26 @@ overlayBooks.addEventListener('click', (e) => {
 
 // =================== ADMIN ===================
 adminToggleBtn.addEventListener('click', () => {
-    const password = prompt(isKirill ? "Китоб қўшиш ва ўчириш учун паролни киритинг:" : "Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
-    if (password === "XoLiSaMaLqIlGuVcHiLaRdAnQiL.") {
-        isAdmin = true;
-        uploadSection.hidden = false;
-        uploadSection.classList.add('reveal');
-        setTimeout(() => uploadSection.classList.add('show'), 10);
-        
-        // --- BU YERGA O'ZGARISH QO'SHILADI ---
-        // Admin rejimga o'tgandan so'ng, butun kitoblar ro'yxatini qayta render qiling.
-        // Bu hamma kartochkalarni isAdmin true bo'lgan holda qayta yaratadi.
-        renderBooks(allBooks, booksContainer);
-        
-        // Agar overlay ochiq bo'lsa, uni ham yangilang
-        if (activeCategory) {
-            filterBooks();
-        }
+  const password = prompt(isKirill 
+    ? "Китоб қўшиш ва ўчириш учун паролни киритинг:" 
+    : "Kitob qo‘shish va o‘chirish uchun parolni kiriting:");
+  
+  if (password === "XoLiSaMaLqIlGuVcHiLaRdAnQiL.") {
+    isAdmin = true;
+    document.body.classList.add("admin-mode"); // 🔥 qo‘shildi
+    uploadSection.hidden = false;
+    uploadSection.classList.add('reveal');
+    setTimeout(() => uploadSection.classList.add('show'), 10);
 
-        alert(isKirill ? "✅ Админ режимига муваффақиятли кирдингиз!" : "✅ Admin rejimiga muvaffaqiyatli kirdingiz!");
-    } else {
-        alert(isKirill ? "❌ Нотўғри парол!" : "❌ Noto‘g‘ri parol!");
-    }
+    // kitoblar qayta render qilinadi
+    renderBooks(allBooks, booksContainer);
+    if (activeCategory) filterBooks();
+
+    alert(isKirill ? "✅ Админ режимига муваффақиятли кирдингиз!" 
+                   : "✅ Admin rejimiga muvaffaqiyatli kirdingiz!");
+  } else {
+    alert(isKirill ? "❌ Нотўғри парол!" : "❌ Noto‘g‘ri parol!");
+  }
 });
 
 // =================== UPLOAD ===================
