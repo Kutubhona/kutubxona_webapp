@@ -371,9 +371,12 @@ adminToggleBtn.addEventListener('click', () => {
         uploadSection.classList.add('reveal');
         setTimeout(() => uploadSection.classList.add('show'), 10);
         
-        // --- BU YERDA O'ZGARISH ---
-        // Admin rejimga o'tgandan so'ng, agar overlay ochiq bo'lsa,
-        // kitoblar ro'yxatini qayta render qiling.
+        // --- BU YERGA O'ZGARISH QO'SHILADI ---
+        // Admin rejimga o'tgandan so'ng, butun kitoblar ro'yxatini qayta render qiling.
+        // Bu hamma kartochkalarni isAdmin true bo'lgan holda qayta yaratadi.
+        renderBooks(allBooks, booksContainer);
+        
+        // Agar overlay ochiq bo'lsa, uni ham yangilang
         if (activeCategory) {
             filterBooks();
         }
